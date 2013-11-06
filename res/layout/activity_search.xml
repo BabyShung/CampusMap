@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	android:id="@+id/widget32"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#ffffcc33">
+	
+	<LinearLayout
+		android:id="@+id/widget18"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true">
+		<TableRow
+			android:id="@+id/widget39"
+			android:layout_width="fill_parent"
+			android:layout_height="55dp"
+			android:orientation="horizontal">
+			<AutoCompleteTextView
+				android:id="@+id/searchACTV"
+				android:layout_width="280dp"
+				android:layout_height="fill_parent"
+				android:text="Find buildings here!"
+				android:background="#ffffff00" 
+				android:textSize="15sp" />
+			<Button
+				android:id="@+id/searchBTN"
+				android:layout_width="80dp"
+				android:layout_height="fill_parent"
+				android:background="#ffffc000" 
+				android:textStyle="bold" 
+				android:textSize="20sp"
+				android:text="SEARCH"
+				android:onClick="onClick_SEARCH"/>
+		</TableRow>
+				
+		<ScrollView
+		android:id="@+id/widget49"
+		android:layout_width="fill_parent"
+		android:layout_height="245dp"
+		android:layout_centerHorizontal="true" />
+	</LinearLayout>
+</RelativeLayout>

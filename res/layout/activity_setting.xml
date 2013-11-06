@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+	android:id="@+id/widget32"
+	android:layout_width="fill_parent"
+	android:layout_height="fill_parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:background="#ffffcc33" >
+<LinearLayout
+		android:id="@+id/widget118"
+		android:layout_width="fill_parent"
+		android:layout_height="fill_parent"
+		android:orientation="vertical"
+		android:layout_alignParentTop="true"
+		android:layout_alignParentLeft="true">
+		
+	    <TableRow
+			android:id="@+id/settingtablerow00"
+			android:layout_width="fill_parent"
+			android:layout_height="50dp"
+			android:orientation="horizontal">			
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/settingtablerow1"
+		    android:layout_width="fill_parent"
+		    android:layout_height="55dp"
+		    android:orientation="horizontal"
+		    android:paddingBottom="10dp" >
+
+			<TextView
+			    android:id="@+id/widget123"
+			    android:layout_width="100dp"
+			    android:layout_height="fill_parent"
+			    android:background="#ffffc000"
+			    android:text="NAME"
+			    android:textSize="20sp"
+			    android:textStyle="bold" 
+			    android:gravity="center"/>
+
+			<EditText
+			    android:id="@+id/settingET"
+			    android:layout_width="250dp"
+			    android:layout_height="fill_parent"
+			    android:background="#ffffff00"
+			    android:text="Type your name here!"
+			    android:textSize="15sp" />
+
+		</TableRow>
+		
+		<TableRow
+		    android:id="@+id/settingtablerow2"
+		    android:layout_width="fill_parent"
+		    android:layout_height="55dp"
+		    android:orientation="horizontal"
+		    android:paddingBottom="10dp" >
+
+			<TextView
+				android:id="@+id/widget125"
+				android:layout_width="100dp"
+				android:layout_height="fill_parent"
+				android:text="SHARE" 
+				android:textStyle="bold" 
+				android:textSize="20sp"
+				android:gravity="center"
+				android:background="#ffffc000"  />
+			<CheckBox
+				android:id="@+id/settingCB"
+				android:layout_width="250dp"
+				android:layout_height="fill_parent"
+				android:text="Would you like to share?"
+				android:textSize="15sp"
+				android:background="#ffffff00"  />
+		</TableRow>
+		
+	
+		
+		<TableRow
+			android:id="@+id/settingtablerow3"
+			android:layout_width="fill_parent"
+			android:layout_height="55dp"
+			android:orientation="horizontal">
+			<TextView
+				android:id="@+id/widget126"
+				android:layout_width="200dp"
+				android:layout_height="fill_parent"
+				android:text="" />
+			<Button
+				android:id="@+id/settingBTN"
+				android:layout_width="100dp"
+				android:layout_height="fill_parent"
+				android:text="CONFIRM"
+				android:textStyle="bold" 
+				android:textSize="20sp" 
+				android:background="#ffffc000"
+				android:onClick="onClick_CONFIRM"/>
+		</TableRow>
+	</LinearLayout>
+</RelativeLayout>
