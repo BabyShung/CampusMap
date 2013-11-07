@@ -5,13 +5,13 @@ import java.util.ArrayList;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Color;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.Toast;
 
+import com.example.campusmap.BuildingDrawing.Building;
 import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -32,28 +32,50 @@ public class MainActivity extends Activity implements OnClickListener,
 	private GoogleMap map;
 	private ArrayList<LatLng> arrayPoints = null;
 
+	private LatLng fromPosition = new LatLng(41.661272, -91.535964);
+	private LatLng toPosition = new LatLng(41.811456, -90.019527);
+	private ArrayList<LatLng> directionPoint;
+
+	private Button btnHOME;
+	private Button btnSEARCH;
+	private Button btnSETTING;
+	private Button btnFUTURE;
+
+	private BuildingDrawing bd;
+	private Marker currentMarker;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
 
-		// Initial map
-		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
-				.getMap();
-		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
-		map.setMyLocationEnabled(true);
+		// Initialize map
+		mapInitialization();
+		setUpHomeCamera(); // Set Home: the location of Old Capitol
+		setUpListeners();
 
-		// Set Home: the location of Old Capitol
+		arrayPoints = new ArrayList<LatLng>();
+
+		CallDirection();
+
+		// initialize all the builing-drawing on the map
+		bd = new BuildingDrawing(map);
+	}
+
+	private void setUpHomeCamera() {
 		CameraUpdate update = CameraUpdateFactory
 				.newLatLngZoom(LOCATION_OC, 18);
 		map.animateCamera(update);
 		map.addMarker(new MarkerOptions().position(LOCATION_OC)
 				.title("Old Capitol").snippet("Welcome to UI!"));
 
-		Button btnHOME = (Button) findViewById(R.id.mainBTN11);
-		Button btnSEARCH = (Button) findViewById(R.id.mainBTN22);
-		Button btnSETTING = (Button) findViewById(R.id.mainBTN33);
-		Button btnFUTURE = (Button) findViewById(R.id.mainBTN44);
+	}
+
+	private void setUpListeners() {
+		btnHOME = (Button) findViewById(R.id.mainBTN11);
+		btnSEARCH = (Button) findViewById(R.id.mainBTN22);
+		btnSETTING = (Button) findViewById(R.id.mainBTN33);
+		btnFUTURE = (Button) findViewById(R.id.mainBTN44);
 
 		btnHOME.setOnClickListener(this);
 		btnSEARCH.setOnClickListener(this);
@@ -62,10 +84,15 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		map.setOnMapClickListener(this);
 		map.setOnMapLongClickListener(this);
-		
+
+	}
+
+	private void mapInitialization() {
+		map = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+				.getMap();
+		map.setMapType(GoogleMap.MAP_TYPE_NORMAL);
 		map.setMyLocationEnabled(true);
-		
-		arrayPoints = new ArrayList<LatLng>();
+
 	}
 
 	public void onClick(View v) {
@@ -105,28 +132,65 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	@Override
 	public void onMapClick(LatLng point) {
-
+		
+		if (bd.pointIsInPolygon(point)) {
+			Toast.makeText(this, "it is within!", Toast.LENGTH_SHORT).show();
+			
+			Building tmpBuilding = bd.getCurrentTouchedBuilding();
+			if(tmpBuilding != null)
+			{
+				addCampusBuildingMaker(point,tmpBuilding.getBuildingName(),tmpBuilding.getAddress());
+			}
+		} else {
+			Toast.makeText(this, "Not within!", Toast.LENGTH_SHORT).show();
+			addSimpleMaker(point);
+		}
+		
 		// Clears the previously MapLongClick position
 		arrayPoints.clear();
 		arrayPoints.add(point);
-		// Clears the previously MapClick position
-		map.clear();
+
+		
+
+	}
+
+	private void addSimpleMaker(LatLng point) {
+		if(currentMarker != null)	//delete the former marker
+		{
+			currentMarker.remove();
+		}
 		// Creating a marker
 		MarkerOptions markerOptions = new MarkerOptions();
-
 		// Setting the position for the marker
 		markerOptions.position(point);
-		// Setting the title for the marker.
-		// This will be displayed on taping the marker
 		markerOptions.title(point.latitude + " : " + point.longitude);
-		// Animating to the touched position
 		map.animateCamera(CameraUpdateFactory.newLatLng(point));
-		// Placing a GREEN marker on the touched position
-		map.addMarker(markerOptions.icon(BitmapDescriptorFactory
-				.defaultMarker(BitmapDescriptorFactory.HUE_GREEN)));
-		map.addMarker(new MarkerOptions().position(LOCATION_OC)
-				.title("Old Capitol").snippet("Welcome to UI!"));
+		
+		currentMarker = map.addMarker(markerOptions.icon(BitmapDescriptorFactory
+				.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))); //GREEN marker on touched position
+		currentMarker.showInfoWindow();
+		
+	}
 
+	private void addCampusBuildingMaker(LatLng point,String bn,String addr) {
+		
+		if(currentMarker != null)	//delete the former marker
+		{
+			currentMarker.remove();
+		}
+		
+		
+		// Creating a marker
+		MarkerOptions markerOptions = new MarkerOptions();
+		// Setting the position for the marker
+		markerOptions.position(point);
+		markerOptions.title(bn).snippet(addr);
+		map.animateCamera(CameraUpdateFactory.newLatLng(point));
+		
+		currentMarker = map.addMarker(markerOptions.icon(BitmapDescriptorFactory
+				.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE))); //marker on touched position
+		currentMarker.showInfoWindow();
+		
 	}
 
 	@Override
@@ -145,6 +209,19 @@ public class MainActivity extends Activity implements OnClickListener,
 		map.addPolyline(polyline);
 	}
 
+	private void CallDirection() { // Async task
 
+		new WebServiceTask(this, map, fromPosition, toPosition).execute();
+	}
+
+	public void setDirectionPoints(ArrayList<LatLng> result) {
+		directionPoint = new ArrayList<LatLng>();
+		directionPoint = result;
+	}
+
+	protected void onResume() {
+		super.onResume();
+		CallDirection();
+	}
 
 }
