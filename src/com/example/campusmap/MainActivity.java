@@ -76,7 +76,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		// abstract class, define its abstract method
 		LocationResult locationResult = new LocationResult() {
 			@Override
-			public void gotLocation(Location location) {// listener
+			public void gotLocation(Location location) {//callback
 
 				setUpMyLocationCamera(location);
 			}
