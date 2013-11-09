@@ -54,7 +54,7 @@ public class BuildingDrawing {
 	}
 
 	private void drawAllTheCampusBuildings() {
-
+		//buildingSet is used to search if a touch belongs to a building
 		buildingSet.put(1, new Building("Meclean Hall", "address1", new LatLng(
 				41.661017, -91.536656), new LatLng(41.661017, -91.536420),
 				new LatLng(41.660418, -91.536420), new LatLng(41.660418,
@@ -63,13 +63,19 @@ public class BuildingDrawing {
 				41.662203, -91.536628), new LatLng(41.662203, -91.536393),
 				new LatLng(41.661598, -91.536400), new LatLng(41.661598,
 						-91.536635)));
-		buildingSet.put(2, new Building("Main Library", "address3", new LatLng(
+		buildingSet.put(3, new Building("Main Library", "address3", new LatLng(
 				41.659932, -91.538974), new LatLng(41.659932, -91.537903),
 				new LatLng(41.659144, -91.537903), new LatLng(41.659144,
 						-91.538167), new LatLng(41.659108, -91.538167),
 				new LatLng(41.659108, -91.538680),new LatLng(41.659144, -91.538680), new LatLng(41.659144,
 						-91.538974)));
-
+//		buildingSet.put(4, new Building("Halsey Hall", "address4", new LatLng(
+//				41.663023, -91.536927), new LatLng(41.662635, -91.536927),
+//				new LatLng(41.662635, -91.537185), new LatLng(41.662629,
+//						-91.537185), new LatLng(41.662629, -91.537178),
+//				new LatLng(41.652629, -91.537460),new LatLng(41.663012, -91.537460), new LatLng(41.663012,
+//						-91.537234), new LatLng(41.663023,
+//								-91.537234)));
 	}
 
 	public class Building {
