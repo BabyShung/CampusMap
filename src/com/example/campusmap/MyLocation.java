@@ -115,7 +115,7 @@ public class MyLocation implements Runnable {
 	LocationListener locationListenerGps = new LocationListener() {
 
 		public void onLocationChanged(Location location) {
-			System.out.println("-----------main1");
+			//System.out.println("-----------main1");
 
 			checkTimerAndRoute(location);
 
@@ -134,7 +134,7 @@ public class MyLocation implements Runnable {
 	LocationListener locationListenerNetwork = new LocationListener() {
 
 		public void onLocationChanged(Location location) {
-			System.out.println("-----------main2");
+			//System.out.println("-----------main2");
 
 			checkTimerAndRoute(location);
 			// System.out.println("Lat:"+location.getLatitude()+" Lng:"+location.getLongitude()+" (Network)");
