@@ -231,7 +231,8 @@ public class BuildingDrawing {
 			for (LatLng point : this.points) {
 				po.add(point);
 			}
-			po.strokeColor(Color.RED).fillColor(Color.BLUE);
+			
+			po.strokeWidth(3).strokeColor(Color.RED).fillColor(Color.BLUE);
 			map.addPolygon(po);
 		}
 
