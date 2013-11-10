@@ -70,14 +70,20 @@ public class MyLocation {
 		return true;
 	}
 
+	public void disableLocationUpdate(){
+		lm.removeUpdates(locationListenerGps);
+		lm.removeUpdates(locationListenerNetwork);
+	}
+	
 	//define a couple of listeners
 	LocationListener locationListenerGps = new LocationListener() {
 		
 		public void onLocationChanged(Location location) {
 			timer1.cancel();
+			System.out.println("Lat:"+location.getLatitude()+" Lng:"+location.getLongitude()+" (GPS)");
 			locationResult.gotLocation(location);
-			lm.removeUpdates(this);
-			lm.removeUpdates(locationListenerNetwork);
+//			lm.removeUpdates(this);
+//			lm.removeUpdates(locationListenerNetwork);
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -97,9 +103,11 @@ public class MyLocation {
 		
 		public void onLocationChanged(Location location) {
 			timer1.cancel();
+			System.out.println("Lat:"+location.getLatitude()+" Lng:"+location.getLongitude()+" (Network)");
 			locationResult.gotLocation(location);
-			lm.removeUpdates(this);
-			lm.removeUpdates(locationListenerGps);
+			
+//			lm.removeUpdates(this);
+//			lm.removeUpdates(locationListenerGps);
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -119,10 +127,9 @@ public class MyLocation {
 		@Override
 		public void run() {
 			
-			System.out.println("after that time?");
-			
-			lm.removeUpdates(locationListenerGps);
-			lm.removeUpdates(locationListenerNetwork);
+
+//			lm.removeUpdates(locationListenerGps);
+//			lm.removeUpdates(locationListenerNetwork);
 
 			Location net_loc = null, gps_loc = null;
 			if (gps_enabled){

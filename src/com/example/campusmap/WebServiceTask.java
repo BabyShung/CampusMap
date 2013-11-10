@@ -40,12 +40,6 @@ public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 			
 			ArrayList<LatLng> directionPoint = md.getDirection(doc);
 
-//			rectline = new PolylineOptions().width(3).color(Color.BLUE);
-//
-//			for (int i = 0; i < directionPoint.size(); i++){
-//				rectline.add(directionPoint.get(i));
-//			}
-
 			return directionPoint;
 		} else
 			return null;
@@ -59,11 +53,12 @@ public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 			rectline = new PolylineOptions().width(4).color(Color.RED);
 
 			int i;
-			for (i = 0; i < result.size(); i++)
+			for (i = 0; i < result.size(); i++){
 				rectline.add(result.get(i));
+			}
 			map.addPolyline(rectline);
 			
-			Toast.makeText(mContext, "points for this route: "+i, Toast.LENGTH_SHORT).show();
+			//Toast.makeText(mContext, "points for this route: "+i, Toast.LENGTH_SHORT).show();
 		}
 	}
 

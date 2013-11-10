@@ -107,23 +107,32 @@ public class GMapV2Direction {
 		NodeList nl1, nl2, nl3;
 		ArrayList<LatLng> listGeopoints = new ArrayList<LatLng>();
 		nl1 = doc.getElementsByTagName("step");
+		//1. a step has many subsets
+		//2. every subset from the step has startLocation, polyline{points} and endLocation
+		//3. the route is formed by all points from an arraylist
+		//4. the decodePoly method is just to show a polyline by points
+		
 		if (nl1.getLength() > 0) {
 			for (int i = 0; i < nl1.getLength(); i++) {
-				Node node1 = nl1.item(i);
-				nl2 = node1.getChildNodes();
+				Node node1 = nl1.item(i);//every "step"
+				nl2 = node1.getChildNodes();//get the step children
 
+				//in the children,get the node "start location"
 				Node locationNode = nl2
 						.item(getNodeIndex(nl2, "start_location"));
+				//get child from start location, get the lat and lng
 				nl3 = locationNode.getChildNodes();
 				Node latNode = nl3.item(getNodeIndex(nl3, "lat"));
 				double lat = Double.parseDouble(latNode.getTextContent());
 				Node lngNode = nl3.item(getNodeIndex(nl3, "lng"));
 				double lng = Double.parseDouble(lngNode.getTextContent());
+				//add the point in arraylist
 				listGeopoints.add(new LatLng(lat, lng));
 
 				locationNode = nl2.item(getNodeIndex(nl2, "polyline"));
 				nl3 = locationNode.getChildNodes();
 				latNode = nl3.item(getNodeIndex(nl3, "points"));
+				//decode points
 				ArrayList<LatLng> arr = decodePoly(latNode.getTextContent());
 				for (int j = 0; j < arr.size(); j++) {
 					listGeopoints.add(new LatLng(arr.get(j).latitude, arr
@@ -136,6 +145,7 @@ public class GMapV2Direction {
 				lat = Double.parseDouble(latNode.getTextContent());
 				lngNode = nl3.item(getNodeIndex(nl3, "lng"));
 				lng = Double.parseDouble(lngNode.getTextContent());
+				//add the current end point
 				listGeopoints.add(new LatLng(lat, lng));
 			}
 		}
@@ -152,6 +162,7 @@ public class GMapV2Direction {
 	}
 
 	private ArrayList<LatLng> decodePoly(String encoded) {
+		
 		ArrayList<LatLng> poly = new ArrayList<LatLng>();
 		int index = 0, len = encoded.length();
 		int lat = 0, lng = 0;
