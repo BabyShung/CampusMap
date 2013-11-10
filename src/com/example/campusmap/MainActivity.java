@@ -38,6 +38,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private final LatLng LOCATION_OC = new LatLng(41.661272, -91.535964);
 	private GoogleMap map;
 	private ArrayList<LatLng> arrayPoints = null;
+	private MyLocation ml;
 
 	private LatLng fromPosition = new LatLng(41.661272, -91.535964);
 	private LatLng toPosition = new LatLng(41.811456, -90.019527);
@@ -62,13 +63,14 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		arrayPoints = new ArrayList<LatLng>();
 
-		// GPSInitialization();
+		//GPSInitialization();
+		GPS_Network_Initialization();
 		// CallDirection();
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
 
-		GPS_Network_Initialization();
+		
 
 	}
 
@@ -83,7 +85,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		};
 
 		try {
-			MyLocation ml = new MyLocation(this);
+			ml = new MyLocation(this);
 			ml.setupLocation(this, locationResult);
 		} catch (Exception e) {
 			Toast.makeText(this, "No network and please turn on GPS", Toast.LENGTH_LONG).show();
@@ -289,8 +291,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 
-						// ...
 
+						ml.beginRoute();
 					}
 				});
 
@@ -299,7 +301,10 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 
-						// ...
+						if(ml != null)
+						{
+							ml.disableLocationUpdate();
+						}
 
 					}
 				});
