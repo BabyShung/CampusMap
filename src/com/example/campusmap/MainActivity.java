@@ -300,9 +300,10 @@ public class MainActivity extends Activity implements OnClickListener,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
-
+						System.out.println("outside******");
 						if(ml != null)
 						{
+							System.out.println("inside******");
 							ml.disableLocationUpdate();
 						}
 

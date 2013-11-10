@@ -4,7 +4,12 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.BlockingQueue;
 
+import com.google.android.gms.maps.model.LatLng;
+
+import android.location.Location;
 import android.os.Environment;
 
 public class RouteRecord {
@@ -16,8 +21,9 @@ public class RouteRecord {
 	private String state;
 	private boolean canW, canR;
 	private boolean recordIsStarted = false;
+	BlockingQueue<LatLng> buffer;
 	public RouteRecord(){
-
+		buffer = new ArrayBlockingQueue<LatLng>(20);;
 	}
 	
 	public void toggleRecordState(){
@@ -31,12 +37,43 @@ public class RouteRecord {
 		return fileName.getName();
 	}
 	
-	public void closeBuffer(){
+	public void bufferStore(Location location){
+		try {
+			buffer.put(new LatLng(location.getLatitude(), location
+					.getLongitude()));
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	public void bufferTakeAndAddToFile(){
+		LatLng tmp;
+		try {
+			tmp = buffer.take();
+			// string that will be stored
+			String dataString = "\"" + tmp.latitude + "\"," + "\""
+					+ tmp.longitude + "\"\n";
+			//append data to a file
+			this.appendDataIntoFile(dataString);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		
+	}
+	
+	public void checkRemainingElementsInBQandCloseBuffer(){
 		
 		try {
+			//check remaining ele in BQ
+			while(!buffer.isEmpty()){
+				bufferTakeAndAddToFile();
+			}
+			
+			//close bw
 			bufferWritter.close();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}

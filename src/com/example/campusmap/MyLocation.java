@@ -21,14 +21,15 @@ public class MyLocation implements Runnable {
 	private LocationResult locationResult;
 	private boolean gps_enabled = false;
 	private boolean network_enabled = false;
+	private boolean timer_cancelled = false;
 	private MainActivity mContext;
-	private final static int TIME_FOR_GPS_WHEN_NO_NETWORK = 60000;
+	private final static int TIME_FOR_GPS_WHEN_NO_NETWORK = 120000;
 
 	private RouteRecord rr;
 
 	private LatLng takeData;
 	private Thread mythread = null;
-	BlockingQueue<LatLng> buffer = new ArrayBlockingQueue<LatLng>(20);
+
 
 	public static abstract class LocationResult {
 		public abstract void gotLocation(Location location);
@@ -63,7 +64,7 @@ public class MyLocation implements Runnable {
 		if (!gps_enabled && !network_enabled)
 			return false;
 
-		if (gps_enabled) {
+		if (gps_enabled) {// setup listeners
 			lm.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0,
 					locationListenerGps);
 
@@ -83,34 +84,32 @@ public class MyLocation implements Runnable {
 	}
 
 	public void beginRoute() {
+		// initialize file and start a thread for recording
+		rr.toggleRecordState();
 		rr.fileInitialization();
-
 		startThread();
 	}
 
 	private void startThread() {
-		// TODO Auto-generated method stub
 		mythread = new Thread(this); // connect to and start the run method
 		mythread.start();
 	}
 
 	public void disableLocationUpdate() {
+		System.out.println("---------ready to close out!!!");
 		if (rr.recordHasStarted()) {
+			System.out.println("---------ready to close in!!!");
+			rr.toggleRecordState();
 			lm.removeUpdates(locationListenerGps);
 			lm.removeUpdates(locationListenerNetwork);
-
-			// show a message
 			Toast.makeText(mContext, "File saved as " + rr.getFileName(),
 					Toast.LENGTH_SHORT).show();
 
 			// stop thread
-			if (timer1 != null) {
-				timer1.cancel();
-			}
 			if (mythread != null) {
 				mythread.interrupt();
 			}
-			rr.closeBuffer();
+			rr.checkRemainingElementsInBQandCloseBuffer();
 		}
 	}
 
@@ -120,20 +119,8 @@ public class MyLocation implements Runnable {
 		public void onLocationChanged(Location location) {
 			System.out.println("-----------main1");
 
-			if (rr.RWTrue()) { // keep on appending data in the csv file
-				try {
-					buffer.put(new LatLng(location.getLatitude(), location
-							.getLongitude()));
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			}
+			checkTimerAndRoute(location);
 
-			// timer1.cancel();
-
-			locationResult.gotLocation(location);
-			// lm.removeUpdates(this);
-			// lm.removeUpdates(locationListenerNetwork);
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -150,19 +137,9 @@ public class MyLocation implements Runnable {
 
 		public void onLocationChanged(Location location) {
 			System.out.println("-----------main2");
-			if (rr.RWTrue()) { // keep on appending data in the csv file
-				try {
-					buffer.put(new LatLng(location.getLatitude(), location
-							.getLongitude()));
-				} catch (InterruptedException e1) {
-					e1.printStackTrace();
-				}
-			}
-			// timer1.cancel();
+
+			checkTimerAndRoute(location);
 			// System.out.println("Lat:"+location.getLatitude()+" Lng:"+location.getLongitude()+" (Network)");
-			locationResult.gotLocation(location);
-			// lm.removeUpdates(this);
-			// lm.removeUpdates(locationListenerGps);
 		}
 
 		public void onProviderDisabled(String provider) {
@@ -175,43 +152,67 @@ public class MyLocation implements Runnable {
 		}
 	};
 
+	private void checkTimerAndRoute(Location location) {
+		if (!timer_cancelled) {
+			timer_cancelled = true; // no more execute this if
+			timer1.cancel();
+			locationResult.gotLocation(location);
+		}
+
+		if (rr.recordHasStarted()) {
+
+			if (rr.RWTrue()) { // keep on appending data in the csv file
+				rr.bufferStore(location);
+			}
+
+		}
+
+	}
+
 	class RetrieveLastLocation extends TimerTask { // runnable,it's a thread
 		@Override
 		public void run() {
-			Location net_loc = null, gps_loc = null;
-			if (gps_enabled) {
-				gps_loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-			}
-			if (network_enabled) {
-				net_loc = lm
-						.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-			}
+			try {
+				lm.removeUpdates(locationListenerGps);
+				lm.removeUpdates(locationListenerNetwork);
 
-			// if there are both values use the latest one
-			if (gps_loc != null && net_loc != null) {
-				if (gps_loc.getTime() > net_loc.getTime()) {
-					locationResult.gotLocation(gps_loc);
-
-				} else {
-					locationResult.gotLocation(net_loc);
-
+				Location net_loc = null, gps_loc = null;
+				if (gps_enabled) {
+					gps_loc = lm
+							.getLastKnownLocation(LocationManager.GPS_PROVIDER);
 				}
-				return;
-			}
+				if (network_enabled) {
+					net_loc = lm
+							.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+				}
 
-			if (gps_loc != null) {
-				locationResult.gotLocation(gps_loc);
-				return;
-			}
-			if (net_loc != null) {
-				locationResult.gotLocation(net_loc);
-				return;
-			}
-			locationResult.gotLocation(null);
-			return;
+				// if there are both values use the latest one
+				if (gps_loc != null && net_loc != null) {
+					if (gps_loc.getTime() > net_loc.getTime()) {
+						locationResult.gotLocation(gps_loc);
 
-			// lm.removeUpdates(locationListenerGps);
-			// lm.removeUpdates(locationListenerNetwork);
+					} else {
+						locationResult.gotLocation(net_loc);
+
+					}
+					return;
+				}
+
+				if (gps_loc != null) {
+					locationResult.gotLocation(gps_loc);
+					return;
+				}
+				if (net_loc != null) {
+					locationResult.gotLocation(net_loc);
+					return;
+				}
+				locationResult.gotLocation(null);
+				return;
+
+			} catch (Exception e) {
+				Toast.makeText(mContext, "Can't get any signals",
+						Toast.LENGTH_SHORT).show();
+			}
 
 		}
 
@@ -219,18 +220,13 @@ public class MyLocation implements Runnable {
 
 	@Override
 	public void run() {
-		try {
-			while (true) {
-				System.out.println("-----------thread!!");
-				takeData = buffer.take();
 
-				// string that will be stored
-				String dataString = "\"" + takeData.latitude + "\"," + "\""
-						+ takeData.longitude + "\"\n";
-				rr.appendDataIntoFile(dataString);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
+		while (true) {
+
+			System.out.println("-----------thread!!");
+
+			rr.bufferTakeAndAddToFile();
+
 		}
 
 	}
