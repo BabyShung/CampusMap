@@ -198,6 +198,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		// Setting the position for the marker
 		markerOptions.position(point);
 		markerOptions.title(point.latitude + " : " + point.longitude);
+
 		map.animateCamera(CameraUpdateFactory.newLatLng(point));
 
 		currentMarker = map.addMarker(markerOptions
@@ -271,7 +272,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
-
+		System.out.println("latLng------***: "+ marker.getTitle());
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
 				new DialogInterface.OnClickListener() {
 

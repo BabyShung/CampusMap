@@ -91,9 +91,8 @@ public class MyLocation implements Runnable {
 	}
 
 	public void disableLocationUpdate(MyLocationTask locationTask) {
-		System.out.println("---------ready to close out!!!");
+
 		if (rr.recordHasStarted()) {
-			System.out.println("---------ready to close in!!!");
 			rr.toggleRecordState();
 			lm.removeUpdates(locationListenerGps);
 			lm.removeUpdates(locationListenerNetwork);

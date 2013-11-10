@@ -191,13 +191,19 @@ public class BuildingDrawing {
 				new LatLng(41.66324654, -91.5350929275), new LatLng(41.66325305, -91.535596512),
 				new LatLng(41.66311754, -91.5355877950), new LatLng(41.66312681, -91.535951904)
 		));
-//		buildingSet.put(4, new Building("Halsey Hall", "address4", new LatLng(
-//				41.663023, -91.536927), new LatLng(41.662635, -91.536927),
-//				new LatLng(41.662635, -91.537185), new LatLng(41.662629,
-//						-91.537185), new LatLng(41.662629, -91.537178),
-//				new LatLng(41.652629, -91.537460),new LatLng(41.663012, -91.537460), new LatLng(41.663012,
-//						-91.537234), new LatLng(41.663023,
-//								-91.537234)));
+		buildingSet.put(13, new Building("Chemistry Bldg", "address13", 
+				new LatLng(41.6645955, -91.5369718), new LatLng(41.6645955, -91.5367622),
+				new LatLng(41.6643516, -91.5367622), new LatLng(41.6643516, -91.5364759),
+				new LatLng(41.6645863, -91.5364759), new LatLng(41.6645863, -91.5362942),
+				new LatLng(41.6642291, -91.5362942), new LatLng(41.6642291, -91.5362868),
+				new LatLng(41.6640595, -91.5362868), new LatLng(41.6640595, -91.5362942),
+				new LatLng(41.6637001, -91.5362942), new LatLng(41.6637001, -91.5364759),
+		
+				new LatLng(41.6637001, -91.5367237), new LatLng(41.6637001, -91.5367237),	
+				new LatLng(41.6637001, -91.5369302), new LatLng(41.6639456, -91.5369302),
+				new LatLng(41.6639456, -91.5372082), new LatLng(41.6642556, -91.5372082),
+				new LatLng(41.6642556, -91.5369718)
+				));
 	}
 
 	public class Building {
