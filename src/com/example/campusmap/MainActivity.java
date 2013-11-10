@@ -39,6 +39,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private GoogleMap map;
 	private ArrayList<LatLng> arrayPoints = null;
 	private MyLocation ml;
+	private MyLocationTask locationTask;
 
 	private LatLng fromPosition = new LatLng(41.661272, -91.535964);
 	private LatLng toPosition = new LatLng(41.811456, -90.019527);
@@ -63,14 +64,12 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		arrayPoints = new ArrayList<LatLng>();
 
-		//GPSInitialization();
+		// GPSInitialization();
 		GPS_Network_Initialization();
 		// CallDirection();
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
-
-		
 
 	}
 
@@ -78,22 +77,18 @@ public class MainActivity extends Activity implements OnClickListener,
 		// abstract class, define its abstract method
 		LocationResult locationResult = new LocationResult() {
 			@Override
-			public void gotLocation(Location location) {//callback
+			public void gotLocation(Location location) {// callback
 
 				setUpMyLocationCamera(location);
 			}
 		};
 
-		try {
-			ml = new MyLocation(this);
-			ml.setupLocation(this, locationResult);
-		} catch (Exception e) {
-			Toast.makeText(this, "No network and please turn on GPS", Toast.LENGTH_LONG).show();
-		}
+		ml = new MyLocation(this);
+		ml.setupLocation(this, locationResult);
 
 	}
 
-	private void GPSInitialization() {
+	private void GPSInitialization() {//test, alternative
 		LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		String provider = lm.getBestProvider(criteria, true);
@@ -268,7 +263,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	protected void onResume() {
 		super.onResume();
-		CallDirection();
+		//CallDirection();
 	}
 
 	@Override
@@ -276,23 +271,15 @@ public class MainActivity extends Activity implements OnClickListener,
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cancel",
-				new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int id) {
-
-						// ...
-
-					}
-				});
 
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
 
-
-						ml.beginRoute();
+						//Async task, begin the route
+					    locationTask = new MyLocationTask(ml);
+						locationTask.execute();
 					}
 				});
 
@@ -300,12 +287,18 @@ public class MainActivity extends Activity implements OnClickListener,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
-						System.out.println("outside******");
-						if(ml != null)
-						{
-							System.out.println("inside******");
-							ml.disableLocationUpdate();
+						if (ml != null) {
+							ml.disableLocationUpdate(locationTask);
 						}
+
+					}
+				});
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cancel",
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int id) {
+
+						// ...
 
 					}
 				});

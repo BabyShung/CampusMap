@@ -3,7 +3,7 @@ package com.example.campusmap;
 import android.os.AsyncTask;
 
 // Async <inputtype, progresstype, returntype>
-public class sendDataToServer extends AsyncTask<String, Integer, String> {
+public class RequestRouteTask extends AsyncTask<String, Integer, String> {
 
 	//new sendDataToServer().execute("haha");
 	

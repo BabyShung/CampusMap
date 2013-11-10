@@ -66,7 +66,7 @@ public class RouteRecord {
 	public void checkRemainingElementsInBQandCloseBuffer(){
 		
 		try {
-			//check remaining ele in BQ
+			//put remaining ele in BQ
 			while(!buffer.isEmpty()){
 				bufferTakeAndAddToFile();
 			}

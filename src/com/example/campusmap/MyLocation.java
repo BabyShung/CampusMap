@@ -2,10 +2,6 @@ package com.example.campusmap;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-
-import com.google.android.gms.maps.model.LatLng;
 
 import android.content.Context;
 import android.location.Location;
@@ -27,7 +23,6 @@ public class MyLocation implements Runnable {
 
 	private RouteRecord rr;
 
-	private LatLng takeData;
 	private Thread mythread = null;
 
 
@@ -95,7 +90,7 @@ public class MyLocation implements Runnable {
 		mythread.start();
 	}
 
-	public void disableLocationUpdate() {
+	public void disableLocationUpdate(MyLocationTask locationTask) {
 		System.out.println("---------ready to close out!!!");
 		if (rr.recordHasStarted()) {
 			System.out.println("---------ready to close in!!!");
@@ -109,7 +104,11 @@ public class MyLocation implements Runnable {
 			if (mythread != null) {
 				mythread.interrupt();
 			}
+			
+		    //add remaining ele and close buffer
 			rr.checkRemainingElementsInBQandCloseBuffer();
+			//iterrupt
+			locationTask.cancel(true);
 		}
 	}
 
