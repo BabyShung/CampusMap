@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
-		rrc.fileInitialization("txt");
+		rrc.fileInitialization("txt",false);
 	}
 
 	private void GPS_Network_Initialization() {
@@ -315,7 +315,7 @@ public class MainActivity extends Activity implements OnClickListener,
 						if(rrc != null){
 						
 							rrc.checkRemainingElementsInBQandCloseBuffer();
-							rrc.fileInitialization("txt");
+							rrc.fileInitialization("txt",false);
 						}
 						// ...
 

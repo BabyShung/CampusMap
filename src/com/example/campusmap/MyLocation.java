@@ -81,7 +81,7 @@ public class MyLocation implements Runnable {
 	public void beginRoute() {
 		// initialize file and start a thread for recording
 		rr.toggleRecordState();
-		rr.fileInitialization("csv");
+		rr.fileInitialization("txt",false);
 		startThread();
 	}
 
@@ -106,6 +106,8 @@ public class MyLocation implements Runnable {
 			
 		    //add remaining ele and close buffer
 			rr.checkRemainingElementsInBQandCloseBuffer();
+			//delete consecutive same lines
+			rr.processRecord();
 			//iterrupt
 			locationTask.cancel(true);
 		}
@@ -159,7 +161,7 @@ public class MyLocation implements Runnable {
 
 		if (rr.recordHasStarted()) {
 
-			if (rr.RWTrue()) { // keep on appending data in the csv file
+			if (rr.RWTrue()) { // keep on appending data in the txt file
 				rr.bufferStore(location);
 			}
 
