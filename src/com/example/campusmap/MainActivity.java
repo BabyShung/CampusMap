@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private BuildingDrawing bd;
 	private Marker currentMarker;
 	
-	RouteRecord rrc   = new RouteRecord();
+	RecordRoute rr_test   = new RecordRoute();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -72,7 +72,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
-		rrc.fileInitialization("txt",false);
+		rr_test.fileInitialization("txt",false);
 	}
 
 	private void GPS_Network_Initialization() {
@@ -85,7 +85,7 @@ public class MainActivity extends Activity implements OnClickListener,
 			}
 		};
 
-		ml = new MyLocation(this);
+		ml = new MyLocation(this,map);
 		ml.setupLocation(this, locationResult);
 
 	}
@@ -280,7 +280,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		System.out.println("new LatLng("+ marker.getTitle()+"),");
 
 		
-		rrc.appendDataIntoFile("new LatLng("+ marker.getTitle()+"), ");
+		rr_test.appendDataIntoFile("new LatLng("+ marker.getTitle()+"), ");
 		
 		//-----
 		
@@ -312,10 +312,10 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 
-						if(rrc != null){
+						if(rr_test != null){
 						
-							rrc.checkRemainingElementsInBQandCloseBuffer();
-							rrc.fileInitialization("txt",false);
+							rr_test.checkRemainingElementsInBQandCloseBuffer();
+							rr_test.fileInitialization("txt",false);
 						}
 						// ...
 

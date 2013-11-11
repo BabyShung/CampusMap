@@ -6,15 +6,19 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.PolylineOptions;
 
+import android.graphics.Color;
 import android.location.Location;
 import android.os.Environment;
 
-public class RouteRecord {
+public class RecordRoute {
 
 	private File path = null;
 	private File fileName = null;
@@ -25,11 +29,30 @@ public class RouteRecord {
 	private String state;
 	private boolean canW, canR;
 	private boolean recordIsStarted = false;
-	BlockingQueue<LatLng> buffer;
+	private BlockingQueue<LatLng> buffer;
 
-	public RouteRecord() {
+	public RecordRoute() {// constructor
 		buffer = new ArrayBlockingQueue<LatLng>(20);
-		;
+		
+	}
+
+	public void showTestRoute(GoogleMap map) {
+		ArrayList<LatLng> result = readPointsFile("MyRoute1");
+		
+		PolylineOptions rectline;
+		if (result != null) {
+			rectline = new PolylineOptions().width(4).color(Color.RED);
+
+			int i;
+			for (i = 0; i < result.size(); i++){
+				rectline.add(result.get(i));
+			}
+			map.addPolyline(rectline);
+			
+			//Toast.makeText(mContext, "points for this route: "+i, Toast.LENGTH_SHORT).show();
+		}
+		
+		
 	}
 
 	public void toggleRecordState() {
@@ -117,18 +140,18 @@ public class RouteRecord {
 		// read file A -> delete consecutive same -> write to fileB
 
 		try {
-		    bufferReader = new BufferedReader(new FileReader(filePath));
+			bufferReader = new BufferedReader(new FileReader(filePath));
 			String line = bufferReader.readLine();
 			String lastString = null;
-			fileInitialization("txt",true);
+			fileInitialization("txt", true);
 			while (line != null) {
-				if (!line.equals(lastString)) {//write in new file
-					
-					appendDataIntoFile(line+"\n");
+				if (!line.equals(lastString)) {// write in new file
+
+					appendDataIntoFile(line + "\n");
 					lastString = line;
 
 				}
-				//else not append and move onto next line
+				// else not append and move onto next line
 				line = bufferReader.readLine();
 			}
 			bufferReader.close();
@@ -138,27 +161,60 @@ public class RouteRecord {
 		}
 	}
 
-	public void fileInitialization(String extension,boolean processing) {
+	public ArrayList<LatLng> readPointsFile(String fn) {
 
+		ArrayList<LatLng> listOfPoints = new ArrayList<LatLng>();
+		checkDownloadFolderExist();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path + "/"
+					+ fn + "_p.txt"));
+			double lat, lng;
+			String line = br.readLine();
+			while (line != null) {
+				String[] tmp = line.replaceAll("\"", "").split(",");
+				lat = Double.parseDouble(tmp[0]);
+				lng = Double.parseDouble(tmp[1]);
+
+				listOfPoints.add(new LatLng(lat, lng));
+
+				line = br.readLine();
+			}
+
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfPoints;
+	}
+
+	private void checkDownloadFolderExist() {
 		// set path, we are going to save the txt file into download folder
 		path = Environment
 				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 		// if not exists, create path directory
 		path.mkdirs();
+	}
+
+	public void fileInitialization(String extension, boolean processing) {
+
+		checkDownloadFolderExist();
+
 		// check if we have access to write
 		checkState();
 
 		if (RWTrue()) {
 			try {
 				String fileBeta = "";
-				if(processing)
+				if (processing)
 					fileBeta = "_p";
+
 				// create a new file
-				fileName = new File(path + "/" + "MyRoute1"+ fileBeta +"." + extension);
+				fileName = new File(path + "/" + "MyRoute1" + fileBeta + "."
+						+ extension);
 				for (int i = 2; i < 100; i++) {
 					if (fileName.exists()) { // if exist,then change name
-						fileName = new File(path + "/" + "MyRoute" + i + fileBeta + "."
-								+ extension);
+						fileName = new File(path + "/" + "MyRoute" + i
+								+ fileBeta + "." + extension);
 					} else { // file not exist,then create
 						fileName.createNewFile();
 						filePath = fileName.getPath();
@@ -176,4 +232,5 @@ public class RouteRecord {
 			}
 		}
 	}
+
 }

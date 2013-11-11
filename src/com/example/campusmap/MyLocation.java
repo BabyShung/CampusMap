@@ -3,6 +3,8 @@ package com.example.campusmap;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.google.android.gms.maps.GoogleMap;
+
 import android.content.Context;
 import android.location.Location;
 import android.location.LocationListener;
@@ -20,8 +22,8 @@ public class MyLocation implements Runnable {
 	private boolean timer_cancelled = false;
 	private MainActivity mContext;
 	private final static int TIME_FOR_GPS_WHEN_NO_NETWORK = 120000;
-
-	private RouteRecord rr;
+	private GoogleMap map;
+	private RecordRoute rr;
 
 	private Thread mythread = null;
 
@@ -30,8 +32,9 @@ public class MyLocation implements Runnable {
 		public abstract void gotLocation(Location location);
 	}
 
-	public MyLocation(MainActivity mContext) {// constructor
+	public MyLocation(MainActivity mContext,GoogleMap map) {// constructor
 		this.mContext = mContext;
+		this.map = map;
 	}
 
 	public boolean setupLocation(Context context, LocationResult result) {
@@ -69,8 +72,9 @@ public class MyLocation implements Runnable {
 					locationListenerNetwork);
 		}
 
-		rr = new RouteRecord();
-
+		rr = new RecordRoute();
+		rr.showTestRoute(map);
+		
 		timer1 = new Timer();
 
 		timer1.schedule(new RetrieveLastLocation(),
@@ -139,7 +143,6 @@ public class MyLocation implements Runnable {
 			//System.out.println("-----------main2");
 
 			checkTimerAndRoute(location);
-			// System.out.println("Lat:"+location.getLatitude()+" Lng:"+location.getLongitude()+" (Network)");
 		}
 
 		public void onProviderDisabled(String provider) {
