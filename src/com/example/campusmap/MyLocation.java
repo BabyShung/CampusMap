@@ -81,7 +81,7 @@ public class MyLocation implements Runnable {
 	public void beginRoute() {
 		// initialize file and start a thread for recording
 		rr.toggleRecordState();
-		rr.fileInitialization();
+		rr.fileInitialization("csv");
 		startThread();
 	}
 

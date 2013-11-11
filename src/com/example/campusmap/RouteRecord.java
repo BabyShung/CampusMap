@@ -106,7 +106,7 @@ public class RouteRecord {
 		}
 	}
 	
-	public void fileInitialization() {
+	public void fileInitialization(String extension) {
 
 		// set path, we are going to save the csv file into download folder
 		path = Environment
@@ -120,10 +120,10 @@ public class RouteRecord {
 			try {
 
 				// create a new file
-				fileName = new File(path + "/" + "MyRoute1.csv");
+				fileName = new File(path + "/" + "MyRoute1."+ extension);
 				for (int i = 2; i < 100; i++) {
 					if (fileName.exists()) { // if exist,then change name
-						fileName = new File(path + "/" + "MyRoute" + i + ".csv");
+						fileName = new File(path + "/" + "MyRoute" + i + "."+extension);
 					} else { // file not exist,then create
 						fileName.createNewFile();
 						break;

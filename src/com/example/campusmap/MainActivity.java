@@ -52,6 +52,8 @@ public class MainActivity extends Activity implements OnClickListener,
 
 	private BuildingDrawing bd;
 	private Marker currentMarker;
+	
+	RouteRecord rrc   = new RouteRecord();
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +72,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
-
+		rrc.fileInitialization("txt");
 	}
 
 	private void GPS_Network_Initialization() {
@@ -170,7 +172,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	public void onMapClick(LatLng point) {
 
 		if (bd.pointIsInPolygon(point)) {
-			Toast.makeText(this, "it is within!", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "it is within!", Toast.LENGTH_SHORT).show();
 
 			Building tmpBuilding = bd.getCurrentTouchedBuilding();
 			if (tmpBuilding != null) {
@@ -178,7 +180,7 @@ public class MainActivity extends Activity implements OnClickListener,
 						tmpBuilding.getAddress());
 			}
 		} else {
-			Toast.makeText(this, "Not within!", Toast.LENGTH_SHORT).show();
+			//Toast.makeText(this, "Not within!", Toast.LENGTH_SHORT).show();
 			addSimpleMaker(point);
 		}
 
@@ -199,7 +201,7 @@ public class MainActivity extends Activity implements OnClickListener,
 		markerOptions.position(point);
 		markerOptions.title(point.latitude + " , " + point.longitude);
 
-		map.animateCamera(CameraUpdateFactory.newLatLng(point));
+		//map.animateCamera(CameraUpdateFactory.newLatLng(point));
 
 		currentMarker = map.addMarker(markerOptions
 				.icon(BitmapDescriptorFactory
@@ -272,7 +274,15 @@ public class MainActivity extends Activity implements OnClickListener,
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
+		
+		
+		//--------- helper : draw map
 		System.out.println("new LatLng("+ marker.getTitle()+"),");
+
+		
+		rrc.appendDataIntoFile("new LatLng("+ marker.getTitle()+"), ");
+		
+		//-----
 		
 		
 		
@@ -302,6 +312,11 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 
+						if(rrc != null){
+						
+							rrc.checkRemainingElementsInBQandCloseBuffer();
+							rrc.fileInitialization("txt");
+						}
 						// ...
 
 					}
