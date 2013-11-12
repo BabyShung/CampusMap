@@ -53,7 +53,7 @@ public class MainActivity extends Activity implements OnClickListener,
 	private BuildingDrawing bd;
 	private Marker currentMarker;
 	
-	RecordRoute rr_test   = new RecordRoute();
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -68,11 +68,11 @@ public class MainActivity extends Activity implements OnClickListener,
 
 		// GPSInitialization();
 		GPS_Network_Initialization();
-		// CallDirection();
+	    CallDirection();
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
-		rr_test.fileInitialization("txt",false);
+
 	}
 
 	private void GPS_Network_Initialization() {
@@ -180,7 +180,6 @@ public class MainActivity extends Activity implements OnClickListener,
 						tmpBuilding.getAddress());
 			}
 		} else {
-			//Toast.makeText(this, "Not within!", Toast.LENGTH_SHORT).show();
 			addSimpleMaker(point);
 		}
 
@@ -200,8 +199,6 @@ public class MainActivity extends Activity implements OnClickListener,
 		// Setting the position for the marker
 		markerOptions.position(point);
 		markerOptions.title(point.latitude + " , " + point.longitude);
-
-		//map.animateCamera(CameraUpdateFactory.newLatLng(point));
 
 		currentMarker = map.addMarker(markerOptions
 				.icon(BitmapDescriptorFactory
@@ -275,17 +272,6 @@ public class MainActivity extends Activity implements OnClickListener,
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
 		
-		
-		//--------- helper : draw map
-		System.out.println("new LatLng("+ marker.getTitle()+"),");
-
-		
-		rr_test.appendDataIntoFile("new LatLng("+ marker.getTitle()+"), ");
-		
-		//-----
-		
-		
-		
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
 				new DialogInterface.OnClickListener() {
 
@@ -312,11 +298,7 @@ public class MainActivity extends Activity implements OnClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 
-						if(rr_test != null){
-						
-							rr_test.checkRemainingElementsInBQandCloseBuffer();
-							rr_test.fileInitialization("txt",false);
-						}
+
 						// ...
 
 					}

@@ -13,6 +13,7 @@ import android.os.Bundle;
 
 import android.widget.Toast;
 
+//This class will be execute in Async task
 public class MyLocation implements Runnable {
 	private Timer timer1;
 	private LocationManager lm;
@@ -23,10 +24,9 @@ public class MyLocation implements Runnable {
 	private MainActivity mContext;
 	private final static int TIME_FOR_GPS_WHEN_NO_NETWORK = 120000;
 	private GoogleMap map;
-	private RecordRoute rr;
-
+	private Route rr;
 	private Thread mythread = null;
-
+	private FileOperations fo;
 
 	public static abstract class LocationResult {
 		public abstract void gotLocation(Location location);
@@ -35,11 +35,15 @@ public class MyLocation implements Runnable {
 	public MyLocation(MainActivity mContext,GoogleMap map) {// constructor
 		this.mContext = mContext;
 		this.map = map;
+		fo = new FileOperations();
+		rr = new Route(fo);
+		
+		
+		rr.showTestRoute(map);
+		//rr.processRecord_test();
 	}
 
 	public boolean setupLocation(Context context, LocationResult result) {
-		// LocationResult callback class to pass location value from
-		// MyLocation to user code.
 
 		locationResult = result;
 		if (lm == null)
@@ -72,9 +76,6 @@ public class MyLocation implements Runnable {
 					locationListenerNetwork);
 		}
 
-		rr = new RecordRoute();
-		rr.showTestRoute(map);
-		
 		timer1 = new Timer();
 
 		timer1.schedule(new RetrieveLastLocation(),
@@ -85,7 +86,7 @@ public class MyLocation implements Runnable {
 	public void beginRoute() {
 		// initialize file and start a thread for recording
 		rr.toggleRecordState();
-		rr.fileInitialization("txt",false);
+		fo.fileInitialization("txt");
 		startThread();
 	}
 
@@ -100,7 +101,7 @@ public class MyLocation implements Runnable {
 			rr.toggleRecordState();
 			lm.removeUpdates(locationListenerGps);
 			lm.removeUpdates(locationListenerNetwork);
-			Toast.makeText(mContext, "File saved as " + rr.getFileName(),
+			Toast.makeText(mContext, "File saved as " + fo.getFileName(),
 					Toast.LENGTH_SHORT).show();
 
 			// stop thread
@@ -109,9 +110,9 @@ public class MyLocation implements Runnable {
 			}
 			
 		    //add remaining ele and close buffer
-			rr.checkRemainingElementsInBQandCloseBuffer();
+			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 			//delete consecutive same lines
-			rr.processRecord();
+			fo.processRecord();
 			//iterrupt
 			locationTask.cancel(true);
 		}
@@ -163,15 +164,21 @@ public class MyLocation implements Runnable {
 		}
 
 		if (rr.recordHasStarted()) {
-
-			if (rr.RWTrue()) { // keep on appending data in the txt file
 				rr.bufferStore(location);
-			}
-
 		}
 
 	}
 
+	@Override
+	public void run() {
+		while (true) {
+			System.out.println("-----------thread!!");
+			rr.bufferTakeAndAddToFile();
+		}
+
+	}
+	
+	
 	class RetrieveLastLocation extends TimerTask { // runnable,it's a thread
 		@Override
 		public void run() {
@@ -221,17 +228,6 @@ public class MyLocation implements Runnable {
 
 	}
 
-	@Override
-	public void run() {
 
-		while (true) {
-
-			System.out.println("-----------thread!!");
-
-			rr.bufferTakeAndAddToFile();
-
-		}
-
-	}
 
 }
