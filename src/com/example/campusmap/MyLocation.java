@@ -40,7 +40,8 @@ public class MyLocation implements Runnable {
 		
 		
 		rr.showTestRoute(map);
-		//rr.processRecord_test();
+		//fo.processRecord_test();
+		//fo.processRecord();
 	}
 
 	public boolean setupLocation(Context context, LocationResult result) {
@@ -113,6 +114,9 @@ public class MyLocation implements Runnable {
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 			//delete consecutive same lines
 			fo.processRecord();
+			
+			//fix outlier points
+			//fo.processRecord_2();
 			//iterrupt
 			locationTask.cancel(true);
 		}

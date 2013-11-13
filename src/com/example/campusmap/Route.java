@@ -57,8 +57,7 @@ public class Route {
 		try {
 			tmp = buffer.take();
 			// string that will be stored
-			String dataString = "\"" + tmp.latitude + "\"," + "\""
-					+ tmp.longitude + "\"\n";
+			String dataString = tmp.latitude + "," + tmp.longitude + ";";
 			// append data to a file
 			fo.appendDataIntoFile(dataString);
 		} catch (InterruptedException e) {

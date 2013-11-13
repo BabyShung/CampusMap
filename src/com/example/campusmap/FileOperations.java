@@ -34,7 +34,7 @@ public class FileOperations {
 	private void checkDownloadFolderExist() {
 		// set path, we are going to save the txt file into download folder
 		path = Environment
-				.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+				.getExternalStoragePublicDirectory("CampusMap/Routes");
 		// if not exists, create path directory
 		path.mkdirs();
 	}
@@ -78,12 +78,13 @@ public class FileOperations {
 			double lat, lng;
 			String line = br.readLine();
 			while (line != null) {
-				String[] tmp = line.replaceAll("\"", "").split(",");
-				lat = Double.parseDouble(tmp[0]);
-				lng = Double.parseDouble(tmp[1]);
-
-				listOfPoints.add(new LatLng(lat, lng));
-
+				String[] tmp = line.split(";");
+				for (String tmpS : tmp) {
+					String[] tmpTwo = tmpS.split(",");
+					lat = Double.parseDouble(tmpTwo[0]);
+					lng = Double.parseDouble(tmpTwo[1]);
+					listOfPoints.add(new LatLng(lat, lng));
+				}
 				line = br.readLine();
 			}
 
@@ -94,31 +95,13 @@ public class FileOperations {
 		return listOfPoints;
 	}
 
-	public void processRecord() {
-		// delete consecutive same data
-		// read file A -> delete consecutive same -> write to fileB
+	private Point getPoint(String s) {
 
-		try {
-			bufferReader = new BufferedReader(new FileReader(filePath));
-			String line = bufferReader.readLine();
-			String lastString = null;
-			file_p_Initialization("txt", fileName);// save as "xx_p.txt"
-			while (line != null) {
-				if (!line.equals(lastString)) {// write in new file
+		String[] tmpTwo = s.split(",");
+		double x = Double.parseDouble(tmpTwo[0]);
+		double y = Double.parseDouble(tmpTwo[1]);
 
-					appendDataIntoFile_p(line + "\n");
-					lastString = line;
-
-				}
-				// else not append and move onto next line
-				line = bufferReader.readLine();
-			}
-			bufferReader.close();
-			bufferWritter_p.close();
-			fileWritter_p.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
+		return new Point(x, y);
 	}
 
 	private void file_p_Initialization(String extension, File fn) {
@@ -144,32 +127,85 @@ public class FileOperations {
 
 	}
 
-	public void processRecord_test() {
-		System.out.println("-------------------2223-----======");
-		String everything = "";
+	public void processRecord() {
+		// delete consecutive same data
+		// read file A -> delete consecutive same -> write to fileB
 		try {
-			bufferReader = new BufferedReader(new FileReader(
-					"/storage/emulated/0/Download/MyRoute1.txt"));
+			//filePath = "/storage/emulated/0/CampusMap/Routes/MyRoute1.txt";
+			//fileName = new File("/storage/emulated/0/CampusMap/Routes/MyRoute1_p.txt");
+			
+			bufferReader = new BufferedReader(new FileReader(filePath));
 			String line = bufferReader.readLine();
-			StringBuilder sb = new StringBuilder();
-
 			file_p_Initialization("txt", fileName);// save as "xx_p.txt"
 			while (line != null) {
-				sb.append(line);
+				String[] tmp = line.split(";");
+				int lastInt = 0;
+				appendDataIntoFile_p(tmp[lastInt] + ";");
+				for (int i = 1; i < tmp.length; i++) {
+					if (!tmp[i].equals(tmp[lastInt])) {
+						appendDataIntoFile_p(tmp[i] + ";");
+						lastInt = i;
+					}
+				}
+				// else not append and move onto next line
 				line = bufferReader.readLine();
 			}
-			everything = sb.toString();
-
-			System.out.println("------------------------======");
-			System.out.println(everything);
-
+			System.out.println("prcessed 1st..");
 			bufferReader.close();
-			bufferWritter.close();
+			bufferWritter_p.close();
+			fileWritter_p.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
+	public void processRecord_2() {
+		// process 2nd time
+		try {
+			bufferReader = new BufferedReader(new FileReader(filePath_p));
+			String line = bufferReader.readLine();
+			file_p_Initialization("txt", fileName);// resave as "xx_p.txt"
+
+			while (line != null) {
+				String[] tmp = line.split(";");
+
+				Point first = getPoint(tmp[0]);
+				Point second = getPoint(tmp[1]);
+				Point Pi;
+				Point tmpP;
+				for (int i = 2; i < tmp.length; i++) {
+
+					Pi = getPoint(tmp[i]);
+
+					if (first.checkNextPointInScope(second, Pi)) {
+						// true, do nothing
+					} else {// false, replace second with mid
+						tmpP = first.getMidPoint();
+						if (tmpP != null)
+							second = tmpP;
+						tmp[i - 1] = second.toString();
+					}
+					first = second;
+					second = Pi;
+					
+				}
+
+				// now can store tmp into file again
+				for (String f : tmp) {
+					appendDataIntoFile_p(f + ";");
+				}
+
+				line = bufferReader.readLine();
+			}
+			System.out.println("prcessed 2nd..");
+			bufferReader.close();
+			bufferWritter_p.close();
+			fileWritter_p.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public void appendDataIntoFile(String data) {
 		try {
 			// just execute writing
@@ -189,7 +225,7 @@ public class FileOperations {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public String getFileName() {
 		return fileName.getName();
 	}
