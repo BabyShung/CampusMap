@@ -133,9 +133,9 @@ public class FileOperations {
 		filePath = path + "/"+originalFileName+".txt";
 		fileName = new File(path +"/"+originalFileName+".txt");
 		processRecord_delete_consecutive();
-		for(int i=0;i<5;i++)
-			processRecord_delete_outliers("a");
-		for(int i=0;i<5;i++)
+		//for(int i=0;i<5;i++)
+			//processRecord_delete_outliers("a");
+		for(int i=0;i<10;i++)
 		processRecord_kalman_filter("a");
 	}
 	///////////------------------------------------
