@@ -39,10 +39,14 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		
+		fo.TESTING("MyRoute1");
 		
 		rr.showTestRoute("MyRoute1_a",map,Color.RED);
-		rr.showTestRoute("MyRoute1_b",map,Color.BLUE);
-		rr.showTestRoute("MyRoute1_c",map,Color.GREEN);
+//		rr.showTestRoute("MyRoute1_b",map,Color.BLACK);
+//		rr.showTestRoute("MyRoute1_c",map,Color.BLUE);
+//		rr.showTestRoute("MyRoute1_d",map,Color.YELLOW);
+//		rr.showTestRoute("MyRoute1_e",map,Color.DKGRAY);
+
 		//fo.processRecord_test();
 		//fo.processRecord();
 	}
@@ -119,10 +123,12 @@ public class MyLocation implements Runnable {
 			fo.processRecord_delete_consecutive();
 			
 			//2. fix outlier points
-			fo.processRecord_kalman_filter();
-			
-			//3. delete outragous outliers points
-			fo.processRecord_delete_outliers();
+			for(int i=0;i<5;i++)
+				fo.processRecord_delete_outliers("a");
+
+			//3. smooth a little bit using kalmen filter
+			for(int i=0;i<5;i++)
+				fo.processRecord_kalman_filter("a");
 			
 			//iterrupt
 			locationTask.cancel(true);

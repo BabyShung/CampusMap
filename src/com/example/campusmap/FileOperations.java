@@ -68,7 +68,7 @@ public class FileOperations {
 		}
 	}
 
-	public ArrayList<LatLng> readPointsFile(String fn) {
+	public ArrayList<LatLng> readPointsFile(String fn) {//for showing path on map
 
 		ArrayList<LatLng> listOfPoints = new ArrayList<LatLng>();
 		checkDownloadFolderExist();
@@ -104,7 +104,7 @@ public class FileOperations {
 		return new Point(x, y);
 	}
 
-	private void file_p_Initialization(String extension, File fn, String beta) {
+	private void file_p_Initialization(String extension, File fn, String beta, boolean append) {
 		checkDownloadFolderExist();
 		System.out.println("****get file name: " + fn.getName());
 
@@ -117,37 +117,46 @@ public class FileOperations {
 			filePath_p = fileName_p.getPath();
 			System.out.println("****Stored processed file_p path: "
 					+ filePath_p);
-
-			fileWritter_p = new FileWriter(fileName_p, true);// true:append file
+			fileWritter_p = new FileWriter(fileName_p, append);// true:append file
 			bufferWritter_p = new BufferedWriter(fileWritter_p);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 
 	}
-
+	
+	///////////------------------------------------
+	///////////-------------TESTING-------------------
+	///////////------------------------------------	
+	public void TESTING(String originalFileName){
+		checkDownloadFolderExist();
+		filePath = path + "/"+originalFileName+".txt";
+		fileName = new File(path +"/"+originalFileName+".txt");
+		processRecord_delete_consecutive();
+		for(int i=0;i<5;i++)
+			processRecord_delete_outliers("a");
+		for(int i=0;i<5;i++)
+		processRecord_kalman_filter("a");
+	}
+	///////////------------------------------------
+	
 	public void processRecord_delete_consecutive() {
 		// delete consecutive same data
 		// read file A -> delete consecutive same -> write to fileB
 		try {
-			//filePath = "/storage/emulated/0/CampusMap/Routes/MyRoute1.txt";
-			//fileName = new File("/storage/emulated/0/CampusMap/Routes/MyRoute1_p.txt");
-			
 			bufferReader = new BufferedReader(new FileReader(filePath));
 			String line = bufferReader.readLine();
-			file_p_Initialization("txt", fileName, "a");// save as "xx_a.txt"
+			file_p_Initialization("txt", fileName, "a", false);// save as "xx_a.txt"
 			while (line != null) {
 				String[] tmp = line.split(";");
 				
 				Location_Hao lastL = new Location_Hao(tmp[0]);
-				appendDataIntoFile_p(lastL.toString());
-				
-				
+				appendDataIntoFile_p(lastL.toString()+";");
+					
 				for (int i = 1; i < tmp.length; i++) {
 					Location_Hao current = new Location_Hao(tmp[i]);
 					if (!lastL.LocationTheSame(current)) {
-						appendDataIntoFile_p(current.toString());
+						appendDataIntoFile_p(current.toString()+";");
 						lastL = current;
 					}
 				}
@@ -163,13 +172,11 @@ public class FileOperations {
 		}
 	}
 	
-	public void processRecord_kalman_filter() {//Kalman Filter Process!!
-
+	public void processRecord_kalman_filter(String beta) {//Kalman Filter Process!!
 		try {
- 
 			bufferReader = new BufferedReader(new FileReader(filePath_p));
 			String line = bufferReader.readLine();
-			file_p_Initialization("txt", fileName, "b");// save as "xx_b.txt"
+			file_p_Initialization("txt", fileName, beta,false);// save as "xx_b.txt"
 			
 			while (line != null) {
 				String[] tmp = line.split(";");
@@ -193,26 +200,25 @@ public class FileOperations {
 			e.printStackTrace();
 		}
 	}
-
-	public void processRecord_delete_outliers() {
-
+	
+	public void processRecord_delete_outliers(String beta) {
 		try {
 			bufferReader = new BufferedReader(new FileReader(filePath_p));
 			String line = bufferReader.readLine();
-			file_p_Initialization("txt", fileName, "c");// save as "xx_c.txt"
+			file_p_Initialization("txt", fileName, beta,false);// save as "xx_c.txt"
 
 			while (line != null) {
 				String[] tmp = line.split(";");
 
-				Point first = getPoint(tmp[0]);
-				Point second = getPoint(tmp[1]);
-				Point Pi;
-				Point tmpP;
+				Location_Hao first = new Location_Hao(tmp[0]);
+				Location_Hao second = new Location_Hao(tmp[1]);
+				Location_Hao Li;
+				Location_Hao tmpP;
 				for (int i = 2; i < tmp.length; i++) {
 
-					Pi = getPoint(tmp[i]);
+					Li = new Location_Hao(tmp[i]);
 
-					if (first.checkNextPointInScope(second, Pi)) {
+					if (first.checkNextPointInScope(second, Li)) {
 						// true, do nothing
 					} else {// false, replace second with mid
 						tmpP = first.getMidPoint();
@@ -221,13 +227,12 @@ public class FileOperations {
 						tmp[i - 1] = second.toString();
 					}
 					first = second;
-					second = Pi;
+					second = Li;
 					
 				}
-
 				// now can store tmp into file again
 				for (String f : tmp) {
-					appendDataIntoFile_p(f + ";");
+					appendDataIntoFile_p(f+";");
 				}
 
 				line = bufferReader.readLine();
