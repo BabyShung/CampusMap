@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import com.google.android.gms.maps.GoogleMap;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -39,7 +40,9 @@ public class MyLocation implements Runnable {
 		rr = new Route(fo);
 		
 		
-		rr.showTestRoute(map);
+		rr.showTestRoute("MyRoute1_a",map,Color.RED);
+		rr.showTestRoute("MyRoute1_b",map,Color.BLUE);
+		rr.showTestRoute("MyRoute1_c",map,Color.GREEN);
 		//fo.processRecord_test();
 		//fo.processRecord();
 	}
@@ -112,11 +115,15 @@ public class MyLocation implements Runnable {
 			
 		    //add remaining ele and close buffer
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
-			//delete consecutive same lines
-			fo.processRecord();
+			//1. delete consecutive same lines
+			fo.processRecord_delete_consecutive();
 			
-			//fix outlier points
-			//fo.processRecord_2();
+			//2. fix outlier points
+			fo.processRecord_kalman_filter();
+			
+			//3. delete outragous outliers points
+			fo.processRecord_delete_outliers();
+			
 			//iterrupt
 			locationTask.cancel(true);
 		}

@@ -74,7 +74,7 @@ public class FileOperations {
 		checkDownloadFolderExist();
 		try {
 			BufferedReader br = new BufferedReader(new FileReader(path + "/"
-					+ fn + "_p.txt"));
+					+ fn + ".txt"));
 			double lat, lng;
 			String line = br.readLine();
 			while (line != null) {
@@ -104,13 +104,13 @@ public class FileOperations {
 		return new Point(x, y);
 	}
 
-	private void file_p_Initialization(String extension, File fn) {
+	private void file_p_Initialization(String extension, File fn, String beta) {
 		checkDownloadFolderExist();
 		System.out.println("****get file name: " + fn.getName());
 
 		try {
 			String tmp = fn.getName().replaceAll("." + extension,
-					"_p." + extension);
+					"_"+ beta +"." + extension);
 			System.out.println("****tmp: " + tmp);
 			fileName_p = new File(path + "/" + tmp);
 			fileName_p.createNewFile();
@@ -127,7 +127,7 @@ public class FileOperations {
 
 	}
 
-	public void processRecord() {
+	public void processRecord_delete_consecutive() {
 		// delete consecutive same data
 		// read file A -> delete consecutive same -> write to fileB
 		try {
@@ -136,15 +136,19 @@ public class FileOperations {
 			
 			bufferReader = new BufferedReader(new FileReader(filePath));
 			String line = bufferReader.readLine();
-			file_p_Initialization("txt", fileName);// save as "xx_p.txt"
+			file_p_Initialization("txt", fileName, "a");// save as "xx_a.txt"
 			while (line != null) {
 				String[] tmp = line.split(";");
-				int lastInt = 0;
-				appendDataIntoFile_p(tmp[lastInt] + ";");
+				
+				Location_Hao lastL = new Location_Hao(tmp[0]);
+				appendDataIntoFile_p(lastL.toString());
+				
+				
 				for (int i = 1; i < tmp.length; i++) {
-					if (!tmp[i].equals(tmp[lastInt])) {
-						appendDataIntoFile_p(tmp[i] + ";");
-						lastInt = i;
+					Location_Hao current = new Location_Hao(tmp[i]);
+					if (!lastL.LocationTheSame(current)) {
+						appendDataIntoFile_p(current.toString());
+						lastL = current;
 					}
 				}
 				// else not append and move onto next line
@@ -158,13 +162,44 @@ public class FileOperations {
 			e.printStackTrace();
 		}
 	}
+	
+	public void processRecord_kalman_filter() {//Kalman Filter Process!!
 
-	public void processRecord_2() {
-		// process 2nd time
+		try {
+ 
+			bufferReader = new BufferedReader(new FileReader(filePath_p));
+			String line = bufferReader.readLine();
+			file_p_Initialization("txt", fileName, "b");// save as "xx_b.txt"
+			
+			while (line != null) {
+				String[] tmp = line.split(";");
+				
+				KalmanLatLong kf = new KalmanLatLong();
+				Location_Hao current;
+				
+				for (int i = 0; i < tmp.length; i++) {
+					current = new Location_Hao(tmp[i]);
+					kf.Process(current.getX(), current.getY(), 1, current.getTS());
+					appendDataIntoFile_p(kf.toString());
+				}
+				// else not append and move onto next line
+				line = bufferReader.readLine();
+			}
+			System.out.println("prcessed Kalman Filter!!..");
+			bufferReader.close();
+			bufferWritter_p.close();
+			fileWritter_p.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void processRecord_delete_outliers() {
+
 		try {
 			bufferReader = new BufferedReader(new FileReader(filePath_p));
 			String line = bufferReader.readLine();
-			file_p_Initialization("txt", fileName);// resave as "xx_p.txt"
+			file_p_Initialization("txt", fileName, "c");// save as "xx_c.txt"
 
 			while (line != null) {
 				String[] tmp = line.split(";");
@@ -197,7 +232,7 @@ public class FileOperations {
 
 				line = bufferReader.readLine();
 			}
-			System.out.println("prcessed 2nd..");
+			System.out.println("prcessed delete outliers..");
 			bufferReader.close();
 			bufferWritter_p.close();
 			fileWritter_p.close();

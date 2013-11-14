@@ -13,18 +13,18 @@ import android.location.Location;
 public class Route {
 	private FileOperations fo;
 	private boolean recordIsStarted = false;
-	private BlockingQueue<LatLng> buffer;
+	private BlockingQueue<Location> buffer;
 
 	public Route(FileOperations fo) {// constructor
-		buffer = new ArrayBlockingQueue<LatLng>(20);
+		buffer = new ArrayBlockingQueue<Location>(20);
 		this.fo = fo;
 	}
 
-	public void showTestRoute(GoogleMap map) {
-		ArrayList<LatLng> result = fo.readPointsFile("MyRoute1");
+	public void showTestRoute(String justName,GoogleMap map,int c) {
+		ArrayList<LatLng> result = fo.readPointsFile(justName);
 		PolylineOptions rectline;
 		if (result != null) {
-			rectline = new PolylineOptions().width(4).color(Color.RED);
+			rectline = new PolylineOptions().width(4).color(c);
 			int i;
 			for (i = 0; i < result.size(); i++){
 				rectline.add(result.get(i));
@@ -35,8 +35,7 @@ public class Route {
 
 	public void bufferStore(Location location) {
 		try {
-			buffer.put(new LatLng(location.getLatitude(), location
-					.getLongitude()));
+			buffer.put(location);
 		} catch (InterruptedException e1) {
 			e1.printStackTrace();
 		}
@@ -53,11 +52,11 @@ public class Route {
 	}
 	
 	public void bufferTakeAndAddToFile() {
-		LatLng tmp;
+		Location tmp;
 		try {
 			tmp = buffer.take();
 			// string that will be stored
-			String dataString = tmp.latitude + "," + tmp.longitude + ";";
+			String dataString = tmp.getLatitude() + "," + tmp.getLongitude() + "," + tmp.getTime() + ";";
 			// append data to a file
 			fo.appendDataIntoFile(dataString);
 		} catch (InterruptedException e) {
