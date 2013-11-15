@@ -135,7 +135,7 @@ public class FileOperations {
 		processRecord_delete_consecutive();
 		//for(int i=0;i<5;i++)
 			//processRecord_delete_outliers("a");
-		for(int i=0;i<10;i++)
+		for(int i=0;i<15;i++)
 		processRecord_kalman_filter("a");
 	}
 	///////////------------------------------------

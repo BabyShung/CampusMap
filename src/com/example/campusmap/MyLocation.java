@@ -39,9 +39,11 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		
-		fo.TESTING("MyRoute1");
+		//fo.TESTING("MyRoute1");
 		
-		rr.showTestRoute("MyRoute1_a",map,Color.RED);
+		//rr.showTestRoute("MyRoute1_a",map,Color.RED);
+		
+		
 //		rr.showTestRoute("MyRoute1_b",map,Color.BLACK);
 //		rr.showTestRoute("MyRoute1_c",map,Color.BLUE);
 //		rr.showTestRoute("MyRoute1_d",map,Color.YELLOW);
