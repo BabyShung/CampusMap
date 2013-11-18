@@ -9,16 +9,8 @@
 		android:id="@+id/widget118"
 		android:layout_width="fill_parent"
 		android:layout_height="fill_parent"
-		android:orientation="vertical"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true">
-		
-	    <TableRow
-			android:id="@+id/settingtablerow00"
-			android:layout_width="fill_parent"
-			android:layout_height="50dp"
-			android:orientation="horizontal">			
-		</TableRow>
+		android:orientation="vertical">
+	
 		
 		<TableRow
 		    android:id="@+id/settingtablerow1"

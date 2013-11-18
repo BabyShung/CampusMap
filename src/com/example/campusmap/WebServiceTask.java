@@ -14,15 +14,15 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 
-	private MainActivity mContext;
+	private HomeActivity mContext;
 	private PolylineOptions rectline;
 	private GoogleMap map;
 	private LatLng fromPosition;
 	private LatLng toPosition;
 
-	public WebServiceTask(MainActivity context, GoogleMap map,
+	public WebServiceTask(HomeActivity homeActivity, GoogleMap map,
 			LatLng fromPosition, LatLng toPosition) {	//constructor
-		this.mContext = context;
+		this.mContext = homeActivity;
 		this.map = map;
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;

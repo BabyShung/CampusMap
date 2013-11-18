@@ -22,7 +22,7 @@ public class MyLocation implements Runnable {
 	private boolean gps_enabled = false;
 	private boolean network_enabled = false;
 	private boolean timer_cancelled = false;
-	private MainActivity mContext;
+	private HomeActivity mContext;
 	private final static int TIME_FOR_GPS_WHEN_NO_NETWORK = 120000;
 	private GoogleMap map;
 	private Route rr;
@@ -33,8 +33,8 @@ public class MyLocation implements Runnable {
 		public abstract void gotLocation(Location location);
 	}
 
-	public MyLocation(MainActivity mContext,GoogleMap map) {// constructor
-		this.mContext = mContext;
+	public MyLocation(HomeActivity homeActivity,GoogleMap map) {// constructor
+		this.mContext = homeActivity;
 		this.map = map;
 		fo = new FileOperations();
 		rr = new Route(fo);
