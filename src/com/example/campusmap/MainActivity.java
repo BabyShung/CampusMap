@@ -1,5 +1,7 @@
 package com.example.campusmap;
 
+import com.example.campusmap.database.DBData;
+
 import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.Intent;
@@ -10,7 +12,7 @@ import android.widget.TabHost.TabSpec;
 
 
 public class MainActivity extends Activity{
-	
+	private DBData datasource;
 	private TabHost mTabHost;
 	private LocalActivityManager lam;
 
@@ -72,6 +74,9 @@ public class MainActivity extends Activity{
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
+		datasource = new DBData(this);
+		datasource.open();
+		datasource.insertData();
 		return true;
 	}
 

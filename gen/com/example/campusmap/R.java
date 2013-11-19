@@ -208,7 +208,7 @@ containing a value of this type.
         public static final int ic_plusone_tall_off_client=0x7f02001c;
     }
     public static final class id {
-        public static final int action_settings=0x7f050018;
+        public static final int action_settings=0x7f050019;
         public static final int hybrid=0x7f050004;
         public static final int linearLayout1=0x7f050008;
         public static final int map=0x7f050007;
@@ -218,17 +218,18 @@ containing a value of this type.
         public static final int satellite=0x7f050002;
         public static final int searchACTV=0x7f05000c;
         public static final int searchBTN=0x7f05000d;
-        public static final int settingBTN=0x7f050017;
-        public static final int settingCB=0x7f050014;
-        public static final int settingET=0x7f050011;
-        public static final int settingtablerow1=0x7f050010;
-        public static final int settingtablerow2=0x7f050012;
-        public static final int settingtablerow3=0x7f050015;
+        public static final int settingBTN=0x7f050018;
+        public static final int settingCB=0x7f050015;
+        public static final int settingET=0x7f050012;
+        public static final int settingtablerow1=0x7f050011;
+        public static final int settingtablerow2=0x7f050013;
+        public static final int settingtablerow3=0x7f050016;
         public static final int terrain=0x7f050003;
-        public static final int widget118=0x7f05000f;
+        public static final int textView1=0x7f05000f;
+        public static final int widget118=0x7f050010;
         public static final int widget123=0x7f050005;
-        public static final int widget125=0x7f050013;
-        public static final int widget126=0x7f050016;
+        public static final int widget125=0x7f050014;
+        public static final int widget126=0x7f050017;
         public static final int widget18=0x7f05000a;
         public static final int widget32=0x7f050009;
         public static final int widget39=0x7f05000b;

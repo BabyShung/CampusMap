@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Criteria;
@@ -13,6 +14,8 @@ import android.os.Bundle;
 
 import com.example.campusmap.BuildingDrawing.Building;
 import com.example.campusmap.MyLocation.LocationResult;
+import com.example.campusmap.database.DBData;
+import com.example.campusmap.database.DatabaseEntry;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -40,17 +43,19 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 
 	private BuildingDrawing bd;
 	private Marker currentMarker;
-
+	
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
-		// Initialize map
+		
+		
+	
 		mapInitialization();
 		setUpListeners();
-
+		
 		arrayPoints = new ArrayList<LatLng>();
 
 		// GPSInitialization();
