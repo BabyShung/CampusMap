@@ -132,6 +132,8 @@ public class MyLocation implements Runnable {
 			for(int i=0;i<5;i++)
 				fo.processRecord_kalman_filter("a");
 			
+			fo.insertDataIntoDB();
+			
 			//iterrupt
 			locationTask.cancel(true);
 		}

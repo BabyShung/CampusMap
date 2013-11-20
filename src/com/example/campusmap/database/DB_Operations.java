@@ -19,6 +19,8 @@ public class DB_Operations implements TableDefinition {
 		System.out.println("DB Path: " + database.getPath());
 	}
 
+	public DB_Operations(){}
+	
 	public DB_Operations(Context context) {
 		passed_context = context;
 	}
@@ -102,5 +104,14 @@ public class DB_Operations implements TableDefinition {
 
 		System.out.println("test----------insert!!!!");
 		// need to add more
+	}
+	
+	
+	public void insertARoute(String db_fn) {
+		 ContentValues cv = new ContentValues();
+		 cv.put(ROUTE_FILENAME, db_fn);
+		 System.out.println("inserted before in Route table");
+		 database.insert(ROUTE_TABLE, null, cv);
+		 System.out.println("inserted in Route table");
 	}
 }

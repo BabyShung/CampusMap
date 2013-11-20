@@ -8,6 +8,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import com.example.campusmap.database.DB_Operations;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.os.Environment;
@@ -306,4 +307,16 @@ public class FileOperations {
 		}
 	}
 
+	public void insertDataIntoDB() {
+
+		String db_fn = fileName_p.getName();
+		System.out.println("********store in db: "+db_fn);
+		
+		DB_Operations op = new DB_Operations();
+		op.open();
+
+		op.insertARoute(db_fn);//need to add more attributes
+		op.close();
+	}
+	
 }
