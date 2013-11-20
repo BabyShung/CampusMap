@@ -37,18 +37,17 @@
 				android:onClick="onClick_SEARCH"/>
 		</TableRow>
 				
-		<ScrollView
-		android:id="@+id/widget49"
-		android:layout_width="fill_parent"
-		android:layout_height="245dp"
-		android:layout_centerHorizontal="true" />
+		<!-- <ScrollView
+		    android:id="@+id/scrollID"
+		    android:layout_width="fill_parent"
+		    android:layout_height="fill_parent"
+		    android:layout_centerHorizontal="true" > -->
+ 
+			<ListView android:id="@android:id/list"
+  			  android:layout_width="fill_parent"
+  			  android:layout_height="fill_parent"/>
 
-		<TextView
-		    android:id="@+id/textView1"
-		    android:layout_width="300dp"
-		    android:layout_height="wrap_content"
-		    android:text="Large Text"
-		    android:textAppearance="?android:attr/textAppearanceLarge" />
+		<!-- </ScrollView> -->
 
 	</LinearLayout>
 </RelativeLayout>

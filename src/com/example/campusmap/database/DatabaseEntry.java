@@ -8,7 +8,7 @@ import android.os.Environment;
 public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 
 	private SQLiteDatabase db;
-	public static final int DATABASE_VERSION = 1;
+	public static final int DATABASE_VERSION = 4;
 	public static final String DATABASE_NAME = CAMPUSMAP_DATABASE;
 
 	public DatabaseEntry(Context context) {
