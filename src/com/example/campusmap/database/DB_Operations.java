@@ -90,7 +90,7 @@ public class DB_Operations implements TableDefinition {
 			String lng) {
 		System.out.println("test----------insert~~~~~");
 		database.execSQL("INSERT INTO Building (" + bn + "," + ba + "," + lat
-				+ "," + lng + ") VALUES ('MClean Hall','address1','41.66069993335234','-91.53652489185333');");
+				+ "," + lng + ") VALUES ('Mclean Hall','address1','41.66069993335234','-91.53652489185333');");
 		database.execSQL("INSERT INTO Building (" + bn + "," + ba + "," + lat
 				+ "," + lng + ") VALUES ('Jessup Hall','address2','41.66193405068999','-91.53651483356953');");
 		database.execSQL("INSERT INTO Building (" + bn + "," + ba + "," + lat

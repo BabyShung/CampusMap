@@ -18,13 +18,14 @@
 			android:layout_width="fill_parent"
 			android:layout_height="55dp"
 			android:orientation="horizontal">
+
 			<AutoCompleteTextView
-				android:id="@+id/searchACTV"
-				android:layout_width="280dp"
-				android:layout_height="fill_parent"
-				android:text="Find buildings here!"
-				android:background="#ffffff00" 
-				android:textSize="15sp" />
+			    android:id="@+id/searchACTV"
+			    android:layout_width="280dp"
+			    android:layout_height="fill_parent"
+			    android:background="#ffffff00"
+			    android:textSize="15sp" />
+
 			<Button
 				android:id="@+id/searchBTN"
 				android:layout_width="80dp"
