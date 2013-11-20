@@ -14,7 +14,7 @@ import android.os.Bundle;
 
 import com.example.campusmap.BuildingDrawing.Building;
 import com.example.campusmap.MyLocation.LocationResult;
-import com.example.campusmap.database.DBData;
+import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.database.DatabaseEntry;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -219,6 +219,13 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
 
+		///////
+		String[] tmp = marker.getTitle().replace(" ", "").split(",");
+		
+		System.out.println(",'"+tmp[0]+"','"+tmp[1]+"'");
+		///////
+		
+		
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
 				new DialogInterface.OnClickListener() {
 

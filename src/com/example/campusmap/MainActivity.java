@@ -1,6 +1,7 @@
 package com.example.campusmap;
 
-import com.example.campusmap.database.DBData;
+import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.database.DatabaseEntry;
 
 import android.app.Activity;
 import android.app.LocalActivityManager;
@@ -12,7 +13,7 @@ import android.widget.TabHost.TabSpec;
 
 
 public class MainActivity extends Activity{
-	private DBData datasource;
+	private DB_Operations datasource;
 	private TabHost mTabHost;
 	private LocalActivityManager lam;
 
@@ -74,9 +75,18 @@ public class MainActivity extends Activity{
 	public boolean onCreateOptionsMenu(Menu menu) {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
-		datasource = new DBData(this);
-		datasource.open();
-		datasource.insertData();
+		//check tables
+		DatabaseEntry dbe = new DatabaseEntry(this);
+		dbe.createTables();
+		
+		//check building_table has rows or not
+		DB_Operations op = new DB_Operations(this);
+		op.open();
+		op.DB_init();
+		op.getDBPath();
+		op.getBuildingNames();
+		op.close();
+		
 		return true;
 	}
 

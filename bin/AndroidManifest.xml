@@ -38,7 +38,7 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.maps.v2.API_KEY"
-            android:value="AIzaSyAo6X9JiW37Y-_wgErdr27CLxp3A_1--Cc" />
+            android:value="AIzaSyCEee4ZuQoWr4YASdfHoRZtnOYccIfrrVw" />
 
         <activity
             android:name="com.example.campusmap.MainActivity"

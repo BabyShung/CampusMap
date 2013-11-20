@@ -19,7 +19,7 @@ public class BuildingDrawing {
 
 		buildingSet = new HashMap<Integer, Building>();
 		this.map = map;
-		drawAllTheCampusBuildings();
+		//drawAllTheCampusBuildings();
 	}
 
 	public boolean pointIsInPolygon(LatLng touchPoint) { // return true if point
