@@ -34,7 +34,7 @@
 				android:textStyle="bold" 
 				android:textSize="20sp"
 				android:text="SEARCH"
-				android:onClick="onClick_SEARCH"/>
+			/>
 		</TableRow>
 				
 		<!-- <ScrollView

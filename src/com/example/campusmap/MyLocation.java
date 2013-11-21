@@ -28,11 +28,42 @@ public class MyLocation implements Runnable {
 	private Route rr;
 	private Thread mythread = null;
 	private FileOperations fo;
+	private Location mylastlocation;
 
 	public static abstract class LocationResult {
 		public abstract void gotLocation(Location location);
 	}
 
+	public Location getMyLastLocation(){
+		Location net_loc = null, gps_loc = null;
+		if (gps_enabled) {
+			gps_loc = lm
+					.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+		}
+		if (network_enabled) {
+			net_loc = lm
+					.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+		}
+		// if there are both values use the latest one
+		if (gps_loc != null && net_loc != null) {
+			if (gps_loc.getTime() > net_loc.getTime()) {
+				return gps_loc;
+
+			} else {
+				return net_loc;
+
+			}
+		}
+
+		if (gps_loc != null) {
+			return gps_loc;
+		}
+		if (net_loc != null) {
+			return net_loc;
+		} 
+		return null;
+	}
+	
 	public MyLocation(HomeActivity homeActivity,GoogleMap map) {// constructor
 		this.mContext = homeActivity;
 		this.map = map;

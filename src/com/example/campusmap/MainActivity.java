@@ -5,9 +5,13 @@ import com.example.campusmap.database.DatabaseEntry;
 
 import android.app.Activity;
 import android.app.LocalActivityManager;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
@@ -68,11 +72,28 @@ public class MainActivity extends Activity{
 		mTabHost.addTab(futureSpec);
 		
 	 
-		//mTabHost.setCurrentTab(1);
+
+		  LocalBroadcastManager.getInstance(this).registerReceiver(mMessageReceiver,
+		      new IntentFilter("SetTab"));
 		
-		//System.out.println("%%%%%"+mTabHost.getCurrentTab());
+
 
 	}
+	
+	private BroadcastReceiver mMessageReceiver = new BroadcastReceiver() {
+	  @Override
+	  public void onReceive(Context context, Intent intent) {
+	    mTabHost.setCurrentTab(0);
+	  }
+	};
+
+	@Override
+	protected void onDestroy() {
+
+	  LocalBroadcastManager.getInstance(this).unregisterReceiver(mMessageReceiver);
+	  super.onDestroy();
+	}
+	
 	
 	@Override
 	protected void onPause() {

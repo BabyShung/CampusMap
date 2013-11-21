@@ -2,6 +2,8 @@ package com.example.campusmap.database;
 
 import java.util.ArrayList;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -54,9 +56,9 @@ public class DB_Operations implements TableDefinition {
 		return cursor;
 
 	}
-	
+
 	public Cursor readRouteData() {
-		String[] FROM = { ROUTE_ID, CREATE_TIME }; 
+		String[] FROM = { ROUTE_ID, CREATE_TIME };
 		Cursor cursor = database.query(ROUTE_TABLE, FROM, null, null, null,
 				null, null);
 		return cursor;
@@ -83,12 +85,13 @@ public class DB_Operations implements TableDefinition {
 		int iRid = c.getColumnIndex(ROUTE_ID);
 		int iRCT = c.getColumnIndex(CREATE_TIME);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-			
-			result.add("Route_"+c.getString(iRid)+":     "+c.getString(iRCT));
+
+			result.add("Route_" + c.getString(iRid) + ":     "
+					+ c.getString(iRCT));
 		}
 		return result;
 	}
-	
+
 	public boolean BuildingTable_isEmpty() {
 		String[] FROM = { BUILDING_ID };
 		Cursor c = database.query(BUILDING_TABLE, FROM, null, null, null, null,
@@ -176,8 +179,14 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lng
 				+ ") VALUES('Halsey Hall', 'address7', '41.662859','-91.537147');");
-		database.execSQL("INSERT INTO Building (" + bn + "," + ba + "," + lat
-				+ "," + lng
+		database.execSQL("INSERT INTO Building ("
+				+ bn
+				+ ","
+				+ ba
+				+ ","
+				+ lat
+				+ ","
+				+ lng
 				+ ") VALUES('IMU Parking Ramp', 'address8','41.663106','-91.538247');");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
@@ -341,7 +350,7 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lng
 				+ ") VALUES('Iowa Advanved Technology Labs','address26','41.664178','-91.538081');");
-		
+
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -351,8 +360,7 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lng
 				+ ") VALUES('Women Resource and Action Center','address27', '41.663415','-91.537273');");
-		
-		
+
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -526,5 +534,23 @@ public class DB_Operations implements TableDefinition {
 		System.out.println("inserted before in Route table");
 		database.insert(ROUTE_TABLE, null, cv);
 		System.out.println("inserted in Route table");
+	}
+
+	public LatLng getLatLngFromDB(String bn) {
+		String[] columns = new String[] { LOCATION_LAT, LOCATION_LNG };
+		Cursor c = database.query(BUILDING_TABLE, columns, BUILDING_NAME
+				+ "='" + bn+"'", null, null, null, null);
+		if(c.getCount()!=0){
+			int ilat = c.getColumnIndex(LOCATION_LAT);
+			int ilng = c.getColumnIndex(LOCATION_LNG);
+			c.moveToFirst();
+			double lat =  Double.valueOf(c.getString(ilat));
+			double lng =  Double.valueOf(c.getString(ilng));
+			return new LatLng(lat,lng);
+			
+		}
+		else
+			return null;
+
 	}
 }

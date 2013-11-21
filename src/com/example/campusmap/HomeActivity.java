@@ -4,13 +4,18 @@ import java.util.ArrayList;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
 
 import com.example.campusmap.BuildingDrawing.Building;
 import com.example.campusmap.MyLocation.LocationResult;
@@ -30,15 +35,13 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 public class HomeActivity extends Activity implements OnMapClickListener,
 		OnMapLongClickListener, OnInfoWindowClickListener {
-	// Location of Old Capitol
-	private final LatLng LOCATION_OC = new LatLng(41.661272, -91.535964);
+
 	private GoogleMap map;
 	private ArrayList<LatLng> arrayPoints = null;
 	private MyLocation ml;
 	private MyLocationTask locationTask;
 
-	private LatLng fromPosition = new LatLng(41.661272, -91.535964);
-	private LatLng toPosition = new LatLng(41.811456, -90.019527);
+
 	private ArrayList<LatLng> directionPoint;
 
 	private BuildingDrawing bd;
@@ -52,7 +55,8 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 		setContentView(R.layout.activity_home);
 		
 		
-	
+		setUpBroadCastManager();
+		
 		mapInitialization();
 		setUpListeners();
 		
@@ -60,20 +64,57 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 
 		// GPSInitialization();
 		GPS_Network_Initialization();
-		CallDirection();
+
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
 
 	}
 
+	private void setUpBroadCastManager() {
+		  LocalBroadcastManager.getInstance(this).registerReceiver(BuildingNameReceiver,
+			      new IntentFilter("GetGoogleDirection"));
+		
+	}
+
+	private BroadcastReceiver BuildingNameReceiver = new BroadcastReceiver() {
+		  @Override
+		  public void onReceive(Context context, Intent intent) {
+		    String bn = intent.getStringExtra("BuildingName");
+		    
+		    //search the building lat & lng by bn
+		    DB_Operations op = new DB_Operations();
+			op.open();
+			LatLng to = op.getLatLngFromDB(bn);
+
+			op.close();
+		    
+		    
+		    //ansync task
+			Location fromL = ml.getMyLastLocation();
+			LatLng from = new LatLng(fromL.getLatitude(),fromL.getLongitude());
+			CallDirection(from,to);
+			
+			
+			
+		  }
+		};
+
+		@Override
+		protected void onDestroy() {
+
+		  LocalBroadcastManager.getInstance(this).unregisterReceiver(BuildingNameReceiver);
+		  super.onDestroy();
+		}
+	
+	
 	private void GPS_Network_Initialization() {
 		// abstract class, define its abstract method
 		LocationResult locationResult = new LocationResult() {
 			@Override
 			public void gotLocation(Location location) {// callback
 
-				setUpMyLocationCamera(location);
+				setUpMyLocationCamera(location,17);
 			}
 		};
 
@@ -87,15 +128,15 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 		Criteria criteria = new Criteria();
 		String provider = lm.getBestProvider(criteria, true);
 		Location myLocation = lm.getLastKnownLocation(provider);
-		setUpMyLocationCamera(myLocation);
+		setUpMyLocationCamera(myLocation,17);
 
 	}
 
-	private void setUpMyLocationCamera(Location l) {
+	private void setUpMyLocationCamera(Location l,int zoomto) {
 
 		map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
 				l.getLatitude(), l.getLongitude())));
-		map.animateCamera(CameraUpdateFactory.zoomTo(17));
+		map.animateCamera(CameraUpdateFactory.zoomTo(zoomto));
 
 	}
 
@@ -198,9 +239,9 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 		map.addPolyline(polyline);
 	}
 
-	private void CallDirection() { // Async task
+	private void CallDirection(LatLng from, LatLng to) { // Async task
 
-		new WebServiceTask(this, map, fromPosition, toPosition).execute();
+		new WebServiceTask(this, map, from, to).execute();
 	}
 
 	public void setDirectionPoints(ArrayList<LatLng> result) {

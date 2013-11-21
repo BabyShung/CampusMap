@@ -1,21 +1,22 @@
 package com.example.campusmap;
 
 import java.util.ArrayList;
- 
-  
+
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.database.TableDefinition;
- 
+
 import android.os.Bundle;
- 
-import android.app.ListActivity; 
+
+import android.app.ListActivity;
 import android.content.Intent;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase; 
+import android.database.sqlite.SQLiteDatabase;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;  
-import android.widget.ListView; 
+import android.widget.AutoCompleteTextView;
+import android.widget.Button;
+import android.widget.ListView;
 
 public class SearchActivity extends ListActivity implements TableDefinition {
 
@@ -28,9 +29,7 @@ public class SearchActivity extends ListActivity implements TableDefinition {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
 		ATV = (AutoCompleteTextView) findViewById(R.id.searchACTV);
-		
-		
-		
+
 		datasource = new DB_Operations(this);
 		datasource.open();
 
@@ -51,7 +50,6 @@ public class SearchActivity extends ListActivity implements TableDefinition {
 		ATV.setThreshold(1);
 		ATV.setAdapter(adapter);
 		datasource.close();
- 
 
 	}
 
@@ -59,9 +57,24 @@ public class SearchActivity extends ListActivity implements TableDefinition {
 	protected void onListItemClick(ListView l, View v, int position, long id) {
 		// TODO Auto-generated method stub
 		super.onListItemClick(l, v, position, id);
-		
+
 		ATV.setText(value.get(position));
 
+		sendMessageToMainActivity();
+		sendMessageToHomeActivity(value.get(position));
+	}
+
+	private void sendMessageToMainActivity() {
+
+		Intent intent = new Intent("SetTab");
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	private void sendMessageToHomeActivity(String bn) {
+
+		Intent intent = new Intent("GetGoogleDirection");
+		intent.putExtra("BuildingName", bn);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
 	@SuppressWarnings("unused")
@@ -70,31 +83,5 @@ public class SearchActivity extends ListActivity implements TableDefinition {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	// ???Get user input and search from database
-	public void onClick_SEARCH(View v) {
-		
-		System.out.println("outoutout");
-		
-		String tfv = ATV.getText().toString();
-		// if the textfield is not empty, do the search
-		if (!tfv.equals("")) {
-
-			
-			
-			Intent i = new Intent(getApplicationContext(),HomeActivity.class);
-			i.putExtra("BN", tfv);
-			startActivity(i);
-
-			
-			
-		}
-
-	}
-	
-//	private void CallDirection() { // Async task
-//
-//		new WebServiceTask(this, map, fromPosition, toPosition).execute();
-//	}
 
 }
