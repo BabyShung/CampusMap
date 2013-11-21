@@ -15,13 +15,16 @@ public class Route {
 	private boolean recordIsStarted = false;
 	private BlockingQueue<Location> buffer;
 
+	
 	public Route(FileOperations fo) {// constructor
 		buffer = new ArrayBlockingQueue<Location>(20);
 		this.fo = fo;
 	}
 
 	public void showTestRoute(String justName,GoogleMap map,int c) {
-		ArrayList<LatLng> result = fo.readPointsFile(justName);
+
+		String newS = justName.replace(".txt", "_a");
+		ArrayList<LatLng> result = fo.readPointsFile(newS);
 		PolylineOptions rectline;
 		if (result != null) {
 			rectline = new PolylineOptions().width(4).color(c);
@@ -30,6 +33,7 @@ public class Route {
 				rectline.add(result.get(i));
 			}
 			map.addPolyline(rectline);
+			System.out.println("*************Drawing********");
 		}
 	}
 

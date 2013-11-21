@@ -39,9 +39,9 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		
-		//fo.TESTING("MyRoute1");
-		
-		//rr.showTestRoute("MyRoute1_a",map,Color.RED);
+//		fo.TESTING("MyRoute1");
+//		
+//		rr.showTestRoute("MyRoute1.txt",map,Color.BLUE);
 		
 		
 //		rr.showTestRoute("MyRoute1_b",map,Color.BLACK);
@@ -105,13 +105,16 @@ public class MyLocation implements Runnable {
 		mythread.start();
 	}
 
-	public void disableLocationUpdate(MyLocationTask locationTask) {
+	public String disableLocationUpdate(MyLocationTask locationTask) {
 
+		String returnName = fo.getFileName();
 		if (rr.recordHasStarted()) {
+			
+			
 			rr.toggleRecordState();
 			lm.removeUpdates(locationListenerGps);
 			lm.removeUpdates(locationListenerNetwork);
-			Toast.makeText(mContext, "File saved as " + fo.getFileName(),
+			Toast.makeText(mContext, "File saved as " + returnName,
 					Toast.LENGTH_SHORT).show();
 
 			// stop thread
@@ -125,11 +128,11 @@ public class MyLocation implements Runnable {
 			fo.processRecord_delete_consecutive();
 			
 			//2. fix outlier points
-			for(int i=0;i<5;i++)
-				fo.processRecord_delete_outliers("a");
+//			for(int i=0;i<5;i++)
+//				fo.processRecord_delete_outliers("a");
 
 			//3. smooth a little bit using kalmen filter
-			for(int i=0;i<5;i++)
+			for(int i=0;i<100;i++)
 				fo.processRecord_kalman_filter("a");
 			
 			fo.insertDataIntoDB();
@@ -137,6 +140,9 @@ public class MyLocation implements Runnable {
 			//iterrupt
 			locationTask.cancel(true);
 		}
+		
+		return returnName;
+		
 	}
 
 	// define a couple of listeners

@@ -54,6 +54,14 @@ public class DB_Operations implements TableDefinition {
 		return cursor;
 
 	}
+	
+	public Cursor readRouteData() {
+		String[] FROM = { ROUTE_ID, CREATE_TIME }; 
+		Cursor cursor = database.query(ROUTE_TABLE, FROM, null, null, null,
+				null, null);
+		return cursor;
+
+	}
 
 	public ArrayList<String> getBuildingNames() {
 		Cursor c = this.readData();
@@ -65,10 +73,22 @@ public class DB_Operations implements TableDefinition {
 			result.add(c.getString(iBN));
 			System.out.println("test----------" + c.getString(iBN));
 		}
-
 		return result;
 	}
 
+	public ArrayList<String> getRouteInfo() {
+		Cursor c = this.readRouteData();
+		ArrayList<String> result = new ArrayList<String>();
+
+		int iRid = c.getColumnIndex(ROUTE_ID);
+		int iRCT = c.getColumnIndex(CREATE_TIME);
+		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+			
+			result.add("Route_"+c.getString(iRid)+":     "+c.getString(iRCT));
+		}
+		return result;
+	}
+	
 	public boolean BuildingTable_isEmpty() {
 		String[] FROM = { BUILDING_ID };
 		Cursor c = database.query(BUILDING_TABLE, FROM, null, null, null, null,
@@ -136,7 +156,7 @@ public class DB_Operations implements TableDefinition {
 				+ lat
 				+ ","
 				+ lng
-				+ ") VALUES ('Old Capitol Mall','address5','41.661284','-91.536155');");
+				+ ") VALUES ('Old Capitol Museum','address5','41.661284','-91.536155');");
 
 		database.execSQL("INSERT INTO Building ("
 				+ bn
@@ -156,15 +176,9 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lng
 				+ ") VALUES('Halsey Hall', 'address7', '41.662859','-91.537147');");
-		database.execSQL("INSERT INTO Building ("
-				+ bn
-				+ ","
-				+ ba
-				+ ","
-				+ lat
-				+ ","
-				+ lng
-				+ ") VALUES('IMU', 'address8','41.663106','-91.538247');");
+		database.execSQL("INSERT INTO Building (" + bn + "," + ba + "," + lat
+				+ "," + lng
+				+ ") VALUES('IMU Parking Ramp', 'address8','41.663106','-91.538247');");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -272,7 +286,7 @@ public class DB_Operations implements TableDefinition {
 				+ lat
 				+ ","
 				+ lng
-				+ ") VALUES('Old Capital Mall', 'address20','41.659378','-91.535447');");
+				+ ") VALUES('Old Capitol Mall', 'address20','41.659378','-91.535447');");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -327,6 +341,7 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lng
 				+ ") VALUES('Iowa Advanved Technology Labs','address26','41.664178','-91.538081');");
+		
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -335,7 +350,9 @@ public class DB_Operations implements TableDefinition {
 				+ lat
 				+ ","
 				+ lng
-				+ ") VALUES('Women's Resource and Action Center','address27', '41.663415','-91.537273');");
+				+ ") VALUES('Women Resource and Action Center','address27', '41.663415','-91.537273');");
+		
+		
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -380,7 +397,7 @@ public class DB_Operations implements TableDefinition {
 				+ lat
 				+ ","
 				+ lng
-				+ ") VALUES('Writers' Workshop', 'address32','41.667245','-91.535060');");
+				+ ") VALUES('Writers Workshop', 'address32','41.667245','-91.535060');");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -510,4 +527,4 @@ public class DB_Operations implements TableDefinition {
 		database.insert(ROUTE_TABLE, null, cv);
 		System.out.println("inserted in Route table");
 	}
-} 
+}

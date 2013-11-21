@@ -19,7 +19,7 @@ public class BuildingDrawing {
 
 		buildingSet = new HashMap<Integer, Building>();
 		this.map = map;
-		//drawAllTheCampusBuildings();
+		drawAllTheCampusBuildings();
 	}
 
 	public boolean pointIsInPolygon(LatLng touchPoint) { // return true if point
@@ -121,7 +121,7 @@ public class BuildingDrawing {
 				new LatLng(41.6619728, -91.5357829), new LatLng(41.66204200,
 						-91.5357849), new LatLng(41.6620445, -91.53587680)));
 
-		buildingSet.put(5, new Building("Old Capitol Mall", "address5",
+		buildingSet.put(5, new Building("Old Capitol Museum", "address5",
 				new LatLng(41.6614684, -91.5362435), new LatLng(41.66146941,
 						-91.5360156), new LatLng(41.6613489, -91.5360095),
 				new LatLng(41.66135268, -91.5359703), new LatLng(41.6612355,
@@ -145,7 +145,7 @@ public class BuildingDrawing {
 				new LatLng(41.66264, -91.5371777), new LatLng(41.662629,
 						-91.53718), new LatLng(41.662628, -91.537469)));
 
-		buildingSet.put(8, new Building("IMU", "address8", new LatLng(
+		buildingSet.put(8, new Building("IMU Parking Ramp", "address8", new LatLng(
 				41.6633357, -91.53746467), new LatLng(41.663331202,
 				-91.537007689), new LatLng(41.66326833, -91.5370009839),
 				new LatLng(41.663266830, -91.536550037), new LatLng(
@@ -373,7 +373,7 @@ public class BuildingDrawing {
 						41.65959253900603, -91.53716325759888), new LatLng(
 						41.65959078559565, -91.53744053095579), new LatLng(
 						41.65959078559565, -91.53744053095579)));
-		buildingSet.put(20, new Building("Old Capital Mall", "address20",
+		buildingSet.put(20, new Building("Old Capitol Mall", "address20",
 				new LatLng(41.66002512893053, -91.5360203012824), new LatLng(
 						41.66002588038705, -91.53554856777191), new LatLng(
 						41.660007594942606, -91.53554387390614), new LatLng(

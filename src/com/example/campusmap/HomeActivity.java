@@ -219,13 +219,7 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
 
-		///////
-		String[] tmp = marker.getTitle().replace(" ", "").split(",");
-		
-		System.out.println(",'"+tmp[0]+"','"+tmp[1]+"'");
-		///////
-		
-		
+	
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
 				new DialogInterface.OnClickListener() {
 
@@ -237,12 +231,16 @@ public class HomeActivity extends Activity implements OnMapClickListener,
 					}
 				});
 
-		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Next",
+		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stop",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
 						if (ml != null) {
-							ml.disableLocationUpdate(locationTask);
+							String returnFileName= ml.disableLocationUpdate(locationTask);
+							//also draw the route as well
+							
+							Route tmpR = new Route(new FileOperations());
+							tmpR.showTestRoute(returnFileName,map,Color.RED);
 						}
 
 					}
