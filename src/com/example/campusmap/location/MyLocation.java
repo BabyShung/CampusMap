@@ -1,8 +1,11 @@
-package com.example.campusmap;
+package com.example.campusmap.location;
 
 import java.util.Timer;
 import java.util.TimerTask;
 
+import com.example.campusmap.HomeActivity;
+import com.example.campusmap.direction.Route;
+import com.example.campusmap.file.FileOperations;
 import com.google.android.gms.maps.GoogleMap;
 
 import android.content.Context;

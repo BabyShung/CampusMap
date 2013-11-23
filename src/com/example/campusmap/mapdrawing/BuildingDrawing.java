@@ -1,4 +1,4 @@
-package com.example.campusmap;
+package com.example.campusmap.mapdrawing;
 
 import java.util.HashMap;
 import java.util.Map;

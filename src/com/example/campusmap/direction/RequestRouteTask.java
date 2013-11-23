@@ -1,4 +1,4 @@
-package com.example.campusmap;
+package com.example.campusmap.direction;
 
 import android.os.AsyncTask;
 

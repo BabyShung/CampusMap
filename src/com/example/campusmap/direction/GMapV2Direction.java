@@ -1,4 +1,4 @@
-package com.example.campusmap;
+package com.example.campusmap.direction;
 
 import java.io.InputStream;
 import java.net.URL;

@@ -1,4 +1,5 @@
-package com.example.campusmap;
+package com.example.campusmap.location;
+
 
 import android.os.AsyncTask;
 //Async <inputtype, progresstype, returntype>

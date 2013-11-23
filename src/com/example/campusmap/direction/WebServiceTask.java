@@ -1,4 +1,4 @@
-package com.example.campusmap;
+package com.example.campusmap.direction;
 
 import java.util.ArrayList;
 import java.util.Random;
@@ -9,6 +9,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.widget.Toast;
 
+import com.example.campusmap.HomeActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
