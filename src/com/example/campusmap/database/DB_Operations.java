@@ -3,7 +3,6 @@ package com.example.campusmap.database;
 import java.util.ArrayList;
 
 import com.google.android.gms.maps.model.LatLng;
-
 import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
@@ -14,7 +13,6 @@ import android.os.Environment;
 public class DB_Operations implements TableDefinition {
 
 	private SQLiteDatabase database;
-
 	private Context passed_context;
 
 	public void getDBPath() {
@@ -29,11 +27,10 @@ public class DB_Operations implements TableDefinition {
 	}
 
 	public void open() throws SQLException {
-
+		//open db in the CampusMap folder
 		database = SQLiteDatabase.openOrCreateDatabase(
 				Environment.getExternalStorageDirectory() + "/CampusMap/"
 						+ CAMPUSMAP_DATABASE, null);
-
 	}
 
 	public void close() {
@@ -47,7 +44,9 @@ public class DB_Operations implements TableDefinition {
 		// database.insert("Building", null, cv);
 	}
 
-	public Cursor readData() {
+	
+//-------------------------------------Cursor should be private--------------------------
+	private Cursor readData() {
 		String[] FROM = { BUILDING_NAME };
 		String ORDER_BY = BUILDING_NAME + " ASC";
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
@@ -57,7 +56,11 @@ public class DB_Operations implements TableDefinition {
 
 	}
 
-	public Cursor readRouteData() {
+	
+	//get route info : Route_id, create_time
+	//Aish, you might add more columns here
+	//serve for getRouteInfo()
+	private Cursor readRouteData() {
 		String[] FROM = { ROUTE_ID, CREATE_TIME };
 		Cursor cursor = database.query(ROUTE_TABLE, FROM, null, null, null,
 				null, null);
@@ -65,6 +68,10 @@ public class DB_Operations implements TableDefinition {
 
 	}
 
+	
+//----------------------------------------------------------------------------------------
+	
+//-------------------------------------public get/read/select methods--------------------------	
 	public ArrayList<String> getBuildingNames() {
 		Cursor c = this.readData();
 		ArrayList<String> result = new ArrayList<String>();
@@ -73,11 +80,12 @@ public class DB_Operations implements TableDefinition {
 
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 			result.add(c.getString(iBN));
-			System.out.println("test----------" + c.getString(iBN));
 		}
 		return result;
 	}
 
+	//get route info : Route_id, create_time
+	//Aish, you might add more columns here
 	public ArrayList<String> getRouteInfo() {
 		Cursor c = this.readRouteData();
 		ArrayList<String> result = new ArrayList<String>();
@@ -91,20 +99,72 @@ public class DB_Operations implements TableDefinition {
 		}
 		return result;
 	}
+	
+	//input a building name, get its LatLng from the Building Table
+	public LatLng getLatLngFromDB(String bn) {
+		String[] columns = new String[] { LOCATION_LAT, LOCATION_LNG };
+		Cursor c = database.query(BUILDING_TABLE, columns, BUILDING_NAME + "='"
+				+ bn + "'", null, null, null, null);
+		if (c.getCount() != 0) {
+			int ilat = c.getColumnIndex(LOCATION_LAT);
+			int ilng = c.getColumnIndex(LOCATION_LNG);
+			c.moveToFirst();
+			double lat = Double.valueOf(c.getString(ilat));
+			double lng = Double.valueOf(c.getString(ilng));
+			return new LatLng(lat, lng);
+		} else
+			return null;
+	}
 
+//----------------------------------------------------------------------------------------
+	
+//-------------------------------------public insert methods--------------------------		
+	
+	//insert, currently just insert the fileName ("Route1.txt")
+	//Aish, you need to add more columns, this is consistent with getRouteInfo
+	public void insertARoute(String db_fn) {
+		ContentValues cv = new ContentValues();
+		cv.put(ROUTE_FILENAME, db_fn);
+		database.insert(ROUTE_TABLE, null, cv);
+	}
+	
+	
+	
+//----------------------------------------------------------------------------------------
+		
+	
+//-------------------------------------public update methods--------------------------	
+	
+	//***** Aish, if you have time, can think about what to update
+	
+	
+//----------------------------------------------------------------------------------------
+	
+	
+//-------------------------------------public delete methods--------------------------	
+	
+	//***** Aish, if you have time, can think about what to delete
+	
+//----------------------------------------------------------------------------------------
+	
+
+	
+	
+	
+//-------------------------------------public other methods--------------------------		
+
+	//check if building_table is empty
 	public boolean BuildingTable_isEmpty() {
 		String[] FROM = { BUILDING_ID };
 		Cursor c = database.query(BUILDING_TABLE, FROM, null, null, null, null,
 				null);
-		System.out.println("test---------cursor count------" + c.getCount());
 		if (c.getCount() == 0)
 			return true;
 		else
 			return false;
 	}
-
+	
 	public void DB_init() {
-
 		if (BuildingTable_isEmpty()) {
 			// if empty, insert the list
 			initialize_Building(BUILDING_NAME, BUILDING_ADDRESS, LOCATION_LAT,
@@ -112,9 +172,9 @@ public class DB_Operations implements TableDefinition {
 		}
 	}
 
+	//insert all the building info into the Building table
 	private void initialize_Building(String bn, String ba, String lat,
 			String lng) {
-		System.out.println("test----------insert~~~~~");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -524,33 +584,8 @@ public class DB_Operations implements TableDefinition {
 				+ lng
 				+ ") VALUES('Hillcrest Residence Hall','address45', '41.659268','-91.542844');");
 
-		System.out.println("test----------insert!!!!");
 		// need to add more
 	}
 
-	public void insertARoute(String db_fn) {
-		ContentValues cv = new ContentValues();
-		cv.put(ROUTE_FILENAME, db_fn);
-		System.out.println("inserted before in Route table");
-		database.insert(ROUTE_TABLE, null, cv);
-		System.out.println("inserted in Route table");
-	}
-
-	public LatLng getLatLngFromDB(String bn) {
-		String[] columns = new String[] { LOCATION_LAT, LOCATION_LNG };
-		Cursor c = database.query(BUILDING_TABLE, columns, BUILDING_NAME
-				+ "='" + bn+"'", null, null, null, null);
-		if(c.getCount()!=0){
-			int ilat = c.getColumnIndex(LOCATION_LAT);
-			int ilng = c.getColumnIndex(LOCATION_LNG);
-			c.moveToFirst();
-			double lat =  Double.valueOf(c.getString(ilat));
-			double lng =  Double.valueOf(c.getString(ilng));
-			return new LatLng(lat,lng);
-			
-		}
-		else
-			return null;
-
-	}
+	
 }

@@ -6,6 +6,7 @@ public interface TableDefinition extends BaseColumns{
 	
 	public static final String CAMPUSMAP_DATABASE = "CampusMap_Database.db";
 	
+	//Building table
 	public static final String BUILDING_TABLE = "Building";
 	public static final String BUILDING_ID = "Bid";
 	public static final String BUILDING_NAME = "BuildingName";
@@ -13,6 +14,7 @@ public interface TableDefinition extends BaseColumns{
 	public static final String LOCATION_LAT = "Location_lat";
 	public static final String LOCATION_LNG = "Location_lng";
 	
+	//Route table
 	public static final String ROUTE_TABLE = "Route";
 	public static final String ROUTE_ID = "Rid";
 	public static final String ROUTE_FILENAME = "RouteFileName";

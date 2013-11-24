@@ -22,8 +22,8 @@ public class BuildingDrawing {
 		drawAllTheCampusBuildings();
 	}
 
-	public boolean pointIsInPolygon(LatLng touchPoint) { // return true if point
-															// is in polygon
+	// ALGO: return true if point is in polygon
+	public boolean pointIsInPolygon(LatLng touchPoint) {
 		int i;
 		int j;
 		boolean result = false;
@@ -145,12 +145,12 @@ public class BuildingDrawing {
 				new LatLng(41.66264, -91.5371777), new LatLng(41.662629,
 						-91.53718), new LatLng(41.662628, -91.537469)));
 
-		buildingSet.put(8, new Building("IMU Parking Ramp", "address8", new LatLng(
-				41.6633357, -91.53746467), new LatLng(41.663331202,
-				-91.537007689), new LatLng(41.66326833, -91.5370009839),
-				new LatLng(41.663266830, -91.536550037), new LatLng(
-						41.66309250, -91.5365453), new LatLng(41.6630927,
-						-91.537468)));
+		buildingSet.put(8, new Building("IMU Parking Ramp", "address8",
+				new LatLng(41.6633357, -91.53746467), new LatLng(41.663331202,
+						-91.537007689),
+				new LatLng(41.66326833, -91.5370009839), new LatLng(
+						41.663266830, -91.536550037), new LatLng(41.66309250,
+						-91.5365453), new LatLng(41.6630927, -91.537468)));
 
 		buildingSet.put(9, new Building("Calvin Hall", "address9", new LatLng(
 				41.66302988, -91.53670158), new LatLng(41.66303213,
@@ -750,6 +750,7 @@ public class BuildingDrawing {
 						-91.542934), new LatLng(41.659943, -91.542940)));
 	}
 
+	// ------------------------inner class------------------------------
 	public class Building {
 
 		private String buildingName;
@@ -787,4 +788,5 @@ public class BuildingDrawing {
 		}
 
 	}
+	// -----------------------------------------------------------
 }

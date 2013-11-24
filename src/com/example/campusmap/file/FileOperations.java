@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.routefilter.KalmanLatLong;
 import com.example.campusmap.routefilter.Location_Hao;
@@ -35,14 +34,39 @@ public class FileOperations {
 
 	}
 
-	private void checkDownloadFolderExist() {
-		// set path, we are going to save the txt file into download folder
-		path = Environment
-				.getExternalStoragePublicDirectory("CampusMap/Routes");
-		// if not exists, create path directory
-		path.mkdirs();
-	}
+//-----------------------------------------------------------------
+	
+//------------------------------read a file-----------------------------
+	public ArrayList<LatLng> readPointsFile(String fn) {//for showing path on map
 
+		ArrayList<LatLng> listOfPoints = new ArrayList<LatLng>();
+		checkDownloadFolderExist();
+		try {
+			BufferedReader br = new BufferedReader(new FileReader(path + "/"
+					+ fn + ".txt"));
+			double lat, lng;
+			String line = br.readLine();
+			while (line != null) {
+				String[] tmp = line.split(";");
+				for (String tmpS : tmp) {
+					String[] tmpTwo = tmpS.split(",");
+					lat = Double.parseDouble(tmpTwo[0]);
+					lng = Double.parseDouble(tmpTwo[1]);
+					listOfPoints.add(new LatLng(lat, lng));
+				}
+				line = br.readLine();
+			}
+
+			br.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return listOfPoints;
+	}
+//-----------------------------------------------------------------
+	
+//------------------------------file init methods-----------------------------	
+	
 	public void fileInitialization(String extension) {
 		checkDownloadFolderExist();
 		// check if we have access to write
@@ -72,42 +96,6 @@ public class FileOperations {
 		}
 	}
 
-	public ArrayList<LatLng> readPointsFile(String fn) {//for showing path on map
-
-		ArrayList<LatLng> listOfPoints = new ArrayList<LatLng>();
-		checkDownloadFolderExist();
-		try {
-			BufferedReader br = new BufferedReader(new FileReader(path + "/"
-					+ fn + ".txt"));
-			double lat, lng;
-			String line = br.readLine();
-			while (line != null) {
-				String[] tmp = line.split(";");
-				for (String tmpS : tmp) {
-					String[] tmpTwo = tmpS.split(",");
-					lat = Double.parseDouble(tmpTwo[0]);
-					lng = Double.parseDouble(tmpTwo[1]);
-					listOfPoints.add(new LatLng(lat, lng));
-				}
-				line = br.readLine();
-			}
-
-			br.close();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		return listOfPoints;
-	}
-
-	private Point getPoint(String s) {
-
-		String[] tmpTwo = s.split(",");
-		double x = Double.parseDouble(tmpTwo[0]);
-		double y = Double.parseDouble(tmpTwo[1]);
-
-		return new Point(x, y);
-	}
-
 	private void file_p_Initialization(String extension, File fn, String beta, boolean append) {
 		checkDownloadFolderExist();
 		System.out.println("****get file name: " + fn.getName());
@@ -129,9 +117,10 @@ public class FileOperations {
 
 	}
 	
-	///////////------------------------------------
-	///////////-------------TESTING-------------------
-	///////////------------------------------------	
+//-----------------------------------------------------------------
+	
+//------------------------------TESTING-----------------------------
+
 	public void TESTING(String originalFileName){
 		checkDownloadFolderExist();
 		filePath = path + "/"+originalFileName+".txt";
@@ -142,8 +131,9 @@ public class FileOperations {
 		for(int i=0;i<100;i++)
 		processRecord_kalman_filter("a");
 	}
-	///////////------------------------------------
+//-------------------------------------------------------------------------
 	
+//-------------process/improve/filter route_file methods-------------------
 	public void processRecord_delete_consecutive() {
 		// delete consecutive same data
 		// read file A -> delete consecutive same -> write to fileB
@@ -210,18 +200,14 @@ public class FileOperations {
 			bufferReader = new BufferedReader(new FileReader(filePath_p));
 			String line = bufferReader.readLine();
 			file_p_Initialization("txt", fileName, beta,false);// save as "xx_c.txt"
-
 			while (line != null) {
 				String[] tmp = line.split(";");
-
 				Location_Hao first = new Location_Hao(tmp[0]);
 				Location_Hao second = new Location_Hao(tmp[1]);
 				Location_Hao Li;
 				Location_Hao tmpP;
 				for (int i = 2; i < tmp.length; i++) {
-
 					Li = new Location_Hao(tmp[i]);
-
 					if (first.checkNextPointInScope(second, Li)) {
 						// true, do nothing
 					} else {// false, replace second with mid
@@ -232,13 +218,11 @@ public class FileOperations {
 					}
 					first = second;
 					second = Li;
-					
 				}
 				// now can store tmp into file again
 				for (String f : tmp) {
 					appendDataIntoFile_p(f+";");
 				}
-
 				line = bufferReader.readLine();
 			}
 			System.out.println("prcessed delete outliers..");
@@ -249,12 +233,13 @@ public class FileOperations {
 			e.printStackTrace();
 		}
 	}
+//-------------------------------------------------------------------------	
 	
+//------------------file write-------------------------------
 	public void appendDataIntoFile(String data) {
 		try {
 			// just execute writing
 			bufferWritter.write(data);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -264,16 +249,13 @@ public class FileOperations {
 		try {
 			// just execute writing
 			bufferWritter_p.write(data);
-
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
-
-	public String getFileName() {
-		return fileName.getName();
-	}
-
+//---------------------------------------------------------
+	
+//------------------file close-------------------------------
 	public void closeBufferWriter() {
 		try {
 			// close bw
@@ -291,7 +273,14 @@ public class FileOperations {
 			e.printStackTrace();
 		}
 	}
-
+//---------------------------------------------------------
+	
+	
+//---------------------------other methods------------------------------
+	public String getFileName() {
+		return fileName.getName();
+	}
+	
 	public boolean RWTrue() {
 		return canW && canR;
 	}
@@ -317,9 +306,16 @@ public class FileOperations {
 		
 		DB_Operations op = new DB_Operations();
 		op.open();
-
 		op.insertARoute(db_fn);//need to add more attributes
 		op.close();
 	}
 	
+	private void checkDownloadFolderExist() {
+		// set path, we are going to save the txt file into download folder
+		path = Environment
+				.getExternalStoragePublicDirectory("CampusMap/Routes");
+		// if not exists, create path directory
+		path.mkdirs();
+	}
+//---------------------------------------------------------
 }

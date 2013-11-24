@@ -11,10 +11,10 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 	public static final int DATABASE_VERSION = 4;
 	public static final String DATABASE_NAME = CAMPUSMAP_DATABASE;
 
+	//for the first time, create the db in CampusMap folder
 	public DatabaseEntry(Context context) {
 		super(context, Environment.getExternalStorageDirectory()
 				+ "/CampusMap/" + DATABASE_NAME, null, DATABASE_VERSION);
-
 	}
 
 	@Override
@@ -31,7 +31,6 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 
 	private void createBuildingTable(SQLiteDatabase db) {
 		// Building table
-
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + BUILDING_TABLE + " ("
 				+ BUILDING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ BUILDING_NAME + " VARCHAR," + BUILDING_ADDRESS + " VARCHAR, "
