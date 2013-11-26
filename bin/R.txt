@@ -57,8 +57,8 @@ int drawable ic_plusone_medium_off_client 0x7f020019
 int drawable ic_plusone_small_off_client 0x7f02001a
 int drawable ic_plusone_standard_off_client 0x7f02001b
 int drawable ic_plusone_tall_off_client 0x7f02001c
+int drawable icon_building 0x7f02001d
 int id action_settings 0x7f050019
-int id buildingListView 0x7f05000b
 int id hybrid 0x7f050004
 int id item_icon 0x7f05000c
 int id item_name 0x7f05000d
@@ -71,6 +71,7 @@ int id relativelayout 0x7f050005
 int id satellite 0x7f050002
 int id searchACTV 0x7f05000a
 int id searchBTN 0x7f050009
+int id searchLV 0x7f05000b
 int id settingBTN 0x7f050018
 int id settingCB 0x7f050015
 int id settingET 0x7f050012

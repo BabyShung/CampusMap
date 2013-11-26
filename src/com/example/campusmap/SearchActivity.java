@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -35,6 +36,7 @@ public class SearchActivity extends Activity {
 
 		buildingList = new ArrayList<String>();
 		querytimesList = new ArrayList<String>();
+		
 		// read info from db , building names
 		readBuildingNamesInfoFromDatabase();
 		getBuildingList();
@@ -42,14 +44,35 @@ public class SearchActivity extends Activity {
 
 		populateLV();
 		populateATV();
+		clearBTN();
 
+	}
+
+	private void clearBTN() {
+		// TODO Auto-generated method stub
+		final Button button = (Button) findViewById(R.id.searchBTN);
+        button.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+            	ATV.setText("");
+            }
+        });
 	}
 
 	private void populateLV() {
 		// TODO Auto-generated method stub
 		ArrayAdapter<DB_Building> adapter = new MyListAdapter();
-		LV = (ListView) findViewById(R.id.buildingListView);
+		LV = (ListView) findViewById(R.id.searchLV);
 		LV.setAdapter(adapter);
+		LV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+			@Override
+			public void onItemClick(AdapterView<?> ATV, View view,
+					int position, long id) {
+				popDialog(value.get(position).getBuildingName());
+			}
+		});
+
 	}
 
 	private class MyListAdapter extends ArrayAdapter<DB_Building> {
@@ -118,13 +141,7 @@ public class SearchActivity extends Activity {
 
 	}
 
-	/*
-	 * protected void onListItemClick(ListView l, View v, int position, long id)
-	 * { super.onListItemClick(l, v, position, id); // pop up a dialog
-	 * popDialog(value.get(position).getBuildingName());
-	 * 
-	 * }
-	 */
+
 
 	private void getBuildingList() {
 		for (DB_Building tmp : value) {

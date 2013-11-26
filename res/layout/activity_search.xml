@@ -12,7 +12,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:background="#ffffc000"
-        android:text="SEARCH"
+        android:text="CLEAR"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -32,7 +32,7 @@
     </AutoCompleteTextView>
 
     <ListView
-        android:id="@+id/buildingListView"
+        android:id="@+id/searchLV"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"

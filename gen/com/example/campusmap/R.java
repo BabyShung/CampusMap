@@ -206,10 +206,10 @@ containing a value of this type.
         public static final int ic_plusone_small_off_client=0x7f02001a;
         public static final int ic_plusone_standard_off_client=0x7f02001b;
         public static final int ic_plusone_tall_off_client=0x7f02001c;
+        public static final int icon_building=0x7f02001d;
     }
     public static final class id {
         public static final int action_settings=0x7f050019;
-        public static final int buildingListView=0x7f05000b;
         public static final int hybrid=0x7f050004;
         public static final int item_icon=0x7f05000c;
         public static final int item_name=0x7f05000d;
@@ -222,6 +222,7 @@ containing a value of this type.
         public static final int satellite=0x7f050002;
         public static final int searchACTV=0x7f05000a;
         public static final int searchBTN=0x7f050009;
+        public static final int searchLV=0x7f05000b;
         public static final int settingBTN=0x7f050018;
         public static final int settingCB=0x7f050015;
         public static final int settingET=0x7f050012;
