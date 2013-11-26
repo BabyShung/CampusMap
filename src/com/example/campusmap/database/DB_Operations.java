@@ -2,6 +2,7 @@ package com.example.campusmap.database;
 
 import java.util.ArrayList;
 
+import com.example.campusmap.db_object.DB_Building;
 import com.google.android.gms.maps.model.LatLng;
 import android.content.ContentValues;
 import android.content.Context;
@@ -47,6 +48,16 @@ public class DB_Operations implements TableDefinition {
 	
 //-------------------------------------Cursor should be private--------------------------
 	private Cursor readData() {
+		String[] FROM = { BUILDING_NAME, QUERY_TIME };
+		String ORDER_BY = QUERY_TIME + " DESC,"+ BUILDING_NAME + " ASC";
+		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
+				null, ORDER_BY);
+
+		return cursor;
+
+	}
+
+	private Cursor readData2() {
 		String[] FROM = { BUILDING_NAME };
 		String ORDER_BY = BUILDING_NAME + " ASC";
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
@@ -55,7 +66,6 @@ public class DB_Operations implements TableDefinition {
 		return cursor;
 
 	}
-
 	
 	//get route info : Route_id, create_time
 	//Aish, you might add more columns here
@@ -80,6 +90,22 @@ public class DB_Operations implements TableDefinition {
 
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 			result.add(c.getString(iBN));
+		}
+		return result;
+	}
+	
+	//return query_times as well
+	public ArrayList<DB_Building> getBuildingNamesWithTimes() {
+		Cursor c = this.readData();
+		ArrayList<DB_Building> result = new ArrayList<DB_Building>();
+
+		int iBN = c.getColumnIndex(BUILDING_NAME);
+		int iQT = c.getColumnIndex(QUERY_TIME);
+		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+			
+			DB_Building dbb = new DB_Building(c.getString(iBN), Integer.parseInt(c.getString(iQT)));
+			result.add(dbb);
+
 		}
 		return result;
 	}

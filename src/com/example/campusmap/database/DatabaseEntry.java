@@ -11,7 +11,7 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 	public static final int DATABASE_VERSION = 4;
 	public static final String DATABASE_NAME = CAMPUSMAP_DATABASE;
 
-	//for the first time, create the db in CampusMap folder
+	// for the first time, create the db in CampusMap folder
 	public DatabaseEntry(Context context) {
 		super(context, Environment.getExternalStorageDirectory()
 				+ "/CampusMap/" + DATABASE_NAME, null, DATABASE_VERSION);
@@ -35,7 +35,9 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 				+ BUILDING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ BUILDING_NAME + " VARCHAR," + BUILDING_ADDRESS + " VARCHAR, "
 				+ LOCATION_LAT + " DOUBLE," + LOCATION_LNG + " DOUBLE, "
-				+ CREATE_TIME
+				+ QUERY_TIME + " INTEGER default 0, "+ CREATE_TIME
+				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), "
+				+ UPDATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))"
 				+ ")");
 	}
@@ -47,7 +49,9 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 				+ ROUTE_FILENAME + " VARCHAR, " + STARTING_LAT + " DOUBLE, "
 				+ STARTING_LNG + " DOUBLE, " + ENDING_LAT + " DOUBLE, "
 				+ ENDING_LNG + " DOUBLE, " + DISTANCE + " DOUBLE, " + TAKETIME
-				+ " INTEGER, " + CREATE_TIME
+				+ " INTEGER, "  + CREATE_TIME
+				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), "
+				+ UPDATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))"
 				+ ")");
 	}

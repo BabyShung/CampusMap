@@ -13,6 +13,8 @@ public interface TableDefinition extends BaseColumns{
 	public static final String BUILDING_ADDRESS = "BuildingAddress";
 	public static final String LOCATION_LAT = "Location_lat";
 	public static final String LOCATION_LNG = "Location_lng";
+	public static final String QUERY_TIME = "QueryTime";
+	
 	
 	//Route table
 	public static final String ROUTE_TABLE = "Route";
@@ -24,7 +26,9 @@ public interface TableDefinition extends BaseColumns{
 	public static final String ENDING_LNG = "Ending_lng";
 	public static final String DISTANCE = "Distance";
 	public static final String TAKETIME = "TakeTime";
+
 	
 	public static final String CREATE_TIME = "CreateTime";
+	public static final String UPDATE_TIME = "UpdateTime";
 	
 }
