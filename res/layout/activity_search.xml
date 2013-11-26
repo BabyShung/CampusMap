@@ -1,55 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-	android:id="@+id/widget32"
-	android:layout_width="fill_parent"
-	android:layout_height="fill_parent"
-	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:background="#ffffcc33">
-	
-	<LinearLayout
-		android:id="@+id/widget18"
-		android:layout_width="fill_parent"
-		android:layout_height="fill_parent"
-		android:orientation="vertical"
-		android:layout_alignParentTop="true"
-		android:layout_alignParentLeft="true">
-		<TableRow
-			android:id="@+id/widget39"
-			android:layout_width="fill_parent"
-			android:layout_height="55dp"
-			android:orientation="horizontal">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/widget32"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="#ffffcc33" >
 
-			<AutoCompleteTextView
-			    android:id="@+id/searchACTV"
-			    android:layout_width="280dp"
-			    android:layout_height="fill_parent"
-			    android:background="#ffffff00"
-			    android:textSize="15sp" />
+    <Button
+        android:id="@+id/searchBTN"
+        android:layout_width="80dp"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+        android:background="#ffffc000"
+        android:text="SEARCH"
+        android:textSize="20sp"
+        android:textStyle="bold" />
 
-			<Button
-				android:id="@+id/searchBTN"
-				android:layout_width="80dp"
-				android:layout_height="fill_parent"
-				android:background="#ffffc000" 
-				android:textStyle="bold" 
-				android:textSize="20sp"
-				android:text="SEARCH"
-			/>
-		</TableRow>
-				
-		<!-- <ScrollView
-		    android:id="@+id/scrollID"
-		    android:layout_width="fill_parent"
-		    android:layout_height="fill_parent"
-		    android:layout_centerHorizontal="true" > -->
- 
-			<ListView android:id="@android:id/list"
-  			  android:layout_width="fill_parent"
-  			  android:layout_height="fill_parent"/>
+    <AutoCompleteTextView
+        android:id="@+id/searchACTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/searchBTN"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:layout_toLeftOf="@+id/searchBTN"
+        android:background="#ffffff00"
+        android:ems="10"
+        android:textSize="18sp" >
 
-			
-			
-		<!-- </ScrollView> -->
+        <requestFocus />
+    </AutoCompleteTextView>
 
-	</LinearLayout>
+    <ListView
+        android:id="@+id/buildingListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/searchBTN" >
+    </ListView>
+
 </RelativeLayout>

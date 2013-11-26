@@ -1,30 +1,32 @@
 package com.example.campusmap;
 
 import java.util.ArrayList;
+
+import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.ListActivity;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.example.campusmap.database.DB_Operations;
-import com.example.campusmap.database.TableDefinition;
 import com.example.campusmap.db_object.DB_Building;
 
-public class SearchActivity extends ListActivity implements TableDefinition {
+public class SearchActivity extends Activity {
 
 	private ArrayList<DB_Building> value;
 	private ArrayList<String> buildingList;
 	private ArrayList<String> querytimesList;
 	private DB_Operations datasource;
+	private ListView LV;
 	private AutoCompleteTextView ATV;
-	private ArrayAdapter<String> ATVadapter;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -38,12 +40,66 @@ public class SearchActivity extends ListActivity implements TableDefinition {
 		getBuildingList();
 		getQueryTimesList();
 
-		ATV = (AutoCompleteTextView) findViewById(R.id.searchACTV);
-		
-		setListAdapter(new ArrayAdapter<String>(SearchActivity.this,
-				android.R.layout.simple_list_item_1, buildingList));
+		populateLV();
+		populateATV();
 
-		ATVadapter = new ArrayAdapter<String>(this,
+	}
+
+	private void populateLV() {
+		// TODO Auto-generated method stub
+		ArrayAdapter<DB_Building> adapter = new MyListAdapter();
+		LV = (ListView) findViewById(R.id.buildingListView);
+		LV.setAdapter(adapter);
+	}
+
+	private class MyListAdapter extends ArrayAdapter<DB_Building> {
+
+		public MyListAdapter() {
+			super(SearchActivity.this, R.layout.activity_search_listviewitem,
+					value);
+		}
+
+		@Override
+		public View getView(int position, View convertView, ViewGroup parent) {
+			// TODO Auto-generated method stub
+			View itemView = convertView;
+			if (itemView == null) {
+				itemView = getLayoutInflater().inflate(
+						R.layout.activity_search_listviewitem, parent, false);
+			}
+
+			// Find building to work with
+			DB_Building currentBuilding = value.get(position);
+
+			// Fill the name
+			TextView nameText = (TextView) itemView
+					.findViewById(R.id.item_name);
+			nameText.setText(currentBuilding.getBuildingName());
+			// Fill the times
+			TextView timesText = (TextView) itemView
+					.findViewById(R.id.item_times);
+			if (currentBuilding.getQueryTime() == 0)
+				timesText.setText("");// howtoString?
+			else
+				timesText.setText("" + currentBuilding.getQueryTime()); // howtoString?
+
+			/*
+			 * //Fill the icons we don't have Icons for buildings in DB yet
+			 * ImageView imageView =
+			 * (ImageView)itemView.findViewById(R.id.item_icon);
+			 * imageView.setImageResource(currentBuilding.getIconID());
+			 */
+			return itemView;
+
+		}
+
+	}
+
+	private void populateATV() {
+
+		ATV = (AutoCompleteTextView) findViewById(R.id.searchACTV);
+
+		ArrayAdapter<String> ATVadapter = new ArrayAdapter<String>(this,
 				android.R.layout.simple_dropdown_item_1line, buildingList);
 		ATV.setThreshold(1);
 		ATV.setAdapter(ATVadapter);
@@ -62,25 +118,25 @@ public class SearchActivity extends ListActivity implements TableDefinition {
 
 	}
 
-	@Override
-	protected void onListItemClick(ListView l, View v, int position, long id) {
-		super.onListItemClick(l, v, position, id);
-		// pop up a dialog
-		popDialog(value.get(position).getBuildingName());
-
-	}
+	/*
+	 * protected void onListItemClick(ListView l, View v, int position, long id)
+	 * { super.onListItemClick(l, v, position, id); // pop up a dialog
+	 * popDialog(value.get(position).getBuildingName());
+	 * 
+	 * }
+	 */
 
 	private void getBuildingList() {
 		for (DB_Building tmp : value) {
 			buildingList.add(tmp.getBuildingName());
 		}
 	}
-	
+
 	private void getQueryTimesList() {
 		for (DB_Building tmp : value) {
 			int times = tmp.getQueryTime();
-			if(times!=0)
-				querytimesList.add(times+"");
+			if (times != 0)
+				querytimesList.add(times + "");
 			else
 				querytimesList.add("");
 		}

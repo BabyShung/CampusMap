@@ -58,7 +58,7 @@ public class MainActivity extends Activity {
 		settingSpec.setContent(settingIntent);
 
 		TabSpec futureSpec = mTabHost.newTabSpec("myroute");
-		futureSpec.setIndicator("My Routes", null);
+		futureSpec.setIndicator("ROUTES", null);
 		futureIntent = new Intent(this, RouteRecordActivity.class);
 		futureSpec.setContent(futureIntent);
 
