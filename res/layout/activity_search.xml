@@ -26,6 +26,7 @@
         android:layout_toLeftOf="@+id/searchBTN"
         android:background="#ffffff00"
         android:ems="10"
+        android:hint="Type any campus building"
         android:textSize="18sp" >
 
         <requestFocus />

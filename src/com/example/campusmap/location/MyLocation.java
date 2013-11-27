@@ -11,7 +11,9 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.widget.Toast;
+import android.location.GpsStatus; 
 
 //This class will be execute in Async task
 public class MyLocation implements Runnable {
@@ -29,6 +31,11 @@ public class MyLocation implements Runnable {
 	private Thread mythread = null;
 	private FileOperations fo;
 
+	private Location MyLastLocation;
+	private boolean isGPSFix;
+	private Long mLastLocationMillis;
+	private HaoGPSListener myGpsListener;
+
 	// abstract class for call back
 	public static abstract class LocationResult {
 		public abstract void gotLocation(Location location);
@@ -40,7 +47,10 @@ public class MyLocation implements Runnable {
 		this.map = map;
 		fo = new FileOperations();
 		rr = new Route(fo);
-
+		this.myGpsListener = new HaoGPSListener();
+		
+		
+		
 		// fo.TESTING("MyRoute1");
 		//
 		// rr.showTestRoute("MyRoute1.txt",map,Color.BLUE);
@@ -54,7 +64,7 @@ public class MyLocation implements Runnable {
 		// fo.processRecord();
 	}
 
-//---------------------------begin route, stop route-----------------------
+	// ---------------------------begin route, stop route-----------------------
 	public void beginRoute() {
 		// initialize file and start a thread for recording
 		rr.toggleRecordState();
@@ -103,9 +113,45 @@ public class MyLocation implements Runnable {
 		}
 		return returnName;
 	}
-//------------------------------------------------------------------------
+
+	// ------------------------------------------------------------------------
 	
-//----------Hao: get my last location once the listener starts--------------
+	// ---------------------------Check GPS availability-----------------------
+	private class HaoGPSListener implements GpsStatus.Listener {
+
+		@Override
+		public void onGpsStatusChanged(int event) {
+
+			switch (event) {
+			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
+				if (MyLastLocation != null) {
+					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 3000;
+				}
+
+				if (isGPSFix) { // A fix has been acquired.
+					System.out.println("GPS exists");
+				} else { // The fix has been lost.
+					System.out.println("GPS lost");
+				}
+
+				break;
+			case GpsStatus.GPS_EVENT_FIRST_FIX:
+				System.out.println("****First Time");
+				isGPSFix = true;
+
+				break;
+			case GpsStatus.GPS_EVENT_STOPPED:
+				System.out.println("****GPS stop");
+				break;
+			}
+
+		}
+
+	}
+	// ------------------------------------------------------------------------
+	
+	// ----------Hao: get my last location once the listener
+	// starts--------------
 	public Location getMyLastLocation() {
 		Location net_loc = null, gps_loc = null;
 		if (gps_enabled) {
@@ -130,9 +176,10 @@ public class MyLocation implements Runnable {
 		}
 		return null;
 	}
-//------------------------------------------------------------------------		
-	
-//--------------------------------setup the location manager--------------
+
+	// ------------------------------------------------------------------------
+
+	// --------------------------------setup the location manager--------------
 	public boolean setupLocation(Context context, LocationResult result) {
 
 		locationResult = result;
@@ -165,23 +212,29 @@ public class MyLocation implements Runnable {
 					locationListenerNetwork);
 		}
 
+		lm.addGpsStatusListener(myGpsListener);
+		
 		timer1 = new Timer();
 		timer1.schedule(new RetrieveLastLocation(),
 				TIME_FOR_GPS_WHEN_NO_NETWORK);
 		return true;
 	}
-//------------------------------------------------------------------------
-	
-//-------------------------define GPS and Network listeners---------------- 
+
+	// ------------------------------------------------------------------------
+
+	// -------------------------define GPS and Network listeners----------------
 	LocationListener locationListenerGps = new LocationListener() {
 		public void onLocationChanged(Location location) {
 			// System.out.println("-----------main1");
 			checkTimerAndRoute(location);
 		}
+
 		public void onProviderDisabled(String provider) {
 		}
+
 		public void onProviderEnabled(String provider) {
 		}
+
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 		}
 	};
@@ -191,27 +244,41 @@ public class MyLocation implements Runnable {
 			// System.out.println("-----------main2");
 			checkTimerAndRoute(location);
 		}
+
 		public void onProviderDisabled(String provider) {
 		}
+
 		public void onProviderEnabled(String provider) {
 		}
+
 		public void onStatusChanged(String provider, int status, Bundle extras) {
 		}
 	};
-//------------------------------------------------------------------------
-	
+
+	// ------------------------------------------------------------------------
+
 	private void checkTimerAndRoute(Location location) {
 		if (!timer_cancelled) {
 			timer_cancelled = true; // no more execute this if
 			timer1.cancel();
 			locationResult.gotLocation(location);
 		}
+
+		if (location == null)
+			return;
+		mLastLocationMillis = SystemClock.elapsedRealtime();
+
+		// Do something.
+
+		MyLastLocation = location;
+
 		if (rr.recordHasStarted()) {
 			rr.bufferStore(location);
 		}
 	}
 
-//------------------------------run definition---------------------------------
+	// ------------------------------run
+	// definition---------------------------------
 	@Override
 	public void run() {
 		while (true) {
@@ -220,7 +287,7 @@ public class MyLocation implements Runnable {
 		}
 	}
 
-//-----------------------------inner class---------------------------------
+	// -----------------------------inner class---------------------------------
 	class RetrieveLastLocation extends TimerTask { // runnable,it's a thread
 		@Override
 		public void run() {
@@ -262,5 +329,5 @@ public class MyLocation implements Runnable {
 			}
 		}
 	}
-//------------------------------------------------------------------------
+	// ------------------------------------------------------------------------
 }

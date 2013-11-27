@@ -1,6 +1,9 @@
 package com.example.campusmap.database;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import com.example.campusmap.db_object.DB_Building;
 import com.google.android.gms.maps.model.LatLng;
@@ -38,18 +41,12 @@ public class DB_Operations implements TableDefinition {
 		database.close();
 	}
 
-	public void insert(String bn, String ba) {
-		// ContentValues cv = new ContentValues();
-		// cv.put(bn, "MClean Hall");
-		// cv.put(ba, "address1");
-		// database.insert("Building", null, cv);
-	}
 
 	
 //-------------------------------------Cursor should be private--------------------------
 	private Cursor readData() {
-		String[] FROM = { BUILDING_NAME, QUERY_TIME };
-		String ORDER_BY = QUERY_TIME + " DESC,"+ BUILDING_NAME + " ASC";
+		String[] FROM = { BUILDING_NAME, QUERY_TIME ,UPDATE_TIME};
+		String ORDER_BY = UPDATE_TIME+" DESC,"+QUERY_TIME + " DESC,"+ BUILDING_NAME + " ASC";
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
 				null, ORDER_BY);
 
@@ -57,12 +54,10 @@ public class DB_Operations implements TableDefinition {
 
 	}
 
-	private Cursor readData2() {
-		String[] FROM = { BUILDING_NAME };
-		String ORDER_BY = BUILDING_NAME + " ASC";
-		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
-				null, ORDER_BY);
-
+	private Cursor readDataFromABuildingName(String bn) {
+		String[] FROM = { QUERY_TIME };
+		Cursor cursor = database.query(BUILDING_TABLE, FROM, BUILDING_NAME+"='"+bn+"'", null, null,
+				null, null);
 		return cursor;
 
 	}
@@ -162,6 +157,24 @@ public class DB_Operations implements TableDefinition {
 //-------------------------------------public update methods--------------------------	
 	
 	//***** Aish, if you have time, can think about what to update
+	
+	
+	
+	public void updateQueryTimesForABuilding(String bn) {
+		Cursor c = readDataFromABuildingName(bn);
+		if(c.getCount() != 0){
+			c.moveToFirst();
+			int qt = Integer.parseInt(c.getString(0));
+			qt++;
+			ContentValues cv = new ContentValues();
+			cv.put(QUERY_TIME, qt);
+			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+			Date date = new Date();	
+			cv.put(UPDATE_TIME, dateFormat.format(date));
+			database.update(BUILDING_TABLE, cv, BUILDING_NAME + "='"
+				+ bn + "'", null);
+		}	
+	}
 	
 	
 //----------------------------------------------------------------------------------------
@@ -612,6 +625,8 @@ public class DB_Operations implements TableDefinition {
 
 		// need to add more
 	}
+
+
 
 	
 }
