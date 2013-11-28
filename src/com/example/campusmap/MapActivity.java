@@ -16,7 +16,6 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.direction.Route;
-import com.example.campusmap.direction.RouteProcessUploadTask;
 import com.example.campusmap.direction.WebServiceTask;
 import com.example.campusmap.file.FileOperations;
 import com.example.campusmap.location.MyLocation;
@@ -43,10 +42,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private ArrayList<LatLng> arrayPoints = null;
 	private MyLocation ml;
 	private MyLocationTask locationTask;
-	private RouteProcessUploadTask stopRouteTask;
 	private ArrayList<LatLng> directionPoint;
 	private BuildingDrawing bd;
 	private Marker currentMarker;
+
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +64,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
+		
+	
 	}
 
 	private void setUpBroadCastManager() {
@@ -221,8 +222,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		directionPoint = result;
 	}
 
-	protected void onResume() {
-		super.onResume();
+	protected void onResume() {	
+		super.onResume(); 
 	}
 
 	@Override
@@ -231,7 +232,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
 
-		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
@@ -247,17 +248,17 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 						if (ml != null) {
-							// Async task, stop the route
-							//stopRouteTask = new RouteProcessUploadTask(ml,locationTask,map);
-							//stopRouteTask.execute();
-							String returnFileName = ml.disableLocationUpdate(locationTask);
+							String returnFileName = ml
+									.disableLocationUpdate(locationTask);
 							// also draw the route as well
+
 							Route tmpR = new Route(new FileOperations());
 							tmpR.showTestRoute(returnFileName, map, Color.RED);
 						}
+
 					}
 				});
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cancel",
+		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {

@@ -27,6 +27,7 @@
 			    android:text="NAME"
 			    android:textSize="20sp"
 			    android:textStyle="bold" 
+			    android:textColor="#696969"
 			    android:gravity="center"/>
 
 			<EditText
@@ -34,7 +35,8 @@
 			    android:layout_width="250dp"
 			    android:layout_height="fill_parent"
 			    android:background="#ffffff00"
-			    android:text="Type your name here!"
+			    android:hint="Type your name here!"
+			    android:textColor="#696969"
 			    android:textSize="15sp" />
 
 		</TableRow>
@@ -54,12 +56,14 @@
 				android:textStyle="bold" 
 				android:textSize="20sp"
 				android:gravity="center"
+				android:textColor="#696969"
 				android:background="#ffffc000"  />
 			<CheckBox
 				android:id="@+id/settingCB"
 				android:layout_width="250dp"
 				android:layout_height="fill_parent"
 				android:text="Would you like to share?"
+				android:textColor="#696969"
 				android:textSize="15sp"
 				android:background="#ffffff00"  />
 		</TableRow>
@@ -84,6 +88,7 @@
 				android:textStyle="bold" 
 				android:textSize="20sp" 
 				android:background="#ffffc000"
+				android:textColor="#696969"
 				android:onClick="onClick_CONFIRM"/>
 		</TableRow>
 	</LinearLayout>

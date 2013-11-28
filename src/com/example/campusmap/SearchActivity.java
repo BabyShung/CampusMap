@@ -16,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import com.example.campusmap.database.DB_Operations;
@@ -51,8 +52,9 @@ public class SearchActivity extends Activity {
 	}
 
 	private void clearBTN() {
-		final Button button = (Button) findViewById(R.id.searchBTN);
-		button.setOnClickListener(new View.OnClickListener() {
+		Button clearBTN= (Button) findViewById(R.id.searchBTN);
+	
+		clearBTN.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				ATV.setText("");
 			}
@@ -91,17 +93,15 @@ public class SearchActivity extends Activity {
 			DB_Building currentBuilding = value.get(position);
 
 			// Fill the name
-			TextView nameText = (TextView) itemView
-					.findViewById(R.id.item_name);
+			TextView nameText = (TextView) itemView.findViewById(R.id.item_name);
 			nameText.setText(currentBuilding.getBuildingName());
 			// Fill the times
-			TextView timesText = (TextView) itemView
-					.findViewById(R.id.item_times);
+			TextView timesText = (TextView) itemView.findViewById(R.id.item_times);
 			int query_time = currentBuilding.getQueryTime();
 			if (query_time == 0)
 				timesText.setText("");// howtoString?
 			else if(query_time ==1)
-				timesText.setText(query_time+" time"); // howtoString?
+				timesText.setText(query_time+" time "); // howtoString?
 			else
 				timesText.setText(query_time+" times");
 
@@ -178,8 +178,9 @@ public class SearchActivity extends Activity {
 	private void popDialog(final String bn) {
 
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
+		
 		alertDialog.setTitle(bn);
-		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Go",
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
@@ -201,14 +202,18 @@ public class SearchActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
+						//hide keyboard
+						imm.hideSoftInputFromWindow(ATV.getWindowToken(), 0);
 
 						// ----
 					}
 				});
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cancel",
+		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
+						//hide keyboard
+						imm.hideSoftInputFromWindow(ATV.getWindowToken(), 0);
 						// ---
 					}
 				});

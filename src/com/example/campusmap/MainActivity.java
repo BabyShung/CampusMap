@@ -1,24 +1,28 @@
 package com.example.campusmap;
 
-import com.example.campusmap.database.DB_Operations;
-import com.example.campusmap.database.DatabaseEntry;
-
 import android.app.Activity;
 import android.app.LocalActivityManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.location.Location;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
+import android.widget.RelativeLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
+import android.widget.TabWidget;
+import android.widget.TextView;
+
+import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.database.DatabaseEntry;
 
 public class MainActivity extends Activity {
 	// private DB_Operations datasource;
 	private TabHost mTabHost;
+	private TabWidget mTabWidget;
 	private LocalActivityManager lam;
 
 	private Intent homeIntent;
@@ -30,11 +34,42 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
-
+		databaseInitCheck();
 		// set up the entire UI framework
 		lam = new LocalActivityManager(MainActivity.this, false);
 		lam.dispatchCreate(savedInstanceState);
 		setUpTabHost();
+		setUpTabWiget();
+	}
+
+	private void setUpTabWiget() {
+		// TODO Auto-generated method stub
+
+		mTabWidget = mTabHost.getTabWidget();
+		for (int i = 0; i < mTabWidget.getChildCount(); i++) {
+			/*
+			 * //change Tabhost's size
+			 * mTabWidget.getChildAt(i).getLayoutParams().height = 30;
+			 * mTabWidget.getChildAt(i).getLayoutParams().width = 65;
+			 */
+
+			// change text font and position
+			TextView tv = (TextView) mTabWidget.getChildAt(i).findViewById(
+					android.R.id.title);
+			tv.setTextSize(20);
+			tv.setTextColor(0xffffc000); // BALCK:-16777216
+			tv.setTypeface(null, Typeface.BOLD);
+
+			RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) tv
+					.getLayoutParams();
+			params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, 0); // cancel
+																	// align
+																	// bottom
+			params.addRule(RelativeLayout.CENTER_IN_PARENT, RelativeLayout.TRUE); // set
+																					// in
+																					// middle
+		}
+
 	}
 
 	private void setUpTabHost() {
@@ -68,12 +103,11 @@ public class MainActivity extends Activity {
 		mTabHost.addTab(futureSpec);
 
 		setuplocalbroadcast();
-		
-		
 
 	}
 
-	//set up the broadcastmanager,when click a building in search, this activity responds
+	// set up the broadcastmanager,when click a building in search, this
+	// activity responds
 	private void setuplocalbroadcast() {
 		LocalBroadcastManager.getInstance(this).registerReceiver(
 				mMessageReceiver, new IntentFilter("SetTab"));
@@ -103,6 +137,7 @@ public class MainActivity extends Activity {
 	protected void onResume() {
 		lam.dispatchResume();
 		super.onResume();
+
 	}
 
 	@Override
@@ -110,8 +145,8 @@ public class MainActivity extends Activity {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.main, menu);
 
-		databaseInitCheck();
 		
+
 		return true;
 	}
 
@@ -126,7 +161,7 @@ public class MainActivity extends Activity {
 		op.DB_init();
 		op.getDBPath();
 		op.close();
-		
+
 	}
 
 }

@@ -5,28 +5,31 @@
     android:layout_height="fill_parent"
     android:background="#ffffcc33" >
 
-    <Button
+       <Button
         android:id="@+id/searchBTN"
         android:layout_width="80dp"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
-        android:background="#ffffc000"
+        android:background="#ffffff00"
         android:text="CLEAR"
+        android:textColor="#494f50"
         android:textSize="20sp"
         android:textStyle="bold" />
 
     <AutoCompleteTextView
         android:id="@+id/searchACTV"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="50dp"
         android:layout_alignBottom="@+id/searchBTN"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/searchBTN"
         android:background="#ffffff00"
         android:ems="10"
-        android:hint="Type any campus building"
+        android:padding="5dp"
+        android:textColor="#494f50"
+     
         android:textSize="18sp" >
 
         <requestFocus />
@@ -37,7 +40,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/searchBTN" >
+        android:layout_below="@+id/searchACTV" >
     </ListView>
 
 </RelativeLayout>

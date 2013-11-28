@@ -10,8 +10,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
         android:adjustViewBounds="true"
-        android:maxHeight="80dp"
-        android:maxWidth="80dp"
+        android:maxHeight="60dp"
+        android:maxWidth="60dp"
         android:src="@drawable/icon_building" />
 
     <TextView
@@ -22,19 +22,22 @@
         android:layout_alignParentTop="true"
         android:layout_toLeftOf="@+id/item_times"
         android:layout_toRightOf="@+id/item_icon"
+        android:paddingLeft="5dp"
         android:text="name"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#494f50"
         android:textSize="18sp" />
 
     <TextView
         android:id="@+id/item_times"
-        android:layout_width="50dp"
+        android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/item_name"
         android:layout_alignParentRight="true"
         android:layout_alignParentTop="true"
         android:text="times"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:textSize="18sp" />
+        android:textSize="18sp"
+        android:textColor="#A9A9A9"  />
 
 </RelativeLayout>
