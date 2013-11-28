@@ -5,6 +5,8 @@ import java.util.TimerTask;
 import com.example.campusmap.MapActivity;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.file.FileOperations;
+import com.example.campusmap.file_upload.fileUpload;
+import com.example.campusmap.file_upload.fileUploadTask;
 import com.google.android.gms.maps.GoogleMap;
 import android.content.Context;
 import android.location.Location;
@@ -30,6 +32,8 @@ public class MyLocation implements Runnable {
 	private Route rr;
 	private Thread mythread = null;
 	private FileOperations fo;
+	private fileUploadTask uploadTask;
+	
 
 	private Location MyLastLocation;
 	private boolean isGPSFix;
@@ -93,7 +97,7 @@ public class MyLocation implements Runnable {
 				mythread.interrupt();
 			}
 
-			// add remaining ele and close buffer
+			// add remaining elements and close buffer
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 			// 1. delete consecutive same lines
 			fo.processRecord_delete_consecutive();
@@ -103,9 +107,17 @@ public class MyLocation implements Runnable {
 			// fo.processRecord_delete_outliers("a");
 
 			// 3. smooth a little bit using kalmen filter
-			for (int i = 0; i < 100; i++)
+			for (int i = 0; i < 30; i++)
 				fo.processRecord_kalman_filter("a");
 
+			
+			//Async task, upload to server
+			//send the proceeded txt to the cloud
+			uploadTask = new fileUploadTask(fo.getProcessedFileName());
+			uploadTask.execute();
+
+			
+			//insert route data into device db
 			fo.insertDataIntoDB();
 
 			// iterrupt

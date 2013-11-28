@@ -281,6 +281,10 @@ public class FileOperations {
 		return fileName.getName();
 	}
 	
+	public String getProcessedFileName() {
+		return fileName_p.getName();
+	}
+	
 	public boolean RWTrue() {
 		return canW && canR;
 	}
@@ -302,7 +306,7 @@ public class FileOperations {
 	public void insertDataIntoDB() {
 
 		String db_fn = fileName_p.getName();
-		System.out.println("********store in db: "+db_fn);
+		System.out.println("********!!!!!store in db: "+db_fn);
 		
 		DB_Operations op = new DB_Operations();
 		op.open();
@@ -310,7 +314,7 @@ public class FileOperations {
 		op.close();
 	}
 	
-	private void checkDownloadFolderExist() {
+	public void checkDownloadFolderExist() {
 		// set path, we are going to save the txt file into download folder
 		path = Environment
 				.getExternalStoragePublicDirectory("CampusMap/Routes");

@@ -11,23 +11,13 @@ public class MyLocationTask extends AsyncTask<Void, Integer, String> {
 		this.ml = ml;
 	}
 
-	// pre execute
-	protected void onPreExecute(String b) {
-
-	}
+	protected void onPreExecute(String b) {}
 
 	@Override
 	protected String doInBackground(Void... arg0) {
-
 		ml.beginRoute();
 		return null;
 	}
-
-	protected void onProgressUpdated(Integer... progress) {
-
-	}
-
-	protected void onPostExecute(String r) {
-
-	}
+	protected void onProgressUpdated(Integer... progress) {}
+	protected void onPostExecute(String r) {}
 }

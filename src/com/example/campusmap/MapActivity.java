@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.direction.Route;
+import com.example.campusmap.direction.RouteProcessUploadTask;
 import com.example.campusmap.direction.WebServiceTask;
 import com.example.campusmap.file.FileOperations;
 import com.example.campusmap.location.MyLocation;
@@ -42,6 +43,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private ArrayList<LatLng> arrayPoints = null;
 	private MyLocation ml;
 	private MyLocationTask locationTask;
+	private RouteProcessUploadTask stopRouteTask;
 	private ArrayList<LatLng> directionPoint;
 	private BuildingDrawing bd;
 	private Marker currentMarker;
@@ -245,14 +247,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 					public void onClick(DialogInterface dialog, int id) {
 						if (ml != null) {
-							String returnFileName = ml
-									.disableLocationUpdate(locationTask);
+							// Async task, stop the route
+							//stopRouteTask = new RouteProcessUploadTask(ml,locationTask,map);
+							//stopRouteTask.execute();
+							String returnFileName = ml.disableLocationUpdate(locationTask);
 							// also draw the route as well
-
 							Route tmpR = new Route(new FileOperations());
 							tmpR.showTestRoute(returnFileName, map, Color.RED);
 						}
-
 					}
 				});
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Cancel",
