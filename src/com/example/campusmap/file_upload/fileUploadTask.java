@@ -14,12 +14,8 @@ public class fileUploadTask extends AsyncTask<Void, Integer, String> {
 
 	@Override
 	protected String doInBackground(Void... arg0) {
-		
-		System.out.println("-----------------------*********#####");
-		
 		fileUpload fu = new fileUpload(JustFileName);
 		fu.upload();
-		
 		return null;
 	}
 

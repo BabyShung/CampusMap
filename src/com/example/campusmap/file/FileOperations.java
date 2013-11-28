@@ -10,7 +10,6 @@ import java.util.ArrayList;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.routefilter.KalmanLatLong;
 import com.example.campusmap.routefilter.Location_Hao;
-import com.example.campusmap.routefilter.Point;
 import com.google.android.gms.maps.model.LatLng;
 
 import android.os.Environment;
@@ -306,7 +305,7 @@ public class FileOperations {
 	public void insertDataIntoDB() {
 
 		String db_fn = fileName_p.getName();
-		System.out.println("********!!!!!store in db: "+db_fn);
+		System.out.println("********!!!!!processed file store in db: "+db_fn);
 		
 		DB_Operations op = new DB_Operations();
 		op.open();
