@@ -94,7 +94,7 @@ public class MainActivity extends Activity {
 
 		TabSpec futureSpec = mTabHost.newTabSpec("myroute");
 		futureSpec.setIndicator("ROUTES", null);
-		futureIntent = new Intent(this, RouteRecordActivity.class);
+		futureIntent = new Intent(this, RoutesActivity.class);
 		futureSpec.setContent(futureIntent);
 
 		mTabHost.addTab(homeSpec);
@@ -160,6 +160,7 @@ public class MainActivity extends Activity {
 		op.open();
 		op.DB_init();
 		op.getDBPath();
+		//op.getCenterPointsFromBuildings();
 		op.close();
 
 	}

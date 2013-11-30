@@ -8,7 +8,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.app.ListActivity;
 
-public class RouteRecordActivity extends ListActivity implements
+public class RoutesActivity extends ListActivity implements
 		TableDefinition {
 
 	private DB_Operations datasource;
@@ -27,7 +27,7 @@ public class RouteRecordActivity extends ListActivity implements
 	private void readRoutesInfoFromDatabase() {
 		datasource = new DB_Operations(this);
 		datasource.open();
-		setListAdapter(new ArrayAdapter<String>(RouteRecordActivity.this,
+		setListAdapter(new ArrayAdapter<String>(RoutesActivity.this,
 				android.R.layout.simple_list_item_1, datasource.getRouteInfo()));
 		datasource.close();	
 	}

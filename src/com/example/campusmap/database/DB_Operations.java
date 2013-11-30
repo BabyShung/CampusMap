@@ -59,7 +59,13 @@ public class DB_Operations implements TableDefinition {
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, BUILDING_NAME+"='"+bn+"'", null, null,
 				null, null);
 		return cursor;
-
+	}
+	
+	private Cursor readCenterPointFromBuildings() {
+		String[] FROM = { LOCATION_LAT,LOCATION_LNG };
+		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
+				null, null);
+		return cursor;
 	}
 	
 	//get route info : Route_id, create_time
@@ -98,13 +104,25 @@ public class DB_Operations implements TableDefinition {
 		int iQT = c.getColumnIndex(QUERY_TIME);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 			
-			DB_Building dbb = new DB_Building(c.getString(iBN), Integer.parseInt(c.getString(iQT)));
+			DB_Building dbb = new DB_Building(c.getString(iBN), c.getInt(iQT));
 			result.add(dbb);
 
 		}
 		return result;
 	}
 
+	public ArrayList<LatLng> getCenterPointsFromBuildings() {
+		Cursor c = this.readCenterPointFromBuildings();
+		ArrayList<LatLng> centerPoints = new ArrayList<LatLng>();
+		int iLat = c.getColumnIndex(LOCATION_LAT);
+		int iLng = c.getColumnIndex(LOCATION_LNG);
+		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
+			centerPoints.add(new LatLng(c.getDouble(iLat),c.getDouble(iLng)));
+			//System.out.println(c.getDouble(iLat)+" - "+c.getDouble(iLng));
+		}
+		return centerPoints;
+	}
+	
 	//get route info : Route_id, create_time
 	//Aish, you might add more columns here
 	public ArrayList<String> getRouteInfo() {
@@ -130,8 +148,8 @@ public class DB_Operations implements TableDefinition {
 			int ilat = c.getColumnIndex(LOCATION_LAT);
 			int ilng = c.getColumnIndex(LOCATION_LNG);
 			c.moveToFirst();
-			double lat = Double.valueOf(c.getString(ilat));
-			double lng = Double.valueOf(c.getString(ilng));
+			double lat = c.getDouble(ilat);
+			double lng = c.getDouble(ilng);
 			return new LatLng(lat, lng);
 		} else
 			return null;
@@ -164,7 +182,7 @@ public class DB_Operations implements TableDefinition {
 		Cursor c = readDataFromABuildingName(bn);
 		if(c.getCount() != 0){
 			c.moveToFirst();
-			int qt = Integer.parseInt(c.getString(0));
+			int qt = c.getInt(0);
 			qt++;
 			ContentValues cv = new ContentValues();
 			cv.put(QUERY_TIME, qt);

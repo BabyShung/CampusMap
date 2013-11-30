@@ -63,7 +63,7 @@
 			      android:screenOrientation="portrait"
 			      android:windowSoftInputMode="stateHidden|adjustResize" >
         </activity>
-        <activity android:name=".RouteRecordActivity"
+        <activity android:name=".RoutesActivity"
                   android:screenOrientation="portrait" 
                   android:windowSoftInputMode="stateHidden|adjustResize">
         </activity>

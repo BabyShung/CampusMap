@@ -44,7 +44,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private ArrayList<LatLng> LongClickArrayPoints;
 	private MyLocation ml;
 	private MyLocationTask locationTask;
-	private ArrayList<LatLng> directionPoint;
 	private BuildingDrawing bd;
 	private Marker currentMarker;
 	private Marker LongClickMarkerA;
@@ -65,8 +64,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 		LongClickArrayPoints = new ArrayList<LatLng>();
 
-		// GPSInitialization();
-		GPS_Network_Initialization();
+		findMyLocation();
+		
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
@@ -112,7 +111,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		LocationResult locationResult = new LocationResult() {
 			@Override
 			public void gotLocation(Location location) {// callback
-				setUpMyLocationCamera(location, 17);
+				// setUpMyLocationCamera(location, 17);
 			}
 		};
 		ml = new MyLocation(this, map);
@@ -120,7 +119,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
-	private void GPSInitialization() {// test, alternative
+	private void findMyLocation() {// test, alternative
 		LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		String provider = lm.getBestProvider(criteria, true);
@@ -254,11 +253,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		googleDirectionTask.execute();
 	}
 
-	public void setDirectionPoints(ArrayList<LatLng> result) {
-		directionPoint = new ArrayList<LatLng>();
-		directionPoint = result;
-	}
-
 	protected void onResume() {
 		super.onResume();
 	}
@@ -273,7 +267,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
-
+						
+						//set up MyLocation.class, for recording
+						GPS_Network_Initialization();
+						
 						// Async task, begin the route
 						locationTask = new MyLocationTask(ml);
 						locationTask.execute();

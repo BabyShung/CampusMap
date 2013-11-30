@@ -5,7 +5,6 @@ import java.util.TimerTask;
 import com.example.campusmap.MapActivity;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.file.FileOperations;
-import com.example.campusmap.file_upload.fileUpload;
 import com.example.campusmap.file_upload.fileUploadTask;
 import com.google.android.gms.maps.GoogleMap;
 import android.content.Context;
@@ -15,7 +14,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.Toast;
-import android.location.GpsStatus; 
+import android.location.GpsStatus;
 
 //This class will be execute in Async task
 public class MyLocation implements Runnable {
@@ -33,7 +32,6 @@ public class MyLocation implements Runnable {
 	private Thread mythread = null;
 	private FileOperations fo;
 	private fileUploadTask uploadTask;
-	
 
 	private Location MyLastLocation;
 	private boolean isGPSFix;
@@ -52,9 +50,7 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		this.myGpsListener = new HaoGPSListener();
-		
-		
-		
+
 		// fo.TESTING("MyRoute1");
 		//
 		// rr.showTestRoute("MyRoute1.txt",map,Color.BLUE);
@@ -102,22 +98,16 @@ public class MyLocation implements Runnable {
 			// 1. delete consecutive same lines
 			fo.processRecord_delete_consecutive();
 
-			// 2. fix outlier points
-			// for(int i=0;i<5;i++)
-			// fo.processRecord_delete_outliers("a");
-
-			// 3. smooth a little bit using kalmen filter
+			// 2. smooth a little bit using kalmen filter
 			for (int i = 0; i < 30; i++)
 				fo.processRecord_kalman_filter("a");
 
-			
-			//Async task, upload to server
-			//send the proceeded txt to the cloud, also insert in server db
+			// Async task, upload to server
+			// send the proceeded txt to the cloud, also insert in server db
 			uploadTask = new fileUploadTask(fo.getProcessedFileName());
 			uploadTask.execute();
 
-			
-			//insert route data into device db
+			// insert route data into device db
 			fo.insertDataIntoDB();
 
 			// iterrupt
@@ -127,7 +117,7 @@ public class MyLocation implements Runnable {
 	}
 
 	// ------------------------------------------------------------------------
-	
+
 	// ---------------------------Check GPS availability-----------------------
 	private class HaoGPSListener implements GpsStatus.Listener {
 
@@ -160,10 +150,10 @@ public class MyLocation implements Runnable {
 		}
 
 	}
+
 	// ------------------------------------------------------------------------
-	
-	// ----------Hao: get my last location once the listener
-	// starts--------------
+
+	// ------Hao: get my last location once the listener starts------------
 	public Location getMyLastLocation() {
 		Location net_loc = null, gps_loc = null;
 		if (gps_enabled) {
@@ -225,7 +215,7 @@ public class MyLocation implements Runnable {
 		}
 
 		lm.addGpsStatusListener(myGpsListener);
-		
+
 		timer1 = new Timer();
 		timer1.schedule(new RetrieveLastLocation(),
 				TIME_FOR_GPS_WHEN_NO_NETWORK);
@@ -273,7 +263,7 @@ public class MyLocation implements Runnable {
 		if (!timer_cancelled) {
 			timer_cancelled = true; // no more execute this if
 			timer1.cancel();
-			locationResult.gotLocation(location);
+			// locationResult.gotLocation(location);
 		}
 
 		if (location == null)
