@@ -16,7 +16,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.direction.Route;
-import com.example.campusmap.direction.WebServiceTask;
+import com.example.campusmap.direction.GoogleRouteTask;
 import com.example.campusmap.file.FileOperations;
 import com.example.campusmap.location.MyLocation;
 import com.example.campusmap.location.MyLocationTask;
@@ -52,7 +52,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private Polyline LongClickPolyLine;
 	private MarkerAndPolyLine marker_polyline;
 	private int LongClickCount;
-	private WebServiceTask googleDirectionTask;
+	private GoogleRouteTask googleDirectionTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -250,7 +250,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	}
 
 	private void CallDirection(LatLng from, LatLng to) { // Async task
-		googleDirectionTask = new WebServiceTask(this, map, from, to);
+		googleDirectionTask = new GoogleRouteTask(this, map, from, to);
 		googleDirectionTask.execute();
 	}
 

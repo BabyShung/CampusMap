@@ -55,15 +55,15 @@ public class BuildingDrawing {
 
 	private void drawAllTheCampusBuildings() {
 		// buildingSet is used to search if a touch belongs to a building
-		buildingSet.put(1, new Building("Meclean Hall", "address1", new LatLng(
+		buildingSet.put(1, new Building("Meclean Hall", "2 West Washington Street, Iowa City, IA 52242", new LatLng(
 				41.661017, -91.536656), new LatLng(41.661017, -91.536420),
 				new LatLng(41.660418, -91.536420), new LatLng(41.660418,
 						-91.536656)));
-		buildingSet.put(2, new Building("Jessup Hall", "address2", new LatLng(
+		buildingSet.put(2, new Building("Jessup Hall", "5 West Jefferson Street, Iowa City, IA 52242", new LatLng(
 				41.662203, -91.536628), new LatLng(41.662203, -91.536393),
 				new LatLng(41.661598, -91.536400), new LatLng(41.661598,
 						-91.536635)));
-		buildingSet.put(3, new Building("Schaeffer Hall", "address3",
+		buildingSet.put(3, new Building("Schaeffer Hall", "20 East Washington Street, Iowa City, IA 52242",
 				new LatLng(41.660991, -91.5358898), new LatLng(41.6609937,
 						-91.5357735), new LatLng(41.66100, -91.5357735),
 				new LatLng(41.660997, -91.535718), new LatLng(41.66100426,
@@ -103,7 +103,7 @@ public class BuildingDrawing {
 
 		));
 
-		buildingSet.put(4, new Building("Macbride Hall", "address4",
+		buildingSet.put(4, new Building("Macbride Hall", "17 North Clinton Street, Iowa City, IA 52242",
 				new LatLng(41.6621840, -91.535876), new LatLng(41.6621840,
 						-91.53543826), new LatLng(41.66204, -91.5354382),
 				new LatLng(41.6620402, -91.5355432), new LatLng(41.66194,
@@ -121,7 +121,7 @@ public class BuildingDrawing {
 				new LatLng(41.6619728, -91.5357829), new LatLng(41.66204200,
 						-91.5357849), new LatLng(41.6620445, -91.53587680)));
 
-		buildingSet.put(5, new Building("Old Capitol Museum", "address5",
+		buildingSet.put(5, new Building("Old Capitol Museum", "21 N Clinton St, Iowa City, IA 52242",
 				new LatLng(41.6614684, -91.5362435), new LatLng(41.66146941,
 						-91.5360156), new LatLng(41.6613489, -91.5360095),
 				new LatLng(41.66135268, -91.5359703), new LatLng(41.6612355,
@@ -131,28 +131,28 @@ public class BuildingDrawing {
 				new LatLng(41.6612407, -91.5362630), new LatLng(41.6613566,
 						-91.5362677), new LatLng(41.6613582, -91.53624449)));
 
-		buildingSet.put(6, new Building("Main Library", "address6", new LatLng(
+		buildingSet.put(6, new Building("Main Library", "125 West Washington Street, Iowa City, IA 52242", new LatLng(
 				41.659932, -91.538974), new LatLng(41.659932, -91.537903),
 				new LatLng(41.659144, -91.537903), new LatLng(41.659144,
 						-91.538167), new LatLng(41.659108, -91.538167),
 				new LatLng(41.659108, -91.538680), new LatLng(41.659144,
 						-91.538680), new LatLng(41.659144, -91.538974)));
 
-		buildingSet.put(7, new Building("Halsey Hall", "address7", new LatLng(
+		buildingSet.put(7, new Building("Halsey Hall", "28 West Jefferson Street, Iowa City, IA 52242", new LatLng(
 				41.663016, -91.53746), new LatLng(41.663016, -91.53724),
 				new LatLng(41.663037, -91.53724), new LatLng(41.66303288,
 						-91.53693325), new LatLng(41.66264064, -91.53693),
 				new LatLng(41.66264, -91.5371777), new LatLng(41.662629,
 						-91.53718), new LatLng(41.662628, -91.537469)));
 
-		buildingSet.put(8, new Building("IMU Parking Ramp", "address8",
+		buildingSet.put(8, new Building("IMU Parking Ramp", "120 North Madison Street, Iowa City, IA 52242",
 				new LatLng(41.6633357, -91.53746467), new LatLng(41.663331202,
 						-91.537007689),
 				new LatLng(41.66326833, -91.5370009839), new LatLng(
 						41.663266830, -91.536550037), new LatLng(41.66309250,
 						-91.5365453), new LatLng(41.6630927, -91.537468)));
 
-		buildingSet.put(9, new Building("Calvin Hall", "address9", new LatLng(
+		buildingSet.put(9, new Building("Calvin Hall", "2 West Jefferson Street, Iowa City, IA 52242", new LatLng(
 				41.66302988, -91.53670158), new LatLng(41.66303213,
 				-91.53650209), new LatLng(41.66299732, -91.536503098),
 				new LatLng(41.66299506, -91.5364682), new LatLng(41.66291917,
@@ -176,7 +176,7 @@ public class BuildingDrawing {
 				new LatLng(41.66292368, -91.5367009)));
 
 		buildingSet
-				.put(10, new Building("Gilmore Hall", "address10", new LatLng(
+				.put(10, new Building("Gilmore Hall", "112 North Capitol Street, Iowa City, IA 52242", new LatLng(
 						41.66302637, -91.53592206), new LatLng(41.66302512,
 						-91.5357239), new LatLng(41.66286832, -91.53572324),
 						new LatLng(41.66286356, -91.53569977), new LatLng(
@@ -190,7 +190,7 @@ public class BuildingDrawing {
 								41.66294021, -91.535924747)));
 
 		buildingSet
-				.put(11, new Building("Trowbridge Hall", "address11",
+				.put(11, new Building("Trowbridge Hall", "123 North Capitol Street, Iowa City, IA 52242",
 						new LatLng(41.66349025, -91.53693057), new LatLng(
 								41.66349100, -91.5363153), new LatLng(
 								41.663230261, -91.53631635), new LatLng(
@@ -202,7 +202,7 @@ public class BuildingDrawing {
 								41.663461197, -91.536931246)));
 
 		buildingSet.put(12, new Building("Tippie College of Business",
-				"address12", new LatLng(41.663128068, -91.53594788),
+				"21 East Market Street, Iowa City, IA 52245", new LatLng(41.663128068, -91.53594788),
 				new LatLng(41.66349551, -91.53594754), new LatLng(
 						41.6634829885, -91.5347720682), new LatLng(
 						41.6626361369, -91.5347687155), new LatLng(41.66263638,
@@ -212,7 +212,7 @@ public class BuildingDrawing {
 						-91.535596512),
 				new LatLng(41.66311754, -91.5355877950), new LatLng(
 						41.66312681, -91.535951904)));
-		buildingSet.put(13, new Building("Chemistry Bldg", "address13",
+		buildingSet.put(13, new Building("Chemistry Bldg", "251 North Capitol Street",
 				new LatLng(41.6645955, -91.5369718), new LatLng(41.6645955,
 						-91.5367622), new LatLng(41.6643516, -91.5367622),
 				new LatLng(41.6643516, -91.5364759), new LatLng(41.6645863,
@@ -228,7 +228,7 @@ public class BuildingDrawing {
 						-91.5372082), new LatLng(41.6642556, -91.5372082),
 				new LatLng(41.6642556, -91.5369718)));
 		buildingSet.put(14, new Building("Engineering Research Facility",
-				"address14", new LatLng(41.6572138, -91.5372762), new LatLng(
+				"330 South Madison Street", new LatLng(41.6572138, -91.5372762), new LatLng(
 						41.6572138, -91.5371260), new LatLng(41.65710891,
 						-91.5371260), new LatLng(41.65710891, -91.5370184),
 				new LatLng(41.6568478, -91.5370184), new LatLng(41.6568478,
@@ -237,7 +237,7 @@ public class BuildingDrawing {
 						-91.5374251), new LatLng(41.6570280, -91.5373959),
 				new LatLng(41.6571089, -91.5373959), new LatLng(41.6571089,
 						-91.5372762)));
-		buildingSet.put(15, new Building("Communications Center", "address15",
+		buildingSet.put(15, new Building("Communications Center", "116 South Madison Street",
 				new LatLng(41.65950461794223, -91.53745595365763), new LatLng(
 						41.65950511891731, -91.53736174106598), new LatLng(
 						41.659496852828276, -91.5373620763421), new LatLng(
@@ -246,7 +246,7 @@ public class BuildingDrawing {
 						41.65910834544716, -91.5373707935214), new LatLng(
 						41.659101081263614, -91.53736777603626), new LatLng(
 						41.6591013317527, -91.53745092451572)));
-		buildingSet.put(16, new Building("Recreation Center", "address16",
+		buildingSet.put(16, new Building("Recreation Center", "309 South Madison",
 				new LatLng(41.65772337646764, -91.53888624161482), new LatLng(
 						41.65772012003958, -91.53795417398214), new LatLng(
 						41.65756331030851, -91.53795685619116), new LatLng(
@@ -269,7 +269,7 @@ public class BuildingDrawing {
 						41.65756305981345, -91.53893250972033), new LatLng(
 						41.657597377630786, -91.53892815113068), new LatLng(
 						41.65759612515604, -91.53889127075672)));
-		buildingSet.put(17, new Building("Iowa Memorial Union", "address17",
+		buildingSet.put(17, new Building("Iowa Memorial Union", "125 North Madison Street",
 				new LatLng(41.66349876825926, -91.5386163443327), new LatLng(
 						41.66349701495529, -91.53783179819584), new LatLng(
 						41.6631243115367, -91.53784018009901), new LatLng(
@@ -288,7 +288,7 @@ public class BuildingDrawing {
 						41.66326106989651, -91.53874475508928), new LatLng(
 						41.663262823206914, -91.53869614005089), new LatLng(
 						41.663392067100624, -91.53869614005089)));
-		buildingSet.put(18, new Building("Lindquist Center", "address18",
+		buildingSet.put(18, new Building("Lindquist Center", "240 South Madison Street",
 				new LatLng(41.65889442742307, -91.53750658035278), new LatLng(
 						41.65889417693317, -91.53719946742058), new LatLng(
 						41.65888165243663, -91.53718069195747), new LatLng(
@@ -326,7 +326,7 @@ public class BuildingDrawing {
 						41.658614880081764, -91.5375179797411), new LatLng(
 						41.65861287615377, -91.5375330671668), new LatLng(
 						41.65887764459723, -91.53752937912941)));
-		buildingSet.put(19, new Building("Seaman Center", "address19",
+		buildingSet.put(19, new Building("Seaman Center", "103 South Capitol Street",
 				new LatLng(41.65999782600442, -91.53743483126163), new LatLng(
 						41.65999331726321, -91.53709888458252), new LatLng(
 						41.6599667657808, -91.53709921985865), new LatLng(
@@ -373,7 +373,7 @@ public class BuildingDrawing {
 						41.65959253900603, -91.53716325759888), new LatLng(
 						41.65959078559565, -91.53744053095579), new LatLng(
 						41.65959078559565, -91.53744053095579)));
-		buildingSet.put(20, new Building("Old Capitol Mall", "address20",
+		buildingSet.put(20, new Building("Old Capitol Mall", "200 South Capitol Street",
 				new LatLng(41.66002512893053, -91.5360203012824), new LatLng(
 						41.66002588038705, -91.53554856777191), new LatLng(
 						41.660007594942606, -91.53554387390614), new LatLng(
@@ -401,8 +401,8 @@ public class BuildingDrawing {
 						41.6600121036828, -91.53604209423065), new LatLng(
 						41.66000884737046, -91.53601761907339)));
 
-		buildingSet.put(21, new Building("Admission Vistiors Center",
-				"address21", new LatLng(41.664125, -91.535714), new LatLng(
+		buildingSet.put(21, new Building("Pomerantz Center",
+				"213 North Clinton Street", new LatLng(41.664125, -91.535714), new LatLng(
 						41.664097, -91.535714), new LatLng(41.664095,
 						-91.535853), new LatLng(41.664067, -91.535858),
 				new LatLng(41.664069, -91.535905), new LatLng(41.663822,
@@ -413,7 +413,7 @@ public class BuildingDrawing {
 						-91.535580), new LatLng(41.663756, -91.535497),
 				new LatLng(41.664112, -91.535573), new LatLng(41.664101,
 						-91.535658), new LatLng(41.664124, -91.535665)));
-		buildingSet.put(22, new Building("Black Honors Center", "address22",
+		buildingSet.put(22, new Building("Black Honors Center", "221 North Clinton",
 				new LatLng(41.664606, -91.535690), new LatLng(41.664565,
 						-91.535690), new LatLng(41.664561, -91.535769),
 				new LatLng(41.664183, -91.535766), new LatLng(41.664179,
@@ -422,14 +422,14 @@ public class BuildingDrawing {
 						-91.535630)));
 
 		buildingSet.put(23, new Building("Lutheran Campus Ministry",
-				"address23", new LatLng(41.664122, -91.535218), new LatLng(
+				"109 E. Market Street, Iowa City, IA 52245", new LatLng(41.664122, -91.535218), new LatLng(
 						41.663991, -91.535217), new LatLng(41.663987,
 						-91.535007), new LatLng(41.663816, -91.535010),
 				new LatLng(41.663810, -91.534928), new LatLng(41.663791,
 						-91.534927), new LatLng(41.663791, -91.534875),
 				new LatLng(41.663812, -91.534875), new LatLng(41.663813,
 						-91.534806), new LatLng(41.664119, -91.534801)));
-		buildingSet.put(24, new Building("Duam Hall", "address24", new LatLng(
+		buildingSet.put(24, new Building("Duam Hall", "225 North Clinton Street", new LatLng(
 				41.664562, -91.535455), new LatLng(41.664512, -91.535455),
 				new LatLng(41.664512, -91.535497), new LatLng(41.664426,
 						-91.535499), new LatLng(41.664426, -91.535459),
@@ -441,7 +441,7 @@ public class BuildingDrawing {
 						-91.534765), new LatLng(41.664544, -91.534765),
 				new LatLng(41.664546, -91.534807), new LatLng(41.664557,
 						-91.534807)));
-		buildingSet.put(25, new Building("Burge Residence Hall", "address25",
+		buildingSet.put(25, new Building("Burge Residence Hall", "301 North Clinton Street",
 				new LatLng(41.665620, -91.535904), new LatLng(41.665491,
 						-91.535896), new LatLng(41.665483, -91.535719),
 				new LatLng(41.665223, -91.535722), new LatLng(41.665215,
@@ -474,8 +474,8 @@ public class BuildingDrawing {
 						-91.535091), new LatLng(41.665606, -91.535090),
 				new LatLng(41.665607, -91.535162), new LatLng(41.665622,
 						-91.535162)));
-		buildingSet.put(26, new Building("Iowa Advanved Technology Labs",
-				"address26", new LatLng(41.664639, -91.537935), new LatLng(
+		buildingSet.put(26, new Building("Iowa Advanced Technology Labs",
+				"205 North Madison Street", new LatLng(41.664639, -91.537935), new LatLng(
 						41.664572, -91.537951), new LatLng(41.664573,
 						-91.538225), new LatLng(41.664313, -91.538234),
 				new LatLng(41.664312, -91.538339), new LatLng(41.664199,
@@ -508,14 +508,14 @@ public class BuildingDrawing {
 						-91.537764), new LatLng(41.664314, -91.537766),
 				new LatLng(41.664463, -91.537787), new LatLng(41.664555,
 						-91.537803), new LatLng(41.664638, -91.537833)));
-		buildingSet.put(27, new Building("Women's Resource and Action Center",
-				"address27", new LatLng(41.663456, -91.537393), new LatLng(
+		buildingSet.put(27, new Building("Womens Resource and Action Center",
+				"130 North Madison", new LatLng(41.663456, -91.537393), new LatLng(
 						41.663387, -91.537391), new LatLng(41.663387,
 						-91.537158), new LatLng(41.663459, -91.537158),
 				new LatLng(41.663459, -91.537268), new LatLng(41.663467,
 						-91.537270), new LatLng(41.663467, -91.537333),
 				new LatLng(41.663457, -91.537334)));
-		buildingSet.put(28, new Building("North Campus Parking", "address28",
+		buildingSet.put(28, new Building("North Campus Parking", "339 North Madison Street",
 				new LatLng(41.665662, -91.536854), new LatLng(41.664863,
 						-91.536864), new LatLng(41.664866, -91.536814),
 				new LatLng(41.664789, -91.536814), new LatLng(41.664827,
@@ -526,7 +526,7 @@ public class BuildingDrawing {
 						-91.536299), new LatLng(41.665568, -91.536301),
 				new LatLng(41.665569, -91.536334), new LatLng(41.665664,
 						-91.536333)));
-		buildingSet.put(29, new Building("Space Place Theater", "address29",
+		buildingSet.put(29, new Building("North Hall", "20 West Davenport Street",
 				new LatLng(41.666134, -91.536948), new LatLng(41.666032,
 						-91.536947), new LatLng(41.666032, -91.536979),
 				new LatLng(41.665997, -91.536979), new LatLng(41.665998,
@@ -538,7 +538,7 @@ public class BuildingDrawing {
 				new LatLng(41.666280, -91.536403), new LatLng(41.666238,
 						-91.536402), new LatLng(41.666239, -91.536486),
 				new LatLng(41.666133, -91.536487)));
-		buildingSet.put(30, new Building("Stanley Residence Hall", "address30",
+		buildingSet.put(30, new Building("Stanley Residence Hall", "10 East Davenport Street",
 				new LatLng(41.666686, -91.535831), new LatLng(41.666666,
 						-91.535890), new LatLng(41.666617, -91.535917),
 				new LatLng(41.666143, -91.535934), new LatLng(41.666110,
@@ -546,7 +546,7 @@ public class BuildingDrawing {
 				new LatLng(41.666109, -91.535806), new LatLng(41.666148,
 						-91.535774), new LatLng(41.666620, -91.535755),
 				new LatLng(41.666664, -91.535774)));
-		buildingSet.put(31, new Building("Currier Residence Hall", "address31",
+		buildingSet.put(31, new Building("Currier Residence Hall", "413 North Clinton Street",
 				new LatLng(41.666088, -91.535611), new LatLng(41.666048,
 						-91.535611), new LatLng(41.666047, -91.535639),
 				new LatLng(41.666009, -91.535639), new LatLng(41.666010,
@@ -573,7 +573,7 @@ public class BuildingDrawing {
 						-91.535224), new LatLng(41.666152, -91.534926),
 				new LatLng(41.666120, -91.534921), new LatLng(41.666087,
 						-91.534963)));
-		buildingSet.put(32, new Building("Writers' Workshop", "address32",
+		buildingSet.put(32, new Building("Dey House", "507 North Clinton Street",
 				new LatLng(41.667426, -91.535202), new LatLng(41.667410,
 						-91.535202), new LatLng(41.667410, -91.535293),
 				new LatLng(41.667198, -91.535296), new LatLng(41.667197,
@@ -589,21 +589,21 @@ public class BuildingDrawing {
 				new LatLng(41.667379, -91.535172), new LatLng(41.667427,
 						-91.535172)));
 		buildingSet.put(33, new Building("Glenn Schaeffer Library",
-				"address33", new LatLng(41.667492, -91.535158), new LatLng(
+				"507 North Clinton Street", new LatLng(41.667492, -91.535158), new LatLng(
 						41.667362, -91.535161), new LatLng(41.667359,
 						-91.535063), new LatLng(41.667492, -91.535059)));
-		buildingSet.put(34, new Building("Jefferson Bldg", "address34",
+		buildingSet.put(34, new Building("Jefferson Bldg", "129 East Washington Street",
 				new LatLng(41.659955, -91.533559), new LatLng(41.659729,
 						-91.533559), new LatLng(41.659730, -91.533250),
 				new LatLng(41.659972, -91.533233)));
-		buildingSet.put(35, new Building("Phillips Hall", "address35",
+		buildingSet.put(35, new Building("Phillips Hall", "16 North Clinton Street",
 				new LatLng(41.662065, -91.534311), new LatLng(41.661625,
 						-91.534327), new LatLng(41.661622, -91.534278),
 				new LatLng(41.661509, -91.534280), new LatLng(41.661504,
 						-91.533940), new LatLng(41.661617, -91.533937),
 				new LatLng(41.661620, -91.534074), new LatLng(41.662069,
 						-91.534064)));
-		buildingSet.put(36, new Building("Biology Bldg", "address36",
+		buildingSet.put(36, new Building("Biology Bldg", "129 East Jefferson Street",
 				new LatLng(41.662320, -91.533772), new LatLng(41.662174,
 						-91.533770), new LatLng(41.662172, -91.533402),
 				new LatLng(41.662105, -91.533403), new LatLng(41.662107,
@@ -612,7 +612,7 @@ public class BuildingDrawing {
 						-91.533283), new LatLng(41.662106, -91.533339),
 				new LatLng(41.662174, -91.533342), new LatLng(41.662173,
 						-91.533232), new LatLng(41.662318, -91.533228)));
-		buildingSet.put(37, new Building("Biology Bldg East", "address37",
+		buildingSet.put(37, new Building("Biology Bldg East", "210 East Iowa Avenue",
 				new LatLng(41.661552, -91.533287), new LatLng(41.661550,
 						-91.532929), new LatLng(41.661490, -91.532927),
 				new LatLng(41.661503, -91.532734), new LatLng(41.661514,
@@ -623,12 +623,12 @@ public class BuildingDrawing {
 						-91.532740), new LatLng(41.661889, -91.532917),
 				new LatLng(41.661596, -91.532921), new LatLng(41.661599,
 						-91.533287)));
-		buildingSet.put(38, new Building("Sciences Library", "address38",
+		buildingSet.put(38, new Building("Sciences Library", "120 East Iowa Avenue",
 				new LatLng(41.662123, -91.533873), new LatLng(41.662078,
 						-91.533924), new LatLng(41.661961, -91.533922),
 				new LatLng(41.661964, -91.533719), new LatLng(41.662078,
 						-91.533721), new LatLng(41.662123, -91.533774)));
-		buildingSet.put(39, new Building("Van Allen Hall", "address39",
+		buildingSet.put(39, new Building("Van Allen Hall", "30 North Dubuque Street",
 				new LatLng(41.662291, -91.532838), new LatLng(41.662100,
 						-91.532836), new LatLng(41.662097, -91.532533),
 				new LatLng(41.662035, -91.532533), new LatLng(41.662033,
@@ -652,13 +652,13 @@ public class BuildingDrawing {
 				new LatLng(41.662312, -91.532733), new LatLng(41.662297,
 						-91.532728)));
 		buildingSet.put(40, new Building("Spence Laboratories of Psychology",
-				"address40", new LatLng(41.661661, -91.531507), new LatLng(
+				"308 East Iowa Avenue", new LatLng(41.661661, -91.531507), new LatLng(
 						41.661612, -91.531507), new LatLng(41.661611,
 						-91.531540), new LatLng(41.661464, -91.531541),
 				new LatLng(41.661460, -91.531090), new LatLng(41.661605,
 						-91.531097), new LatLng(41.661607, -91.531132),
 				new LatLng(41.661663, -91.531133)));
-		buildingSet.put(41, new Building("Seashore Hall", "address41",
+		buildingSet.put(41, new Building("Seashore Hall", "301 East Jefferson Street",
 				new LatLng(41.661503, -91.531060), new LatLng(41.661589,
 						-91.531062), new LatLng(41.661842, -91.531061),
 				new LatLng(41.661845, -91.531176), new LatLng(41.661743,
@@ -677,14 +677,14 @@ public class BuildingDrawing {
 						-91.531094), new LatLng(41.662116, -91.530840),
 				new LatLng(41.661949, -91.530841), new LatLng(41.661950,
 						-91.530899), new LatLng(41.661502, -91.530903)));
-		buildingSet.put(42, new Building("Stuit Hall", "address42", new LatLng(
+		buildingSet.put(42, new Building("Stuit Hall", "335 East Jefferson Street", new LatLng(
 				41.662266, -91.530726), new LatLng(41.662135, -91.530730),
 				new LatLng(41.662130, -91.530337), new LatLng(41.662267,
 						-91.530337), new LatLng(41.662267, -91.530483),
 				new LatLng(41.662277, -91.530480), new LatLng(41.662279,
 						-91.530558), new LatLng(41.662269, -91.530559)));
 		buildingSet.put(43, new Building("University Services Blgd",
-				"address43", new LatLng(41.654314, -91.536877), new LatLng(
+				"1 West Prentiss", new LatLng(41.654314, -91.536877), new LatLng(
 						41.654310, -91.536868), new LatLng(41.654299,
 						-91.536871), new LatLng(41.654299, -91.536801),
 				new LatLng(41.654307, -91.536442), new LatLng(41.654296,
@@ -701,7 +701,7 @@ public class BuildingDrawing {
 						-91.536935), new LatLng(41.654110, -91.536938),
 				new LatLng(41.654196, -91.536931), new LatLng(41.654240,
 						-91.536917)));
-		buildingSet.put(44, new Building("Hillcrest Hall", "address44",
+		buildingSet.put(44, new Building("Hillcrest Hall", "25 Byington Road",
 				new LatLng(41.659612, -91.542485), new LatLng(41.659466,
 						-91.542487), new LatLng(41.659469, -91.542652),
 				new LatLng(41.659255, -91.542666), new LatLng(41.659257,
@@ -715,7 +715,7 @@ public class BuildingDrawing {
 				new LatLng(41.659459, -91.542208), new LatLng(41.659463,
 						-91.542231), new LatLng(41.659609, -91.542221)));
 		buildingSet.put(45, new Building("Hillcrest Residence Hall",
-				"address45", new LatLng(41.659955, -91.543474), new LatLng(
+				"25 Byington Road", new LatLng(41.659955, -91.543474), new LatLng(
 						41.659847, -91.543478), new LatLng(41.659834,
 						-91.543015), new LatLng(41.659762, -91.542913),
 				new LatLng(41.659349, -91.542932), new LatLng(41.659322,
@@ -748,6 +748,163 @@ public class BuildingDrawing {
 						-91.542827), new LatLng(41.659919, -91.542800),
 				new LatLng(41.659933, -91.542819), new LatLng(41.659937,
 						-91.542934), new LatLng(41.659943, -91.542940)));
+		buildingSet.put(46, new Building("English Philosophy Building",
+				"308 English Philosophy Bldg, Iowa City, IA 52242", new LatLng(
+						41.66100351789066, -91.54030848294497), new LatLng(
+						41.6610010130736, -91.54016967862844), new LatLng(
+						41.660870762451815, -91.54017101973295), new LatLng(
+						41.66086925955848, -91.54005534946918), new LatLng(
+						41.660894558258136, -91.54005769640207), new LatLng(
+						41.66089505922239, -91.53953567147255), new LatLng(
+						41.660858739304196, -91.53953433036804), new LatLng(
+						41.660858238339664, -91.53949040919542), new LatLng(
+						41.66072773694633, -91.53948940336704), new LatLng(
+						41.66072673501522, -91.53954036533833), new LatLng(
+						41.660706445906946, -91.53954304754734), new LatLng(
+						41.66070920121831, -91.5401753783226), new LatLng(
+						41.66063305438788, -91.54017504304647), new LatLng(
+						41.660631551489026, -91.54030814766884)));
+		buildingSet.put(47, new Building(
+				"Adler Journalism and Mass Communication Building",
+				"104 West Washington, Iowa City, IA 52242", new LatLng(
+						41.66089080102614, -91.53901096433401), new LatLng(
+						41.660895309704536, -91.53896100819111), new LatLng(
+						41.66091960646585, -91.53896100819111), new LatLng(
+						41.660930126710184, -91.5388922765851), new LatLng(
+						41.660935386831696, -91.53879605233669), new LatLng(
+						41.66091284345073, -91.53879571706057), new LatLng(
+						41.660912092004565, -91.53872530907393), new LatLng(
+						41.660895309704536, -91.53872463852167), new LatLng(
+						41.66089280488325, -91.53860326856375), new LatLng(
+						41.660480760456906, -91.53860226273537), new LatLng(
+						41.660478756587, -91.5386475250125), new LatLng(
+						41.66041914142856, -91.53865054249763), new LatLng(
+						41.66041788900867, -91.53861835598946), new LatLng(
+						41.66040887158474, -91.53860528022051), new LatLng(
+						41.66039434351025, -91.53859253972769), new LatLng(
+						41.66037680962285, -91.53859119862318), new LatLng(
+						41.660339988443795, -91.5385952219367), new LatLng(
+						41.66031368758874, -91.53861433267593), new LatLng(
+						41.66028788769189, -91.53866160660982), new LatLng(
+						41.66028838866085, -91.53870955109596), new LatLng(
+						41.66029815755497, -91.53874810785055), new LatLng(
+						41.660336732148046, -91.53874408453703), new LatLng(
+						41.6603384855381, -91.53892245143652), new LatLng(
+						41.660371549455704, -91.53892613947392), new LatLng(
+						41.66036729122485, -91.53901029378176), new LatLng(
+						41.66047825561951, -91.5390096232295), new LatLng(
+						41.660480760456906, -91.53903141617775), new LatLng(
+						41.66056166665259, -91.53902772814035), new LatLng(
+						41.66056291906968, -91.53901264071465)));
+		buildingSet.put(48, new Building("Becker Communications Studies Bldg",
+				"25 South Madison Street, Iowa City, IA 52242", new LatLng(
+						41.660747274599785, -91.53838098049164), new LatLng(
+						41.660743016393766, -91.53828676789999), new LatLng(
+						41.66070419156121, -91.53823312371969), new LatLng(
+						41.66066336284106, -91.53821870684624), new LatLng(
+						41.66072297777343, -91.53812449425459), new LatLng(
+						41.66067413361024, -91.53805676847696), new LatLng(
+						41.66067313167829, -91.53787169605494), new LatLng(
+						41.66058496160651, -91.53787337243557), new LatLng(
+						41.66058070338975, -91.53789382427931), new LatLng(
+						41.66056291906968, -91.5378924831748), new LatLng(
+						41.660562668586266, -91.53787571936846), new LatLng(
+						41.66032295551033, -91.53787605464458), new LatLng(
+						41.6603164429169, -91.53833571821451), new LatLng(
+						41.66045846740061, -91.53833471238613), new LatLng(
+						41.660509566080016, -91.53840411454439), new LatLng(
+						41.66059397900575, -91.5382931381464), new LatLng(
+						41.660595732388785, -91.53838634490967), new LatLng(
+						41.66063681163494, -91.53843026608229), new LatLng(
+						41.66070920121831, -91.53842724859715)));
+		buildingSet.put(49, new Building("Boyd Law Building",
+				"220 Boyd Law Bldg, Iowa City, IA 52242", new LatLng(
+						41.65708135596558, -91.54315866529942), new LatLng(
+						41.65710840963131, -91.54321029782295), new LatLng(
+						41.6571640199085, -91.5432719886303), new LatLng(
+						41.657222636094666, -91.54331792145967), new LatLng(
+						41.657272484860556, -91.54334474354982), new LatLng(
+						41.65732508904404, -91.54336016625166), new LatLng(
+						41.65740499722152, -91.5433732420206), new LatLng(
+						41.657407502178444, -91.54338229447603), new LatLng(
+						41.65741526754433, -91.54338330030441), new LatLng(
+						41.65743029728211, -91.54337927699089), new LatLng(
+						41.65743630917624, -91.54336888343096), new LatLng(
+						41.657436058680666, -91.54335480183363), new LatLng(
+						41.6574826508413, -91.54335044324398), new LatLng(
+						41.65754101624228, -91.54332898557186), new LatLng(
+						41.65758936179187, -91.54330383986235), new LatLng(
+						41.657639711263506, -91.54326360672712), new LatLng(
+						41.657682044868416, -91.54320996254683), new LatLng(
+						41.65771936855613, -91.54315866529942), new LatLng(
+						41.65776896644328, -91.54305003583431), new LatLng(
+						41.657810047492625, -91.5428901091218), new LatLng(
+						41.65781555836308, -91.54280997812748), new LatLng(
+						41.65781029798672, -91.54272615909576), new LatLng(
+						41.657792011913216, -91.54261115938425), new LatLng(
+						41.65777122089178, -91.54253840446472), new LatLng(
+						41.657737153661486, -91.5424633026123), new LatLng(
+						41.657691814157886, -91.54238853603601), new LatLng(
+						41.657693567619944, -91.54244888573885), new LatLng(
+						41.65756756872478, -91.54245559126139), new LatLng(
+						41.65756305981345, -91.54226616024971), new LatLng(
+						41.657500937002645, -91.54223263263702), new LatLng(
+						41.65742027745732, -91.54221754521132), new LatLng(
+						41.65741902497911, -91.54218837618828), new LatLng(
+						41.657409005152566, -91.54217932373285), new LatLng(
+						41.65739247243534, -91.54218569397926), new LatLng(
+						41.657391720948105, -91.54223665595055), new LatLng(
+						41.657302043407036, -91.54225375503302), new LatLng(
+						41.65722664403706, -91.54229566454887), new LatLng(
+						41.657153749545614, -91.5423583611846), new LatLng(
+						41.65707233807447, -91.54247235506773), new LatLng(
+						41.65702273965085, -91.54259540140629), new LatLng(
+						41.65716251692866, -91.54270939528942), new LatLng(
+						41.657283757189205, -91.54272951185703), new LatLng(
+						41.65731156225811, -91.54278114438057), new LatLng(
+						41.657276492799845, -91.5428039431572), new LatLng(
+						41.657274488830254, -91.54284987598658), new LatLng(
+						41.65731582069102, -91.54287736862898), new LatLng(
+						41.6573060513445, -91.54293738305569)));
+		buildingSet.put(50, new Building("Field House",
+				"225 South Grand Avenue, Iowa City, IA 52242", new LatLng(
+						41.659253378457386, -91.5469915419817), new LatLng(
+						41.65925162503779, -91.54633641242981), new LatLng(
+						41.65893876412109, -91.54633909463882), new LatLng(
+						41.65893851363137, -91.54624722898006), new LatLng(
+						41.65864017966706, -91.54625326395035), new LatLng(
+						41.65863867672167, -91.54621437191963), new LatLng(
+						41.65882228628987, -91.54621034860611), new LatLng(
+						41.65882253678005, -91.54611077159643), new LatLng(
+						41.6588127676621, -91.54611311852932), new LatLng(
+						41.65881402011321, -91.54605779796839), new LatLng(
+						41.65870931511683, -91.54605410993099), new LatLng(
+						41.65871131904179, -91.54597967863083), new LatLng(
+						41.65869979647236, -91.5459793433547), new LatLng(
+						41.658700046963006, -91.54595017433167), new LatLng(
+						41.65853171701842, -91.5459531918168), new LatLng(
+						41.65853021407051, -91.5459793433547), new LatLng(
+						41.65851819048591, -91.54598101973534), new LatLng(
+						41.658513431149736, -91.5460604801774), new LatLng(
+						41.65842250271188, -91.54606316238642), new LatLng(
+						41.658418494843914, -91.54621470719576), new LatLng(
+						41.65849840166474, -91.546212695539), new LatLng(
+						41.65849815117328, -91.54624119400978), new LatLng(
+						41.658277467830445, -91.54624052345753), new LatLng(
+						41.65827546389197, -91.54634647071362), new LatLng(
+						41.657969111064475, -91.54635015875101), new LatLng(
+						41.65796585464883, -91.54645208269358), new LatLng(
+						41.65786139876743, -91.54645208269358), new LatLng(
+						41.65786114827348, -91.54628846794367), new LatLng(
+						41.65742954579531, -91.54629282653332), new LatLng(
+						41.6574315497601, -91.54707100242376), new LatLng(
+						41.65787217000524, -91.54706630855799), new LatLng(
+						41.657867661115205, -91.54688593000174), new LatLng(
+						41.65797487241483, -91.54688660055399), new LatLng(
+						41.65797286846694, -91.54698483645916), new LatLng(
+						41.65830978132973, -91.54697645455599), new LatLng(
+						41.658315793141774, -91.54699992388487), new LatLng(
+						41.6592503725952, -91.54699087142944)));
 	}
 
 	// ------------------------inner class------------------------------

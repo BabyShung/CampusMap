@@ -13,7 +13,7 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
-public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
+public class GoogleRouteTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 
 	private MapActivity mContext;
 	private PolylineOptions rectline;
@@ -23,7 +23,7 @@ public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 	private Polyline drawnLine;
 
 	// constructor
-	public WebServiceTask(MapActivity homeActivity, GoogleMap map,
+	public GoogleRouteTask(MapActivity homeActivity, GoogleMap map,
 			LatLng fromPosition, LatLng toPosition) {
 		this.mContext = homeActivity;
 		this.map = map;
