@@ -23,6 +23,7 @@ import com.example.campusmap.location.MyLocationTask;
 import com.example.campusmap.location.MyLocation.LocationResult;
 import com.example.campusmap.mapdrawing.BuildingDrawing;
 import com.example.campusmap.mapdrawing.BuildingDrawing.Building;
+import com.example.campusmap.mapdrawing.MarkerAndPolyLine;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
@@ -33,23 +34,28 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapActivity extends Activity implements OnMapClickListener,
 		OnMapLongClickListener, OnInfoWindowClickListener {
 
 	private GoogleMap map;
-	private ArrayList<LatLng> arrayPoints = null;
+	private ArrayList<LatLng> LongClickArrayPoints;
 	private MyLocation ml;
 	private MyLocationTask locationTask;
 	private ArrayList<LatLng> directionPoint;
 	private BuildingDrawing bd;
 	private Marker currentMarker;
-
+	private Marker LongClickMarkerA;
+	private Marker LongClickMarkerB;
+	private Polyline LongClickPolyLine;
+	private MarkerAndPolyLine marker_polyline;
+	private int LongClickCount;
+	private WebServiceTask googleDirectionTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
-		// TODO Auto-generated method stub
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
 
@@ -57,15 +63,17 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		mapInitialization();
 		setUpListeners();
 
-		arrayPoints = new ArrayList<LatLng>();
+		LongClickArrayPoints = new ArrayList<LatLng>();
 
 		// GPSInitialization();
 		GPS_Network_Initialization();
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
-		
-	
+
+		// options for drawing markers and polylines
+		marker_polyline = new MarkerAndPolyLine(map);
+
 	}
 
 	private void setUpBroadCastManager() {
@@ -142,79 +150,108 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	@Override
 	public void onMapClick(LatLng point) {
+
+		if (LongClickCount == 2 || LongClickArrayPoints.size() == 1) {
+			clearMarkersAndLine();
+		}
+
 		// if the clicked point is in polygon
 		if (bd.pointIsInPolygon(point)) {
-			// Toast.makeText(this, "it is within!", Toast.LENGTH_SHORT).show();
 
 			Building tmpBuilding = bd.getCurrentTouchedBuilding();
 			if (tmpBuilding != null) {
 				addCampusBuildingMaker(point, tmpBuilding.getBuildingName(),
 						tmpBuilding.getAddress());
 			}
-		} else {//add a simple marker
+		} else {// add a simple marker
 			addSimpleMaker(point);
 		}
 
 		// Clears the previously MapLongClick position
-		arrayPoints.clear();
-		arrayPoints.add(point);
-
+		LongClickArrayPoints.clear();
+		LongClickArrayPoints.add(point);
+		LongClickCount++;
 	}
 
 	private void addSimpleMaker(LatLng point) {
-		if (currentMarker != null) // delete the former marker
-		{
-			currentMarker.remove();
-		}
-		// Creating a marker
-		MarkerOptions markerOptions = new MarkerOptions();
-		// Setting the position for the marker
-		markerOptions.position(point);
-		markerOptions.title(point.latitude + " , " + point.longitude);
-		currentMarker = map.addMarker(markerOptions
-				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))); 
+		MarkerOptions mo = marker_polyline.setupMarkerOptions(point,
+				point.latitude + " , " + point.longitude,
+				BitmapDescriptorFactory.HUE_RED, null, false);
+		currentMarker = map.addMarker(mo);
 		currentMarker.showInfoWindow();
 
 	}
 
 	private void addCampusBuildingMaker(LatLng point, String bn, String addr) {
 
-		if (currentMarker != null) // delete the former marker
-		{
-			currentMarker.remove();
-		}
-
-		// Creating a marker
-		MarkerOptions markerOptions = new MarkerOptions();
-		// Setting the position for the marker
-		markerOptions.position(point);
-		markerOptions.title(bn).snippet(addr);
-		map.animateCamera(CameraUpdateFactory.newLatLng(point));
-		currentMarker = map.addMarker(markerOptions
-				.icon(BitmapDescriptorFactory
-						.defaultMarker(BitmapDescriptorFactory.HUE_ORANGE)));
+		MarkerOptions mo = marker_polyline.setupMarkerOptions(point, bn,
+				BitmapDescriptorFactory.HUE_RED, addr, true);
+		currentMarker = map.addMarker(mo);
 		currentMarker.showInfoWindow();
 	}
 
 	@Override
 	public void onMapLongClick(LatLng point) {
-		// add marker
-		MarkerOptions marker = new MarkerOptions();
-		marker.position(point);
-		map.addMarker(marker.icon(BitmapDescriptorFactory
-				.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)));
+		MarkerOptions mo = marker_polyline.setupMarkerOptions(point, null,
+				BitmapDescriptorFactory.HUE_RED, null, false);
+
 		// set polyline in the map
-		arrayPoints.add(point);
-		PolylineOptions polyline = new PolylineOptions();
-		polyline.color(Color.BLUE);
-		polyline.width(5);
-		polyline.addAll(arrayPoints);
-		map.addPolyline(polyline);
+		LongClickArrayPoints.add(point);
+
+		if (LongClickCount == 2) {
+			clearMarkersAndLine();
+		}
+
+		if (LongClickArrayPoints.size() == 1) {
+			LongClickMarkerA = map.addMarker(mo);
+		} else { // size is 2
+			LongClickMarkerB = map.addMarker(mo);
+		}
+
+		if (LongClickArrayPoints.size() == 2) {// draw line
+
+			PolylineOptions plo = marker_polyline.setupPolyLineOptions(
+					Color.RED, 5, LongClickArrayPoints);
+			LongClickPolyLine = map.addPolyline(plo);
+
+			// start google direction async task
+			CallDirection(LongClickArrayPoints.get(0),
+					LongClickArrayPoints.get(1));
+			LongClickArrayPoints.clear();
+
+		}
+		LongClickCount++;
+	}
+
+	private void clearMarkersAndLine() {
+		// remove the last line
+		if (LongClickPolyLine != null) {
+			LongClickPolyLine.remove();
+		}
+		// remove the last two markers
+		if (LongClickMarkerA != null) {
+			LongClickMarkerA.remove();
+		}
+		if (LongClickMarkerB != null) {
+			LongClickMarkerB.remove();
+		}
+		// remove currentmarker
+		if (currentMarker != null) {
+			currentMarker.remove();
+		}
+
+		LongClickCount = 0;
+		if (googleDirectionTask != null) {
+			Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
+			if (lastGoogleLine != null) {
+				lastGoogleLine.remove();
+			}
+		}
 	}
 
 	private void CallDirection(LatLng from, LatLng to) { // Async task
-		new WebServiceTask(this, map, from, to).execute();
+		googleDirectionTask = new WebServiceTask(this, map, from, to);
+		googleDirectionTask.execute();
 	}
 
 	public void setDirectionPoints(ArrayList<LatLng> result) {
@@ -222,8 +259,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		directionPoint = result;
 	}
 
-	protected void onResume() {	
-		super.onResume(); 
+	protected void onResume() {
+		super.onResume();
 	}
 
 	@Override

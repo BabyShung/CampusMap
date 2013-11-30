@@ -10,6 +10,7 @@ import com.example.campusmap.MapActivity;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
@@ -19,14 +20,19 @@ public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 	private GoogleMap map;
 	private LatLng fromPosition;
 	private LatLng toPosition;
+	private Polyline drawnLine;
 
 	// constructor
 	public WebServiceTask(MapActivity homeActivity, GoogleMap map,
-			LatLng fromPosition, LatLng toPosition) { 
+			LatLng fromPosition, LatLng toPosition) {
 		this.mContext = homeActivity;
 		this.map = map;
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;
+	}
+
+	public Polyline getDrawnLine() {
+		return drawnLine;
 	}
 
 	@Override
@@ -45,8 +51,8 @@ public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 	@Override
 	protected void onPostExecute(ArrayList<LatLng> result) {
 		super.onPostExecute(result);
-		
-		//select random color for a route
+
+		// select random color for a route
 		int[] randomColor = { Color.RED, Color.BLACK, Color.BLUE, Color.YELLOW,
 				Color.CYAN };
 		Random rm = new Random();
@@ -58,9 +64,9 @@ public class WebServiceTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 			for (i = 0; i < result.size(); i++) {
 				rectline.add(result.get(i));
 			}
-			map.addPolyline(rectline);
+			drawnLine = map.addPolyline(rectline);
 			map.animateCamera(CameraUpdateFactory.newLatLng(toPosition));
-			Toast.makeText(mContext, "points for this route: " + i,
+			Toast.makeText(mContext, "Google direction",
 					Toast.LENGTH_SHORT).show();
 		}
 	}

@@ -11,7 +11,8 @@ public class MyLocationTask extends AsyncTask<Void, Integer, String> {
 		this.ml = ml;
 	}
 
-	protected void onPreExecute(String b) {}
+	protected void onPreExecute(String b) {
+	}
 
 	@Override
 	protected String doInBackground(Void... arg0) {
