@@ -55,6 +55,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private MarkerAndPolyLine marker_polyline;
 	private int LongClickCount;
 	private GoogleRouteTask googleDirectionTask;
+	private Location myLastLocation;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -86,28 +87,29 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private BroadcastReceiver BuildingNameReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
+			
+			if (googleDirectionTask != null) {
+				Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
+				if (lastGoogleLine != null) {
+					lastGoogleLine.remove();
+				}
+			}
+			
 			String bn = intent.getStringExtra("BuildingName");
-
 			// search the building lat & lng by bn
 			DB_Operations op = new DB_Operations();
 			op.open();
 			LatLng to = op.getLatLngFromDB(bn);
 			op.close();
-
 			// start an ansync task
-			Location fromL = ml.getMyLastLocation();
+			Location fromL = myLastLocation;
 			LatLng from = new LatLng(fromL.getLatitude(), fromL.getLongitude());
 			CallDirection(from, to);
 
 		}
 	};
 
-	@Override
-	protected void onDestroy() {
-		LocalBroadcastManager.getInstance(this).unregisterReceiver(
-				BuildingNameReceiver);
-		super.onDestroy();
-	}
+
 
 	private void GPS_Network_Initialization() {
 		// abstract class, define its abstract method
@@ -128,7 +130,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		String provider = lm.getBestProvider(criteria, true);
 		Location myLocation = lm.getLastKnownLocation(provider);
 		setUpMyLocationCamera(myLocation, 17);
-		
+		myLastLocation = myLocation;
 		
 		/**
 		 * put below in another method
@@ -282,10 +284,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		googleDirectionTask.execute();
 	}
 
-	protected void onResume() {
-		super.onResume();
-	}
-
 	@Override
 	public void onInfoWindowClick(Marker marker) {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
@@ -336,4 +334,23 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
+
+	@Override
+	protected void onPause() {
+
+		super.onPause();
+	}
+
+	@Override
+	protected void onResume() {
+
+		super.onResume();
+
+	}
+	@Override
+	protected void onDestroy() {
+		LocalBroadcastManager.getInstance(this).unregisterReceiver(
+				BuildingNameReceiver);
+		super.onDestroy();
+	}
 }
