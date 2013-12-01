@@ -44,8 +44,7 @@ public class DB_Operations implements TableDefinition {
 		database.close();
 	}
 
-	// -------------------------------------Cursor should be
-	// private--------------------------
+	// ---------Cursor should be private--------------------------
 	private Cursor readData() {
 		String[] FROM = { BUILDING_NAME, QUERY_TIME, UPDATE_TIME };
 		String ORDER_BY = UPDATE_TIME + " DESC," + QUERY_TIME + " DESC,"
@@ -111,7 +110,7 @@ public class DB_Operations implements TableDefinition {
 	}
 
 	// return query_times as well
-	public ArrayList<DB_Building> getBuildingNamesWithTimes() {
+	public ArrayList<DB_Building> getBuildingOBJWithTimes() {
 		Cursor c = this.readData();
 		ArrayList<DB_Building> result = new ArrayList<DB_Building>();
 
@@ -223,6 +222,7 @@ public class DB_Operations implements TableDefinition {
 			cv.put(UPDATE_TIME, dateFormat.format(date));
 			database.update(BUILDING_TABLE, cv,
 					BUILDING_NAME + "='" + bn + "'", null);
+			System.out.println("updated..");
 		}
 	}
 

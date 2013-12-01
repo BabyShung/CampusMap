@@ -145,11 +145,11 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		
 		//use this point to get the buildingName in DB
 		String bn = op.getBuildingNameFromLatLng(result);
-		if(bd.pointIsInPolygon(result)){
+		if(bd.pointIsInPolygon(origin)){
 			Toast.makeText(this, "You are now in " + bn,
 				Toast.LENGTH_LONG).show();
 		}else{
-			Toast.makeText(this, "You are not within campus buildings",
+			Toast.makeText(this, "Your nearest building is "+ bn,
 					Toast.LENGTH_LONG).show();
 		}
 		op.close();

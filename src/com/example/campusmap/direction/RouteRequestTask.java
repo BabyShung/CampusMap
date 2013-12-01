@@ -9,14 +9,14 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 
 // Async <inputtype, progresstype, returntype>
-public class RouteProcessUploadTask extends AsyncTask<String, Integer, String> {
+public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 
 	private MyLocation ml;
 	private MyLocationTask mt;
 	private GoogleMap map;
 	private String returnFileName;
 
-	public RouteProcessUploadTask(MyLocation ml, MyLocationTask mt,
+	public RouteRequestTask(MyLocation ml, MyLocationTask mt,
 			GoogleMap map) {
 		this.ml = ml;
 		this.mt = mt;
@@ -29,7 +29,7 @@ public class RouteProcessUploadTask extends AsyncTask<String, Integer, String> {
 	@Override
 	protected String doInBackground(String... arg0) {
 
-		returnFileName = ml.disableLocationUpdate(mt);
+		//returnFileName = ml.disableLocationUpdate(mt);
 
 		return null;
 	}

@@ -20,11 +20,14 @@ public class NearestPoint {
 		double min = Double.MAX_VALUE;
 		for (LatLng tmp : al) {
 			double current = getDistanceSquare(tmp);
+			System.out.println("distance:  "+current);
+			
 			if (current < min) {
 				min = current;
 				returnPoint = tmp;
 			}
 		}
+		System.out.println("return smallest:  "+min);
 		return returnPoint;
 	}
 

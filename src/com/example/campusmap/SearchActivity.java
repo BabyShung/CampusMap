@@ -42,8 +42,8 @@ public class SearchActivity extends Activity {
 	}
 
 	private void initData() {
-		// read info from db , building names
-		readBuildingNamesInfoFromDatabase();
+		// read info from db , building object
+		readBuildingObjectFromDatabase();
 		getBuildingList();
 
 		populateLV();
@@ -159,10 +159,10 @@ public class SearchActivity extends Activity {
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
-	private void readBuildingNamesInfoFromDatabase() {
+	private void readBuildingObjectFromDatabase() {
 		datasource = new DB_Operations(this);
 		datasource.open();
-		value = datasource.getBuildingNamesWithTimes();
+		value = datasource.getBuildingOBJWithTimes();
 		datasource.close();
 	}
 	
@@ -171,7 +171,6 @@ public class SearchActivity extends Activity {
 		dbo.open();
 		dbo.updateQueryTimesForABuilding(bn);
 		dbo.close();
-		System.out.println("updateddddd");
 	}
 
 	private void popDialog(final String bn) {
