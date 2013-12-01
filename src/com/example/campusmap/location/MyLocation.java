@@ -104,7 +104,7 @@ public class MyLocation implements Runnable {
 
 			// Async task, upload to server
 			// send the proceeded txt to the cloud, also insert in server db
-			uploadTask = new fileUploadTask(fo.getProcessedFileName());
+			uploadTask = new fileUploadTask(fo.getProcessedFileName(),mContext);
 			uploadTask.execute();
 
 			// insert route data into device db

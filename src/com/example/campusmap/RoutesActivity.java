@@ -25,11 +25,11 @@ public class RoutesActivity extends ListActivity implements
 	}
 
 	private void readRoutesInfoFromDatabase() {
-		datasource = new DB_Operations(this);
-		datasource.open();
-		setListAdapter(new ArrayAdapter<String>(RoutesActivity.this,
-				android.R.layout.simple_list_item_1, datasource.getRouteInfo()));
-		datasource.close();	
+//		datasource = new DB_Operations(this);
+//		datasource.open();
+//		setListAdapter(new ArrayAdapter<String>(RoutesActivity.this,
+//				android.R.layout.simple_list_item_1, datasource.getRouteInfo()));
+//		datasource.close();	
 	}
 
 	@Override

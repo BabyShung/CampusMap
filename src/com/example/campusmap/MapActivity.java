@@ -14,6 +14,9 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.widget.Toast;
+
+import com.example.campusmap.algorithms.NearestPoint;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.direction.GoogleRouteTask;
@@ -64,12 +67,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 		LongClickArrayPoints = new ArrayList<LatLng>();
 
-		findMyLocation();
-		
-
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
 
+		//camera to my current location
+		findMyLocation();
+		
 		// options for drawing markers and polylines
 		marker_polyline = new MarkerAndPolyLine(map);
 
@@ -125,6 +128,32 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		String provider = lm.getBestProvider(criteria, true);
 		Location myLocation = lm.getLastKnownLocation(provider);
 		setUpMyLocationCamera(myLocation, 17);
+		
+		
+		/**
+		 * put below in another method
+		 * 
+		 */
+		// find the nearest building
+		DB_Operations op = new DB_Operations(this);
+		op.open();
+		ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
+		
+		LatLng origin = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
+		NearestPoint np = new NearestPoint(origin,al);
+		LatLng result = np.getNearestPoint();
+		
+		//use this point to get the buildingName in DB
+		String bn = op.getBuildingNameFromLatLng(result);
+		if(bd.pointIsInPolygon(result)){
+			Toast.makeText(this, "You are now in " + bn,
+				Toast.LENGTH_LONG).show();
+		}else{
+			Toast.makeText(this, "You are not within campus buildings",
+					Toast.LENGTH_LONG).show();
+		}
+		op.close();
+		
 	}
 
 	private void setUpMyLocationCamera(Location l, int zoomto) {
@@ -284,8 +313,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						if (ml != null) {
 							String returnFileName = ml
 									.disableLocationUpdate(locationTask);
+							
+							
 							// also draw the route as well
-
 							Route tmpR = new Route(new FileOperations());
 							tmpR.showTestRoute(returnFileName, map, Color.RED);
 						}

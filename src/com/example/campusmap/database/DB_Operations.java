@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import com.example.campusmap.db_object.DB_Building;
+import com.example.campusmap.db_object.DB_Route;
+import com.example.campusmap.file_upload.fileUploadTask;
 import com.google.android.gms.maps.model.LatLng;
 import android.content.ContentValues;
 import android.content.Context;
@@ -18,6 +20,7 @@ public class DB_Operations implements TableDefinition {
 
 	private SQLiteDatabase database;
 	private Context passed_context;
+	private fileUploadTask uploadTask;
 
 	public void getDBPath() {
 		System.out.println("DB Path: " + database.getPath());
@@ -31,7 +34,7 @@ public class DB_Operations implements TableDefinition {
 	}
 
 	public void open() throws SQLException {
-		//open db in the CampusMap folder
+		// open db in the CampusMap folder
 		database = SQLiteDatabase.openOrCreateDatabase(
 				Environment.getExternalStorageDirectory() + "/CampusMap/"
 						+ CAMPUSMAP_DATABASE, null);
@@ -41,48 +44,60 @@ public class DB_Operations implements TableDefinition {
 		database.close();
 	}
 
-
-	
-//-------------------------------------Cursor should be private--------------------------
+	// -------------------------------------Cursor should be
+	// private--------------------------
 	private Cursor readData() {
-		String[] FROM = { BUILDING_NAME, QUERY_TIME ,UPDATE_TIME};
-		String ORDER_BY = UPDATE_TIME+" DESC,"+QUERY_TIME + " DESC,"+ BUILDING_NAME + " ASC";
+		String[] FROM = { BUILDING_NAME, QUERY_TIME, UPDATE_TIME };
+		String ORDER_BY = UPDATE_TIME + " DESC," + QUERY_TIME + " DESC,"
+				+ BUILDING_NAME + " ASC";
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
 				null, ORDER_BY);
-
 		return cursor;
-
 	}
 
 	private Cursor readDataFromABuildingName(String bn) {
 		String[] FROM = { QUERY_TIME };
-		Cursor cursor = database.query(BUILDING_TABLE, FROM, BUILDING_NAME+"='"+bn+"'", null, null,
-				null, null);
+		Cursor cursor = database.query(BUILDING_TABLE, FROM, BUILDING_NAME
+				+ "='" + bn + "'", null, null, null, null);
 		return cursor;
 	}
-	
+
+	private Cursor readBuildingNameFromALatLng(LatLng point) {
+		String[] FROM = { BUILDING_NAME };
+		Cursor cursor = database.query(BUILDING_TABLE, FROM, LOCATION_LAT
+				+ "='" + point.latitude + "' and " + LOCATION_LNG + "='"
+				+ point.longitude + "'", null, null, null, null);
+		return cursor;
+	}
+
 	private Cursor readCenterPointFromBuildings() {
-		String[] FROM = { LOCATION_LAT,LOCATION_LNG };
+		String[] FROM = { LOCATION_LAT, LOCATION_LNG };
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
 				null, null);
 		return cursor;
 	}
-	
-	//get route info : Route_id, create_time
-	//Aish, you might add more columns here
-	//serve for getRouteInfo()
-	private Cursor readRouteData() {
-		String[] FROM = { ROUTE_ID, CREATE_TIME };
-		Cursor cursor = database.query(ROUTE_TABLE, FROM, null, null, null,
+
+	// get route info : Route_id, create_time
+	// Aish, you might add more columns here
+	// serve for getRouteInfo()
+	private Cursor readRouteData(boolean normal) {
+		String table;
+		if (normal) {
+			table = ROUTE_TABLE;
+		} else {
+			table = ROUTE_HISTORY_TABLE;
+		}
+		String[] FROM = { ROUTE_ID, ROUTE_FILENAME, CREATE_TIME };
+		Cursor cursor = database.query(table, FROM, null, null, null,
 				null, null);
 		return cursor;
 
 	}
 
-	
-//----------------------------------------------------------------------------------------
-	
-//-------------------------------------public get/read/select methods--------------------------	
+	// ----------------------------------------------------------------------------------------
+
+	// -------------------------------------public get/read/select
+	// methods--------------------------
 	public ArrayList<String> getBuildingNames() {
 		Cursor c = this.readData();
 		ArrayList<String> result = new ArrayList<String>();
@@ -94,8 +109,8 @@ public class DB_Operations implements TableDefinition {
 		}
 		return result;
 	}
-	
-	//return query_times as well
+
+	// return query_times as well
 	public ArrayList<DB_Building> getBuildingNamesWithTimes() {
 		Cursor c = this.readData();
 		ArrayList<DB_Building> result = new ArrayList<DB_Building>();
@@ -103,7 +118,7 @@ public class DB_Operations implements TableDefinition {
 		int iBN = c.getColumnIndex(BUILDING_NAME);
 		int iQT = c.getColumnIndex(QUERY_TIME);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-			
+
 			DB_Building dbb = new DB_Building(c.getString(iBN), c.getInt(iQT));
 			result.add(dbb);
 
@@ -117,29 +132,30 @@ public class DB_Operations implements TableDefinition {
 		int iLat = c.getColumnIndex(LOCATION_LAT);
 		int iLng = c.getColumnIndex(LOCATION_LNG);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-			centerPoints.add(new LatLng(c.getDouble(iLat),c.getDouble(iLng)));
-			//System.out.println(c.getDouble(iLat)+" - "+c.getDouble(iLng));
+			centerPoints.add(new LatLng(c.getDouble(iLat), c.getDouble(iLng)));
+			// System.out.println(c.getDouble(iLat)+" - "+c.getDouble(iLng));
 		}
 		return centerPoints;
 	}
-	
-	//get route info : Route_id, create_time
-	//Aish, you might add more columns here
-	public ArrayList<String> getRouteInfo() {
-		Cursor c = this.readRouteData();
-		ArrayList<String> result = new ArrayList<String>();
+
+	// get route info : Route_id, create_time
+	// Aish, you might add more columns here
+	public ArrayList<DB_Route> getRouteInfo(boolean normal) {
+		Cursor c = this.readRouteData(normal);
+		ArrayList<DB_Route> result = new ArrayList<DB_Route>();
 
 		int iRid = c.getColumnIndex(ROUTE_ID);
+		int iRfn = c.getColumnIndex(ROUTE_FILENAME);
 		int iRCT = c.getColumnIndex(CREATE_TIME);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 
-			result.add("Route_" + c.getString(iRid) + ":     "
-					+ c.getString(iRCT));
+			result.add(new DB_Route(c.getInt(iRid), c.getString(iRfn), c
+					.getString(iRCT)));
 		}
 		return result;
 	}
-	
-	//input a building name, get its LatLng from the Building Table
+
+	// input a building name, get its LatLng from the Building Table
 	public LatLng getLatLngFromDB(String bn) {
 		String[] columns = new String[] { LOCATION_LAT, LOCATION_LNG };
 		Cursor c = database.query(BUILDING_TABLE, columns, BUILDING_NAME + "='"
@@ -155,62 +171,84 @@ public class DB_Operations implements TableDefinition {
 			return null;
 	}
 
-//----------------------------------------------------------------------------------------
-	
-//-------------------------------------public insert methods--------------------------		
-	
-	//insert, currently just insert the fileName ("Route1.txt")
-	//Aish, you need to add more columns, this is consistent with getRouteInfo
-	public void insertARoute(String db_fn) {
+	// input a centerPoint LatLng, return its BN
+	public String getBuildingNameFromLatLng(LatLng point) {
+		Cursor c = this.readBuildingNameFromALatLng(point);
+		if (c.getCount() != 0) {
+			c.moveToFirst();
+			int iBN = c.getColumnIndex(BUILDING_NAME);
+
+			return c.getString(iBN);
+		} else
+			return null;
+	}
+
+	// ----------------------------------------------------------------------------------------
+
+	// -------------------------------------public insert
+	// methods--------------------------
+
+	// insert, currently just insert the fileName ("Route1.txt")
+	// Aish, you need to add more columns, this is consistent with getRouteInfo
+	public void insertARoute(String db_fn, boolean connected) {
 		ContentValues cv = new ContentValues();
 		cv.put(ROUTE_FILENAME, db_fn);
-		database.insert(ROUTE_TABLE, null, cv);
+		String table;
+		if (connected) {
+			table = ROUTE_TABLE;
+		} else {
+			table = ROUTE_HISTORY_TABLE;
+		}
+		database.insert(table, null, cv);
+		System.out.println("inserted..");
 	}
-	
-	
-	
-//----------------------------------------------------------------------------------------
-		
-	
-//-------------------------------------public update methods--------------------------	
-	
-	//***** Aish, if you have time, can think about what to update
-	
-	
-	
+
+	// ----------------------------------------------------------------------------------------
+
+	// -------------------------------------public update
+	// methods--------------------------
+
+	// ***** Aish, if you have time, can think about what to update
+
 	public void updateQueryTimesForABuilding(String bn) {
 		Cursor c = readDataFromABuildingName(bn);
-		if(c.getCount() != 0){
+		if (c.getCount() != 0) {
 			c.moveToFirst();
 			int qt = c.getInt(0);
 			qt++;
 			ContentValues cv = new ContentValues();
 			cv.put(QUERY_TIME, qt);
 			DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-			Date date = new Date();	
+			Date date = new Date();
 			cv.put(UPDATE_TIME, dateFormat.format(date));
-			database.update(BUILDING_TABLE, cv, BUILDING_NAME + "='"
-				+ bn + "'", null);
-		}	
+			database.update(BUILDING_TABLE, cv,
+					BUILDING_NAME + "='" + bn + "'", null);
+		}
 	}
-	
-	
-//----------------------------------------------------------------------------------------
-	
-	
-//-------------------------------------public delete methods--------------------------	
-	
-	//***** Aish, if you have time, can think about what to delete
-	
-//----------------------------------------------------------------------------------------
-	
 
-	
-	
-	
-//-------------------------------------public other methods--------------------------		
+	// ----------------------------------------------------------------------------------------
 
-	//check if building_table is empty
+	// -------------------------------------public delete
+	// methods--------------------------
+
+	// ***** Aish, if you have time, can think about what to delete
+	public void deleteARoute(int id, boolean normal) {
+		String table;
+		if (normal) {
+			table = ROUTE_TABLE;
+		} else {
+			table = ROUTE_HISTORY_TABLE;
+		}
+		database.delete(table, ROUTE_ID + "=" + id, null);
+		System.out.println("deleted..");
+	}
+
+	// ----------------------------------------------------------------------------------------
+
+	// -------------------------------------public other
+	// methods--------------------------
+
+	// check if building_table is empty
 	public boolean BuildingTable_isEmpty() {
 		String[] FROM = { BUILDING_ID };
 		Cursor c = database.query(BUILDING_TABLE, FROM, null, null, null, null,
@@ -220,7 +258,7 @@ public class DB_Operations implements TableDefinition {
 		else
 			return false;
 	}
-	
+
 	public void DB_init() {
 		if (BuildingTable_isEmpty()) {
 			// if empty, insert the list
@@ -229,7 +267,20 @@ public class DB_Operations implements TableDefinition {
 		}
 	}
 
-	//insert all the building info into the Building table
+	public void uploadPreviousFailedRoute() {
+		ArrayList<DB_Route> al = this.getRouteInfo(false);
+		if (al.size() > 0) {
+			for (DB_Route tmp : al) {
+				uploadTask = new fileUploadTask(tmp.getFileName(),
+						passed_context);
+				uploadTask.execute();
+				// and then delete the row in RouteHistory
+				deleteARoute(tmp.getRid(), false);
+			}
+		}
+	}
+
+	// insert all the building info into the Building table
 	private void initialize_Building(String bn, String ba, String lat,
 			String lng) {
 		database.execSQL("INSERT INTO Building ("
@@ -689,7 +740,4 @@ public class DB_Operations implements TableDefinition {
 		// need to add more
 	}
 
-
-
-	
 }

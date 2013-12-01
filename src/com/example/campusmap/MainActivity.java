@@ -159,6 +159,7 @@ public class MainActivity extends Activity {
 		DB_Operations op = new DB_Operations(this);
 		op.open();
 		op.DB_init();
+		op.uploadPreviousFailedRoute();
 		op.getDBPath();
 		//op.getCenterPointsFromBuildings();
 		op.close();

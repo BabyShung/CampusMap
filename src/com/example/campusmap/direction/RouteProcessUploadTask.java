@@ -36,8 +36,10 @@ public class RouteProcessUploadTask extends AsyncTask<String, Integer, String> {
 
 	protected void onProgressUpdated(Integer... progress) {
 	}
-
+	
+	@Override
 	protected void onPostExecute(String r) {
+		super.onPostExecute(r);
 		// also draw the route as well
 		Route tmpR = new Route(new FileOperations());
 		tmpR.showTestRoute(returnFileName, map, Color.RED);

@@ -26,6 +26,7 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 		db = this.getWritableDatabase();
 		createBuildingTable(db);
 		createRouteTable(db);
+		createHistoryRouteTable(db);
 		this.close();
 	}
 
@@ -45,6 +46,20 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 	private void createRouteTable(SQLiteDatabase db) {
 		// Route table
 		db.execSQL("CREATE TABLE IF NOT EXISTS " + ROUTE_TABLE + " ("
+				+ ROUTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+				+ ROUTE_FILENAME + " VARCHAR, " + STARTING_LAT + " DOUBLE, "
+				+ STARTING_LNG + " DOUBLE, " + ENDING_LAT + " DOUBLE, "
+				+ ENDING_LNG + " DOUBLE, " + DISTANCE + " DOUBLE, " + TAKETIME
+				+ " INTEGER, "  + CREATE_TIME
+				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), "
+				+ UPDATE_TIME
+				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))"
+				+ ")");
+	}
+	
+	private void createHistoryRouteTable(SQLiteDatabase db) {
+		// HistoryRoute table
+		db.execSQL("CREATE TABLE IF NOT EXISTS " + ROUTE_HISTORY_TABLE + " ("
 				+ ROUTE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ ROUTE_FILENAME + " VARCHAR, " + STARTING_LAT + " DOUBLE, "
 				+ STARTING_LNG + " DOUBLE, " + ENDING_LAT + " DOUBLE, "

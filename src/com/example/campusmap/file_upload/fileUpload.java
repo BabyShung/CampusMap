@@ -3,9 +3,12 @@ package com.example.campusmap.file_upload;
 import java.io.DataOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import com.example.campusmap.database.DB_Operations;
 
 import android.os.Environment;
 
@@ -17,7 +20,7 @@ public class fileUpload {
 	/********** File Path *************/
 	private File uploadFilePath;
 	private final String uploadFileName;
-
+	private boolean uploadSucceed;
 	// = "service_lifecycle.png";
 
 	public fileUpload(String fn) {
@@ -34,6 +37,10 @@ public class fileUpload {
 		uploadFile(uploadFilePath + "/" + uploadFileName);
 	}
 
+	public boolean isUploadSucceed(){
+		return uploadSucceed;
+	}
+	
 	public File checkDownloadFolderExist() {
 		File tmp;
 		tmp = Environment.getExternalStoragePublicDirectory("CampusMap/Routes");
@@ -114,6 +121,10 @@ public class fileUpload {
 
 				if (serverResponseCode == 200) {
 					System.out.println("Upload succeeded!");
+					uploadSucceed = true;
+				} else {
+
+				
 				}
 				// close the streams //
 				fileInputStream.close();
@@ -121,10 +132,25 @@ public class fileUpload {
 				dos.close();
 			} catch (MalformedURLException ex) {
 				ex.printStackTrace();
-			} catch (Exception e) {
+			} catch (IOException e) {
 				e.printStackTrace();
+				
+				
+				//upload failure, might be network problem
+				//Thus store the route in DB
+				insertRouteIntoHistoryTable(uploadFileName);
+				System.out.println("Upload failed, insert into db");
+				
+				
 			}
 			return serverResponseCode;
 		} // End else block
+	}
+
+	private void insertRouteIntoHistoryTable(String fileName) {
+		DB_Operations op = new DB_Operations();
+		op.open();
+		op.insertARoute(fileName,false);//need to add more attributes
+		op.close();
 	}
 }

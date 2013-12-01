@@ -31,4 +31,7 @@ public interface TableDefinition extends BaseColumns{
 	public static final String CREATE_TIME = "CreateTime";
 	public static final String UPDATE_TIME = "UpdateTime";
 	
+	//RouteHistory table
+	public static final String ROUTE_HISTORY_TABLE = "RouteHistory";
+	
 }

@@ -309,7 +309,7 @@ public class FileOperations {
 		
 		DB_Operations op = new DB_Operations();
 		op.open();
-		op.insertARoute(db_fn);//need to add more attributes
+		op.insertARoute(db_fn,true);//need to add more attributes
 		op.close();
 	}
 	
