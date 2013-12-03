@@ -1,10 +1,9 @@
 package com.example.campusmap.direction;
 
-import android.content.Context;
+import net.simonvt.messagebar.MessageBar;
 import android.os.AsyncTask;
-import android.widget.Toast;
-
 import com.example.campusmap.MapActivity;
+import com.example.campusmap.R;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
 
@@ -16,13 +15,15 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 	private LatLng toPosition;
 	private GoogleMap map;
 	private CampusMapDirection cmd;
-
+	private MessageBar mMessageBar;
+	
 	public RouteRequestTask(MapActivity ma, GoogleMap map,
-			LatLng fromPosition, LatLng toPosition) {
+			LatLng fromPosition, LatLng toPosition,MessageBar mMessageBar) {
 		this.ma = ma;
 		this.map = map;
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;
+		this.mMessageBar = mMessageBar;
 	}
 
 
@@ -47,7 +48,8 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 			System.out.println("********bad luck*******");
 		}else{
 		cmd.getStatus();
-		ma.openOptionsMenu();
+		mMessageBar.show("Request route successfully!", "Select",R.drawable.ic_messagebar_undo);
+		//ma.openOptionsMenu();
 		}
 	}
 }

@@ -1,6 +1,8 @@
 package com.example.campusmap;
 
 import java.util.ArrayList;
+
+import net.simonvt.messagebar.MessageBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.BroadcastReceiver;
@@ -13,6 +15,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -45,7 +48,8 @@ import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 
 public class MapActivity extends Activity implements OnMapClickListener,
-		OnMapLongClickListener, OnInfoWindowClickListener {
+		OnMapLongClickListener, OnInfoWindowClickListener,
+		MessageBar.OnMessageClickListener {
 
 	private GoogleMap map;
 	private ArrayList<LatLng> LongClickArrayPoints;
@@ -62,25 +66,33 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private Location myLastLocation;
 	private RouteRequestTask campusRouteTask;
 
+	private MessageBar mMessageBar;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-		
+
 		setUpBroadCastManager();
 		mapInitialization();
 		setUpListeners();
-
+		messageBarInit();
 		LongClickArrayPoints = new ArrayList<LatLng>();
 
 		// initialize all the builing-drawing on the map
 		bd = new BuildingDrawing(map);
 
-		//camera to my current location
+		// camera to my current location
 		findMyLocation();
-		
+
 		// options for drawing markers and polylines
 		marker_polyline = new MarkerAndPolyLine(map);
+
+	}
+
+	private void messageBarInit() {
+		mMessageBar = new MessageBar(this);
+		mMessageBar.setOnClickListener(this);
 
 	}
 
@@ -92,14 +104,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private BroadcastReceiver BuildingNameReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
-			
+
 			if (googleDirectionTask != null) {
 				Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
 				if (lastGoogleLine != null) {
 					lastGoogleLine.remove();
 				}
 			}
-			
+
 			String bn = intent.getStringExtra("BuildingName");
 			// search the building lat & lng by bn
 			DB_Operations op = new DB_Operations();
@@ -113,8 +125,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 		}
 	};
-
-
 
 	private void GPS_Network_Initialization() {
 		// abstract class, define its abstract method
@@ -136,7 +146,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		Location myLocation = lm.getLastKnownLocation(provider);
 		setUpMyLocationCamera(myLocation, 17);
 		myLastLocation = myLocation;
-		
+
 		/**
 		 * put below in another method
 		 * 
@@ -145,22 +155,23 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		DB_Operations op = new DB_Operations(this);
 		op.open();
 		ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
-		
-		LatLng origin = new LatLng(myLocation.getLatitude(),myLocation.getLongitude());
-		NearestPoint np = new NearestPoint(origin,al);
+
+		LatLng origin = new LatLng(myLocation.getLatitude(),
+				myLocation.getLongitude());
+		NearestPoint np = new NearestPoint(origin, al);
 		LatLng result = np.getNearestPoint();
-		
-		//use this point to get the buildingName in DB
+
+		// use this point to get the buildingName in DB
 		String bn = op.getBuildingNameFromLatLng(result);
-		if(bd.pointIsInPolygon(origin)){
-			Toast.makeText(this, "You are now in " + bn,
-				Toast.LENGTH_LONG).show();
-		}else{
-			Toast.makeText(this, "Your nearest building is "+ bn,
+		if (bd.pointIsInPolygon(origin)) {
+			Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
+					.show();
+		} else {
+			Toast.makeText(this, "Your nearest building is " + bn,
 					Toast.LENGTH_LONG).show();
 		}
 		op.close();
-		
+
 	}
 
 	private void setUpMyLocationCamera(Location l, int zoomto) {
@@ -299,18 +310,20 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
-						
-						LatLng from = new LatLng(myLastLocation.getLatitude(),myLastLocation.getLongitude());
-						
-						campusRouteTask = new RouteRequestTask(MapActivity.this,map,from,from);
+
+						LatLng from = new LatLng(myLastLocation.getLatitude(),
+								myLastLocation.getLongitude());
+
+						campusRouteTask = new RouteRequestTask(
+								MapActivity.this, map, from, from, mMessageBar);
 						campusRouteTask.execute();
-						
-//						//set up MyLocation.class, for recording
-//						GPS_Network_Initialization();
-//						
-//						// Async task, begin the route
-//						locationTask = new MyLocationTask(ml);
-//						locationTask.execute();
+
+						// //set up MyLocation.class, for recording
+						// GPS_Network_Initialization();
+						//
+						// // Async task, begin the route
+						// locationTask = new MyLocationTask(ml);
+						// locationTask.execute();
 					}
 				});
 
@@ -321,8 +334,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						if (ml != null) {
 							String returnFileName = ml
 									.disableLocationUpdate(locationTask);
-							
-							
+
 							// also draw the route as well
 							Route tmpR = new Route(new FileOperations());
 							tmpR.showTestRoute(returnFileName, map, Color.RED);
@@ -344,7 +356,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
-
 	@Override
 	protected void onPause() {
 
@@ -357,6 +368,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		super.onResume();
 
 	}
+
 	@Override
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(
@@ -366,7 +378,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
- 
+
 		super.onCreateOptionsMenu(menu);
 		MenuInflater mi = getMenuInflater();
 		mi.inflate(R.menu.route_menu, menu);
@@ -375,21 +387,29 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
-		switch(item.getItemId()){
+		switch (item.getItemId()) {
 		case R.id.route1:
-			Toast.makeText(this, "You picked route 1!",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "You picked route 1!", Toast.LENGTH_SHORT)
+					.show();
 			break;
 		case R.id.route2:
-			Toast.makeText(this, "You picked route 2!",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "You picked route 2!", Toast.LENGTH_SHORT)
+					.show();
 			break;
 		case R.id.route3:
-			Toast.makeText(this, "You picked route 3!",
-					Toast.LENGTH_SHORT).show();
+			Toast.makeText(this, "You picked route 3!", Toast.LENGTH_SHORT)
+					.show();
 			break;
 		}
 		return true;
 	}
-	
+
+	/**
+	 * message bar
+	 * 
+	 */
+	@Override
+	public void onMessageClick(Parcelable token) {
+		openOptionsMenu();
+	}
 }
