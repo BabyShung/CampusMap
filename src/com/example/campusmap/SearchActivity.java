@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -34,7 +36,7 @@ public class SearchActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_search);
-		imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		buildingList = new ArrayList<String>();
 
 		initData();
@@ -51,8 +53,8 @@ public class SearchActivity extends Activity {
 	}
 
 	private void clearBTN() {
-		Button clearBTN= (Button) findViewById(R.id.searchBTN);
-	
+		Button clearBTN = (Button) findViewById(R.id.searchBTN);
+
 		clearBTN.setOnClickListener(new View.OnClickListener() {
 			public void onClick(View v) {
 				ATV.setText("");
@@ -69,6 +71,7 @@ public class SearchActivity extends Activity {
 			public void onItemClick(AdapterView<?> ATV, View view,
 					int position, long id) {
 				popDialog(value.get(position).getBuildingName());
+
 			}
 		});
 	}
@@ -92,17 +95,19 @@ public class SearchActivity extends Activity {
 			DB_Building currentBuilding = value.get(position);
 
 			// Fill the name
-			TextView nameText = (TextView) itemView.findViewById(R.id.item_name);
+			TextView nameText = (TextView) itemView
+					.findViewById(R.id.item_name);
 			nameText.setText(currentBuilding.getBuildingName());
 			// Fill the times
-			TextView timesText = (TextView) itemView.findViewById(R.id.item_times);
+			TextView timesText = (TextView) itemView
+					.findViewById(R.id.item_times);
 			int query_time = currentBuilding.getQueryTime();
 			if (query_time == 0)
 				timesText.setText("");// howtoString?
-			else if(query_time ==1)
-				timesText.setText(query_time+" time "); // howtoString?
+			else if (query_time == 1)
+				timesText.setText(query_time + " time "); // howtoString?
 			else
-				timesText.setText(query_time+" times");
+				timesText.setText(query_time + " times");
 
 			/*
 			 * //Fill the icons we don't have Icons for buildings in DB yet
@@ -165,7 +170,7 @@ public class SearchActivity extends Activity {
 		value = datasource.getBuildingOBJWithTimes();
 		datasource.close();
 	}
-	
+
 	private void updateQueryTimesIntoDatabase(String bn) {
 		DB_Operations dbo = new DB_Operations();
 		dbo.open();
@@ -176,7 +181,7 @@ public class SearchActivity extends Activity {
 	private void popDialog(final String bn) {
 
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		
+
 		alertDialog.setTitle(bn);
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
 				new DialogInterface.OnClickListener() {
@@ -184,14 +189,14 @@ public class SearchActivity extends Activity {
 					public void onClick(DialogInterface dialog, int id) {
 						// broadcast send message
 						broadcastMsg(bn);
-						
-						//hide keyboard
+
+						// hide keyboard
 						imm.hideSoftInputFromWindow(ATV.getWindowToken(), 0);
-						
-						//update the times in db
+
+						// update the times in db
 						updateQueryTimesIntoDatabase(bn);
-						
-						//refresh the lists
+
+						// refresh the lists
 						initData();
 					}
 				});
@@ -200,7 +205,7 @@ public class SearchActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
-						//hide keyboard
+						// hide keyboard
 						imm.hideSoftInputFromWindow(ATV.getWindowToken(), 0);
 
 						// ----
@@ -210,7 +215,7 @@ public class SearchActivity extends Activity {
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
-						//hide keyboard
+						// hide keyboard
 						imm.hideSoftInputFromWindow(ATV.getWindowToken(), 0);
 						// ---
 					}

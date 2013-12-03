@@ -219,6 +219,9 @@ containing a value of this type.
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int relativelayout=0x7f050005;
+        public static final int route1=0x7f05001a;
+        public static final int route2=0x7f05001b;
+        public static final int route3=0x7f05001c;
         public static final int satellite=0x7f050002;
         public static final int searchACTV=0x7f05000a;
         public static final int searchBTN=0x7f050009;
@@ -249,6 +252,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
+        public static final int route_menu=0x7f0a0001;
     }
     public static final class string {
         public static final int action_settings=0x7f06001b;

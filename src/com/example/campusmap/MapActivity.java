@@ -14,12 +14,15 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.widget.Toast;
 
 import com.example.campusmap.algorithms.NearestPoint;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.direction.GoogleRouteTask;
+import com.example.campusmap.direction.RouteRequestTask;
 import com.example.campusmap.file.FileOperations;
 import com.example.campusmap.location.MyLocation;
 import com.example.campusmap.location.MyLocationTask;
@@ -56,12 +59,13 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private int LongClickCount;
 	private GoogleRouteTask googleDirectionTask;
 	private Location myLastLocation;
+	private RouteRequestTask campusRouteTask;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_home);
-
+		
 		setUpBroadCastManager();
 		mapInitialization();
 		setUpListeners();
@@ -290,17 +294,22 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		alertDialog.setTitle(marker.getTitle());
 		alertDialog.setMessage(marker.getSnippet());
 
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Get route",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
 						
-						//set up MyLocation.class, for recording
-						GPS_Network_Initialization();
+						LatLng from = new LatLng(myLastLocation.getLatitude(),myLastLocation.getLongitude());
 						
-						// Async task, begin the route
-						locationTask = new MyLocationTask(ml);
-						locationTask.execute();
+						campusRouteTask = new RouteRequestTask(MapActivity.this,map,from,from);
+						campusRouteTask.execute();
+						
+//						//set up MyLocation.class, for recording
+//						GPS_Network_Initialization();
+//						
+//						// Async task, begin the route
+//						locationTask = new MyLocationTask(ml);
+//						locationTask.execute();
 					}
 				});
 
@@ -353,4 +362,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				BuildingNameReceiver);
 		super.onDestroy();
 	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+ 
+		super.onCreateOptionsMenu(menu);
+		MenuInflater mi = getMenuInflater();
+		mi.inflate(R.menu.route_menu, menu);
+		return true;
+	}
+	
 }
