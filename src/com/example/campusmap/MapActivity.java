@@ -16,6 +16,7 @@ import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.example.campusmap.algorithms.NearestPoint;
@@ -369,6 +370,25 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		super.onCreateOptionsMenu(menu);
 		MenuInflater mi = getMenuInflater();
 		mi.inflate(R.menu.route_menu, menu);
+		return true;
+	}
+
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		switch(item.getItemId()){
+		case R.id.route1:
+			Toast.makeText(this, "You picked route 1!",
+					Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.route2:
+			Toast.makeText(this, "You picked route 2!",
+					Toast.LENGTH_SHORT).show();
+			break;
+		case R.id.route3:
+			Toast.makeText(this, "You picked route 3!",
+					Toast.LENGTH_SHORT).show();
+			break;
+		}
 		return true;
 	}
 	

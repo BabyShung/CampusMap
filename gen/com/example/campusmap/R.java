@@ -209,7 +209,6 @@ containing a value of this type.
         public static final int icon_building=0x7f02001d;
     }
     public static final class id {
-        public static final int action_settings=0x7f050019;
         public static final int hybrid=0x7f050004;
         public static final int item_icon=0x7f05000c;
         public static final int item_name=0x7f05000d;
@@ -219,9 +218,9 @@ containing a value of this type.
         public static final int none=0x7f050000;
         public static final int normal=0x7f050001;
         public static final int relativelayout=0x7f050005;
-        public static final int route1=0x7f05001a;
-        public static final int route2=0x7f05001b;
-        public static final int route3=0x7f05001c;
+        public static final int route1=0x7f050019;
+        public static final int route2=0x7f05001a;
+        public static final int route3=0x7f05001b;
         public static final int satellite=0x7f050002;
         public static final int searchACTV=0x7f05000a;
         public static final int searchBTN=0x7f050009;
