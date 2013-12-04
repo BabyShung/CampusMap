@@ -1,6 +1,7 @@
 package com.example.campusmap;
 
 import java.util.ArrayList;
+import java.util.Timer;
 
 import net.simonvt.messagebar.MessageBar;
 import android.app.Activity;
@@ -65,7 +66,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private GoogleRouteTask googleDirectionTask;
 	private Location myLastLocation;
 	private RouteRequestTask campusRouteTask;
-
 	private MessageBar mMessageBar;
 
 	@Override
@@ -152,25 +152,25 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		 * 
 		 */
 		// find the nearest building
-		DB_Operations op = new DB_Operations(this);
-		op.open();
-		ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
-
-		LatLng origin = new LatLng(myLocation.getLatitude(),
-				myLocation.getLongitude());
-		NearestPoint np = new NearestPoint(origin, al);
-		LatLng result = np.getNearestPoint();
-
-		// use this point to get the buildingName in DB
-		String bn = op.getBuildingNameFromLatLng(result);
-		if (bd.pointIsInPolygon(origin)) {
-			Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
-					.show();
-		} else {
-			Toast.makeText(this, "Your nearest building is " + bn,
-					Toast.LENGTH_LONG).show();
-		}
-		op.close();
+//		DB_Operations op = new DB_Operations(this);
+//		op.open();
+//		ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
+//
+//		LatLng origin = new LatLng(myLocation.getLatitude(),
+//				myLocation.getLongitude());
+//		NearestPoint np = new NearestPoint(origin, al);
+//		LatLng result = np.getNearestPoint();
+//
+//		// use this point to get the buildingName in DB
+//		String bn = op.getBuildingNameFromLatLng(result);
+//		if (bd.pointIsInPolygon(origin)) {
+//			Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
+//					.show();
+//		} else {
+//			Toast.makeText(this, "Your nearest building is " + bn,
+//					Toast.LENGTH_LONG).show();
+//		}
+//		op.close();
 
 	}
 
@@ -400,6 +400,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 			Toast.makeText(this, "You picked route 3!", Toast.LENGTH_SHORT)
 					.show();
 			break;
+
 		}
 		return true;
 	}

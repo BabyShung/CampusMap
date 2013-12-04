@@ -48,7 +48,7 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 			System.out.println("********bad luck*******");
 		}else{
 		cmd.getStatus();
-		mMessageBar.show("Request route successfully!", "Select",R.drawable.ic_messagebar_undo);
+		mMessageBar.show("Request route success!", "Select",R.drawable.ic_messagebar_undo);
 		//ma.openOptionsMenu();
 		}
 	}

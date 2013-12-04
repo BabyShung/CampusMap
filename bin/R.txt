@@ -85,6 +85,7 @@ int id relativelayout 0x7f040008
 int id route1 0x7f04001c
 int id route2 0x7f04001d
 int id route3 0x7f04001e
+int id routeCancel 0x7f04001f
 int id satellite 0x7f040005
 int id searchACTV 0x7f04000d
 int id searchBTN 0x7f04000c

@@ -245,6 +245,7 @@ containing a value of this type.
         public static final int route1=0x7f04001c;
         public static final int route2=0x7f04001d;
         public static final int route3=0x7f04001e;
+        public static final int routeCancel=0x7f04001f;
         public static final int satellite=0x7f040005;
         public static final int searchACTV=0x7f04000d;
         public static final int searchBTN=0x7f04000c;
