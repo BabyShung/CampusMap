@@ -83,7 +83,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		bd = new BuildingDrawing(map);
 
 		// camera to my current location
-		findMyLocation();
+	//	findMyLocation();
 
 		// options for drawing markers and polylines
 		marker_polyline = new MarkerAndPolyLine(map);
@@ -119,12 +119,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 			LatLng to = op.getLatLngFromDB(bn);
 			op.close();
 			// start an ansync task
-			Location fromL = myLastLocation;
-			LatLng from = new LatLng(fromL.getLatitude(), fromL.getLongitude());
-			CallDirection(from, to);
-
+			if(myLastLocation!=null){
+				Location fromL = myLastLocation;
+				LatLng from = new LatLng(fromL.getLatitude(), fromL.getLongitude());
+				CallDirection(from, to);
+			}
 		}
 	};
+
 
 	private void GPS_Network_Initialization() {
 		// abstract class, define its abstract method
@@ -145,7 +147,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		String provider = lm.getBestProvider(criteria, true);
 		Location myLocation = lm.getLastKnownLocation(provider);
 		setUpMyLocationCamera(myLocation, 17);
-		myLastLocation = myLocation;
+		if (myLocation != null)
+			myLastLocation = myLocation;
 
 		/**
 		 * put below in another method

@@ -28,7 +28,7 @@ public class MainActivity extends Activity {
 	private Intent homeIntent;
 	private Intent searchIntent;
 	private Intent settingIntent;
-	private Intent futureIntent;
+	private Intent routeIntent;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -92,15 +92,15 @@ public class MainActivity extends Activity {
 		settingIntent = new Intent(this, SettingActivity.class);
 		settingSpec.setContent(settingIntent);
 
-		TabSpec futureSpec = mTabHost.newTabSpec("myroute");
-		futureSpec.setIndicator("ROUTES", null);
-		futureIntent = new Intent(this, RoutesActivity.class);
-		futureSpec.setContent(futureIntent);
+		TabSpec routeSpec = mTabHost.newTabSpec("route");
+		routeSpec.setIndicator("ROUTE", null);
+		routeIntent = new Intent(this, RouteActivity.class);
+		routeSpec.setContent(routeIntent);
 
 		mTabHost.addTab(homeSpec);
 		mTabHost.addTab(searchSpec);
 		mTabHost.addTab(settingSpec);
-		mTabHost.addTab(futureSpec);
+		mTabHost.addTab(routeSpec);
 
 		setuplocalbroadcast();
 
