@@ -44,6 +44,10 @@ public class MyLocation implements Runnable {
 	}
 
 	// constructor
+	public MyLocation(){
+		
+	}
+	
 	public MyLocation(MapActivity homeActivity, GoogleMap map) {
 		this.mContext = homeActivity;
 		this.map = map;

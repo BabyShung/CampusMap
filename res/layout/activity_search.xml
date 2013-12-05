@@ -29,7 +29,6 @@
         android:ems="10"
         android:padding="5dp"
         android:textColor="#494f50"
-     
         android:textSize="18sp" >
 
         <requestFocus />

@@ -234,18 +234,18 @@ containing a value of this type.
         public static final int item_icon=0x7f040013;
         public static final int item_name=0x7f040014;
         public static final int item_times=0x7f040015;
-        public static final int linearLayout1=0x7f04000a;
-        public static final int map=0x7f040009;
+        public static final int linearLayout1=0x7f040008;
+        public static final int map=0x7f04000a;
         public static final int mbButton=0x7f040002;
         public static final int mbContainer=0x7f040000;
         public static final int mbMessage=0x7f040001;
         public static final int none=0x7f040003;
         public static final int normal=0x7f040004;
-        public static final int relativelayout=0x7f040008;
-        public static final int route1=0x7f040020;
-        public static final int route2=0x7f040021;
-        public static final int route3=0x7f040022;
-        public static final int routeCancel=0x7f040023;
+        public static final int relativelayout=0x7f040009;
+        public static final int route1=0x7f040019;
+        public static final int route2=0x7f04001a;
+        public static final int route3=0x7f04001b;
+        public static final int routeCancel=0x7f04001c;
         public static final int routeLV=0x7f04000c;
         public static final int route_item_icon=0x7f04000d;
         public static final int route_item_name=0x7f04000e;
@@ -253,26 +253,19 @@ containing a value of this type.
         public static final int searchACTV=0x7f040011;
         public static final int searchBTN=0x7f040010;
         public static final int searchLV=0x7f040012;
-        public static final int settingBTN=0x7f04001f;
-        public static final int settingCB=0x7f04001c;
-        public static final int settingET=0x7f040019;
-        public static final int settingtablerow1=0x7f040017;
-        public static final int settingtablerow2=0x7f04001a;
-        public static final int settingtablerow3=0x7f04001d;
+        public static final int setting_button1=0x7f040016;
+        public static final int setting_button2=0x7f040017;
+        public static final int setting_button3=0x7f040018;
         public static final int terrain=0x7f040006;
         public static final int textView1=0x7f04000b;
-        public static final int widget118=0x7f040016;
-        public static final int widget123=0x7f040018;
-        public static final int widget125=0x7f04001b;
-        public static final int widget126=0x7f04001e;
         public static final int widget32=0x7f04000f;
     }
     public static final class integer {
         public static final int google_play_services_version=0x7f080000;
     }
     public static final class layout {
-        public static final int activity_home=0x7f030000;
-        public static final int activity_main=0x7f030001;
+        public static final int activity_main=0x7f030000;
+        public static final int activity_map=0x7f030001;
         public static final int activity_route=0x7f030002;
         public static final int activity_route_listviewitem=0x7f030003;
         public static final int activity_search=0x7f030004;

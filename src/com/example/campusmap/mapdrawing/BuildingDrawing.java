@@ -940,7 +940,7 @@ public class BuildingDrawing {
 				po.add(point);
 			}
 
-			po.strokeWidth(3).strokeColor(Color.RED).fillColor(Color.BLUE);
+			po.strokeWidth(3).strokeColor(Color.rgb(105, 105, 105)).fillColor(Color.rgb(240, 165, 20));
 			map.addPolygon(po);
 		}
 

@@ -67,11 +67,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private Location myLastLocation;
 	private RouteRequestTask campusRouteTask;
 	private MessageBar mMessageBar;
+	private LocationManager lm;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_home);
+		setContentView(R.layout.activity_map);
 
 		setUpBroadCastManager();
 		mapInitialization();
@@ -83,7 +84,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		bd = new BuildingDrawing(map);
 
 		// camera to my current location
-	//	findMyLocation();
+		findMyLocation();
 
 		// options for drawing markers and polylines
 		marker_polyline = new MarkerAndPolyLine(map);
@@ -141,14 +142,25 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
-	private void findMyLocation() {// test, alternative
-		LocationManager lm = (LocationManager) getSystemService(LOCATION_SERVICE);
+	private void findMyLocation(){
+		MyLocation mmll = new MyLocation();
+		Location myLocation = mmll.getMyLastLocation();
+		if (myLocation != null){
+			setUpMyLocationCamera(myLocation, 17);
+			myLastLocation = myLocation;
+		}
+	}
+	
+	private void findMyLocation2() {// test, alternative
+		lm = (LocationManager) getSystemService(LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		String provider = lm.getBestProvider(criteria, true);
 		Location myLocation = lm.getLastKnownLocation(provider);
-		setUpMyLocationCamera(myLocation, 17);
-		if (myLocation != null)
+		
+		if (myLocation != null){
+			setUpMyLocationCamera(myLocation, 17);
 			myLastLocation = myLocation;
+		}
 
 		/**
 		 * put below in another method
