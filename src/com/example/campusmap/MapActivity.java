@@ -97,44 +97,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
-	private void setUpBroadCastManager() {
-		LocalBroadcastManager.getInstance(this).registerReceiver(
-				BuildingNameReceiver, new IntentFilter("GetGoogleDirection"));
-	}
-
-	private BroadcastReceiver BuildingNameReceiver = new BroadcastReceiver() {
-		@Override
-		public void onReceive(Context context, Intent intent) {
-
-			if (googleDirectionTask != null) {
-				Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
-				if (lastGoogleLine != null) {
-					lastGoogleLine.remove();
-				}
-			}
-
-			String bn = intent.getStringExtra("BuildingName");
-			// search the building lat & lng by bn
-			DB_Operations op = new DB_Operations();
-			op.open();
-			LatLng to = op.getLatLngFromDB(bn);
-			op.close();
-			// start an ansync task
-			if(myLastLocation!=null){
-				Location fromL = myLastLocation;
-				LatLng from = new LatLng(fromL.getLatitude(), fromL.getLongitude());
-				CallDirection(from, to);
-			}
-		}
-	};
-
-
 	private void GPS_Network_Initialization() {
 		// abstract class, define its abstract method
 		LocationResult locationResult = new LocationResult() {
 			@Override
 			public void gotLocation(Location location) {// callback
-				// setUpMyLocationCamera(location, 17);
+				if (location != null) {
+					myLastLocation = location;
+				}
 			}
 		};
 		ml = new MyLocation(this, map);
@@ -142,50 +112,42 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
-	private void findMyLocation(){
-		MyLocation mmll = new MyLocation();
-		Location myLocation = mmll.getMyLastLocation();
-		if (myLocation != null){
-			setUpMyLocationCamera(myLocation, 17);
-			myLastLocation = myLocation;
-		}
-	}
-	
-	private void findMyLocation2() {// test, alternative
+	private void findMyLocation() {// test, alternative
 		lm = (LocationManager) getSystemService(LOCATION_SERVICE);
 		Criteria criteria = new Criteria();
 		String provider = lm.getBestProvider(criteria, true);
 		Location myLocation = lm.getLastKnownLocation(provider);
-		
-		if (myLocation != null){
+
+		if (myLocation != null) {
 			setUpMyLocationCamera(myLocation, 17);
 			myLastLocation = myLocation;
 		}
+		GPS_Network_Initialization();
 
 		/**
 		 * put below in another method
 		 * 
 		 */
 		// find the nearest building
-//		DB_Operations op = new DB_Operations(this);
-//		op.open();
-//		ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
-//
-//		LatLng origin = new LatLng(myLocation.getLatitude(),
-//				myLocation.getLongitude());
-//		NearestPoint np = new NearestPoint(origin, al);
-//		LatLng result = np.getNearestPoint();
-//
-//		// use this point to get the buildingName in DB
-//		String bn = op.getBuildingNameFromLatLng(result);
-//		if (bd.pointIsInPolygon(origin)) {
-//			Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
-//					.show();
-//		} else {
-//			Toast.makeText(this, "Your nearest building is " + bn,
-//					Toast.LENGTH_LONG).show();
-//		}
-//		op.close();
+		// DB_Operations op = new DB_Operations(this);
+		// op.open();
+		// ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
+		//
+		// LatLng origin = new LatLng(myLocation.getLatitude(),
+		// myLocation.getLongitude());
+		// NearestPoint np = new NearestPoint(origin, al);
+		// LatLng result = np.getNearestPoint();
+		//
+		// // use this point to get the buildingName in DB
+		// String bn = op.getBuildingNameFromLatLng(result);
+		// if (bd.pointIsInPolygon(origin)) {
+		// Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
+		// .show();
+		// } else {
+		// Toast.makeText(this, "Your nearest building is " + bn,
+		// Toast.LENGTH_LONG).show();
+		// }
+		// op.close();
 
 	}
 
@@ -193,7 +155,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
 				l.getLatitude(), l.getLongitude())));
 		map.animateCamera(CameraUpdateFactory.zoomTo(zoomto));
-
 	}
 
 	private void setUpListeners() {
@@ -250,6 +211,38 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		currentMarker = map.addMarker(mo);
 		currentMarker.showInfoWindow();
 	}
+
+	private void setUpBroadCastManager() {
+		LocalBroadcastManager.getInstance(this).registerReceiver(
+				BuildingNameReceiver, new IntentFilter("GetGoogleDirection"));
+	}
+
+	private BroadcastReceiver BuildingNameReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+
+			if (googleDirectionTask != null) {
+				Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
+				if (lastGoogleLine != null) {
+					lastGoogleLine.remove();
+				}
+			}
+
+			String bn = intent.getStringExtra("BuildingName");
+			// search the building lat & lng by bn
+			DB_Operations op = new DB_Operations();
+			op.open();
+			LatLng to = op.getLatLngFromDB(bn);
+			op.close();
+			// start an ansync task
+			if (myLastLocation != null) {
+				Location fromL = myLastLocation;
+				LatLng from = new LatLng(fromL.getLatitude(),
+						fromL.getLongitude());
+				CallDirection(from, to);
+			}
+		}
+	};
 
 	@Override
 	public void onMapLongClick(LatLng point) {

@@ -267,9 +267,11 @@ public class MyLocation implements Runnable {
 		if (!timer_cancelled) {
 			timer_cancelled = true; // no more execute this if
 			timer1.cancel();
-			// locationResult.gotLocation(location);
+			
 		}
 
+		locationResult.gotLocation(location);
+		
 		if (location == null)
 			return;
 		mLastLocationMillis = SystemClock.elapsedRealtime();
