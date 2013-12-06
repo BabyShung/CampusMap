@@ -23,12 +23,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.campusmap.algorithms.NearestPoint;
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.direction.GoogleRouteTask;
 import com.example.campusmap.direction.RouteRequestTask;
 import com.example.campusmap.file.FileOperations;
+import com.example.campusmap.geometry.NearestPoint;
 import com.example.campusmap.location.MyLocation;
 import com.example.campusmap.location.MyLocationTask;
 import com.example.campusmap.location.MyLocation.LocationResult;

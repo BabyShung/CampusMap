@@ -23,6 +23,8 @@ public class MyLocation implements Runnable {
 	private LocationManager lm;
 	private LocationResult locationResult;
 	private boolean gps_enabled = false;
+	private boolean gps_flag = false;
+	private boolean gps_indoor_recording_flag = true;
 	private boolean network_enabled = false;
 	private boolean timer_cancelled = false;
 	private MapActivity mContext;
@@ -54,18 +56,6 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		this.myGpsListener = new HaoGPSListener();
-
-		// fo.TESTING("MyRoute1");
-		//
-		// rr.showTestRoute("MyRoute1.txt",map,Color.BLUE);
-
-		// rr.showTestRoute("MyRoute1_b",map,Color.BLACK);
-		// rr.showTestRoute("MyRoute1_c",map,Color.BLUE);
-		// rr.showTestRoute("MyRoute1_d",map,Color.YELLOW);
-		// rr.showTestRoute("MyRoute1_e",map,Color.DKGRAY);
-
-		// fo.processRecord_test();
-		// fo.processRecord();
 	}
 
 	// ---------------------------begin route, stop route-----------------------
@@ -131,17 +121,42 @@ public class MyLocation implements Runnable {
 			switch (event) {
 			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
 				if (MyLastLocation != null) {
-					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 3000;
+					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 5000;
+				}else{
+					MyLastLocation = getMyLastLocation();
 				}
 
 				if (isGPSFix) { // A fix has been acquired.
 					System.out.println("GPS exists");
 				} else { // The fix has been lost.
 					System.out.println("GPS lost");
+					if(!gps_flag){
+						Toast.makeText(mContext, "GPS signal lost", Toast.LENGTH_SHORT)
+						.show();
+						gps_flag = true;
+						
+						//set the flag so that no more recording
+						gps_indoor_recording_flag = false;
+						//judge which building I go, return a building obj
+						
+						
+						//add that center point and add into the route
+						if (rr.recordHasStarted()) {
+							//rr.bufferStore(location);
+						}
+						
+					}
 				}
 
 				break;
 			case GpsStatus.GPS_EVENT_FIRST_FIX:
+				Toast.makeText(mContext, "GPS first time fixed",
+						Toast.LENGTH_SHORT).show();
+				
+				gps_flag = false;
+				
+				//if the route has started, set back the flag so that it can keep on recording
+				
 				System.out.println("****First Time");
 				isGPSFix = true;
 
@@ -272,15 +287,18 @@ public class MyLocation implements Runnable {
 
 		locationResult.gotLocation(location);
 		
-		if (location == null)
+		if (location != null)
+		{
+			mLastLocationMillis = SystemClock.elapsedRealtime();
+			// Do something.
+			MyLastLocation = location;
+		}else{
 			return;
-		mLastLocationMillis = SystemClock.elapsedRealtime();
+		}
 
-		// Do something.
 
-		MyLastLocation = location;
 
-		if (rr.recordHasStarted()) {
+		if (rr.recordHasStarted()&&gps_indoor_recording_flag) {
 			rr.bufferStore(location);
 		}
 	}

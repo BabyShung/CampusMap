@@ -2,6 +2,8 @@ package com.example.campusmap.direction;
 
 import net.simonvt.messagebar.MessageBar;
 import android.os.AsyncTask;
+import android.widget.Toast;
+
 import com.example.campusmap.MapActivity;
 import com.example.campusmap.R;
 import com.google.android.gms.maps.GoogleMap;
@@ -45,7 +47,8 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 		//Route tmpR = new Route(new FileOperations());
 		//tmpR.showTestRoute(returnFileName, map, Color.RED);
 		if(cmd.returnJSONObj()==null){
-			System.out.println("********bad luck*******");
+			Toast.makeText(ma, "Network error",
+					Toast.LENGTH_LONG).show();
 		}else{
 		cmd.getStatus();
 		mMessageBar.show("Request route success!", "Select",R.drawable.ic_messagebar_undo);

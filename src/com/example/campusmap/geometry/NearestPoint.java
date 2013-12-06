@@ -1,4 +1,4 @@
-package com.example.campusmap.algorithms;
+package com.example.campusmap.geometry;
 
 import java.util.ArrayList;
 

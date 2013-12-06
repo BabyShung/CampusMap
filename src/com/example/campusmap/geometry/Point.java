@@ -1,4 +1,4 @@
-package com.example.campusmap.routefilter;
+package com.example.campusmap.geometry;
 
 public class Point {
 	private double x;
