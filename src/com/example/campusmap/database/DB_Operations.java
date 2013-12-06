@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
+import com.example.campusmap.R;
 import com.example.campusmap.db_object.DB_Building;
 import com.example.campusmap.db_object.DB_Route;
 import com.example.campusmap.file_upload.fileUploadTask;
@@ -46,7 +47,7 @@ public class DB_Operations implements TableDefinition {
 
 	// ---------Cursor should be private--------------------------
 	private Cursor readData() {
-		String[] FROM = { BUILDING_NAME, QUERY_TIME, UPDATE_TIME };
+		String[] FROM = { BUILDING_NAME, QUERY_TIME,BUILDING_ICON, UPDATE_TIME };
 		String ORDER_BY = UPDATE_TIME + " DESC," + QUERY_TIME + " DESC,"
 				+ BUILDING_NAME + " ASC";
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, null, null, null,
@@ -116,9 +117,10 @@ public class DB_Operations implements TableDefinition {
 
 		int iBN = c.getColumnIndex(BUILDING_NAME);
 		int iQT = c.getColumnIndex(QUERY_TIME);
+		int iBI = c.getColumnIndex(BUILDING_ICON);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 
-			DB_Building dbb = new DB_Building(c.getString(iBN), c.getInt(iQT));
+			DB_Building dbb = new DB_Building(c.getString(iBN), c.getInt(iQT), c.getInt(iBI));
 			result.add(dbb);
 
 		}
@@ -263,7 +265,7 @@ public class DB_Operations implements TableDefinition {
 		if (BuildingTable_isEmpty()) {
 			// if empty, insert the list
 			initialize_Building(BUILDING_NAME, BUILDING_ADDRESS, LOCATION_LAT,
-					LOCATION_LNG);
+					LOCATION_LNG,BUILDING_ICON);
 		}
 	}
 
@@ -282,7 +284,7 @@ public class DB_Operations implements TableDefinition {
 
 	// insert all the building info into the Building table
 	private void initialize_Building(String bn, String ba, String lat,
-			String lng) {
+			String lng,String bi) {
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -290,8 +292,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES ('Mclean Hall','2 West Washington Street, Iowa City, IA 52242','41.660715','-91.536520');");
+				+ lng+ ","+bi
+				+ ") VALUES ('Mclean Hall','2 West Washington Street, Iowa City, IA 52242','41.660715','-91.536520',"+R.drawable.bi1+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -299,8 +301,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES ('Jessup Hall','5 West Jefferson Street, Iowa City, IA 52242','41.661885','-91.536520');");
+				+ lng+ ","+bi
+				+ ") VALUES ('Jessup Hall','5 West Jefferson Street, Iowa City, IA 52242','41.661885','-91.536520',"+R.drawable.bi2+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -308,8 +310,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES ('Schaeffer hall','20 East Washington Street, Iowa City, IA 52242','41.660695','-91.535656');");
+				+ lng+ ","+bi
+				+ ") VALUES ('Schaeffer hall','20 East Washington Street, Iowa City, IA 52242','41.660695','-91.535656',"+R.drawable.bi3+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -317,8 +319,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES ('Macbride Hall','17 North Clinton Street, Iowa City, IA 52242','41.661889','-91.535667');");
+				+ lng+ ","+bi
+				+ ") VALUES ('Macbride Hall','17 North Clinton Street, Iowa City, IA 52242','41.661889','-91.535667',"+R.drawable.bi4+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -326,8 +328,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES ('Old Capitol Museum','21 N Clinton St, Iowa City, IA 52242','41.661284','-91.536155');");
+				+ lng+ ","+bi
+				+ ") VALUES ('Old Capitol Museum','21 N Clinton St, Iowa City, IA 52242','41.661284','-91.536155',"+R.drawable.bi5+");");
 
 		database.execSQL("INSERT INTO Building ("
 				+ bn
@@ -336,8 +338,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Main Library', '125 West Washington Street, Iowa City, IA 52242','41.659533','-91.538440');");
+				+ lng+ ","+bi
+				+ ") VALUES('Main Library', '125 West Washington Street, Iowa City, IA 52242','41.659533','-91.538440',"+R.drawable.bi6+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -345,8 +347,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Halsey Hall', '28 West Jefferson Street, Iowa City, IA 52242', '41.662859','-91.537147');");
+				+ lng+ ","+bi
+				+ ") VALUES('Halsey Hall', '28 West Jefferson Street, Iowa City, IA 52242', '41.662859','-91.537147',"+R.drawable.bi7+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -354,8 +356,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('IMU Parking Ramp', '120 North Madison Street, Iowa City, IA 52242','41.663106','-91.538247');");
+				+ lng+ ","+bi
+				+ ") VALUES('IMU Parking Ramp', '120 North Madison Street, Iowa City, IA 52242','41.663106','-91.538247',"+R.drawable.bi8+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -363,8 +365,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Calvin Hall', '2 West Jefferson Street, Iowa City, IA 52242', '41.662799','-91.536450');");
+				+ lng+ ","+bi
+				+ ") VALUES('Calvin Hall', '2 West Jefferson Street, Iowa City, IA 52242', '41.662799','-91.536450',"+R.drawable.bi9+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -372,8 +374,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Gilmore Hall', '112 North Capitol Street, Iowa City, IA 52242', '41.662817','-91.535801');");
+				+ lng+ ","+bi
+				+ ") VALUES('Gilmore Hall', '112 North Capitol Street, Iowa City, IA 52242', '41.662817','-91.535801',"+R.drawable.bi10+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -381,8 +383,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Trowbridge Hall', '123 North Capitol Street, Iowa City, IA 52242','41.663381','-91.536563');");
+				+ lng+ ","+bi
+				+ ") VALUES('Trowbridge Hall', '123 North Capitol Street, Iowa City, IA 52242','41.663381','-91.536563',"+R.drawable.bi11+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -390,8 +392,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Tippie College of Business','21 East Market Street, Iowa City, IA 52245','41.663311','-91.534987');");
+				+ lng+ ","+bi
+				+ ") VALUES('Tippie College of Business','21 East Market Street, Iowa City, IA 52245','41.663311','-91.534987',"+R.drawable.bi12+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -399,8 +401,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Chemistry Bldg', '251 North Capitol Street',	'41.664113','-91.536632');");
+				+ lng+ ","+bi
+				+ ") VALUES('Chemistry Bldg', '251 North Capitol Street',	'41.664113','-91.536632',"+R.drawable.bi13+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -408,8 +410,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Engineering Research Facility','330 South Madison Street', '41.656966','-91.537271');");
+				+ lng+ ","+bi
+				+ ") VALUES('Engineering Research Facility','330 South Madison Street', '41.656966','-91.537271',"+R.drawable.bi14+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -417,8 +419,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Communications Center', '116 South Madison Street','41.659309','-91.537291');");
+				+ lng+ ","+bi
+				+ ") VALUES('Communications Center', '116 South Madison Street','41.659309','-91.537291',"+R.drawable.bi15+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -426,8 +428,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Recreation Center', '309 South Madison','41.657278','-91.538461');");
+				+ lng+ ","+bi
+				+ ") VALUES('Recreation Center', '309 South Madison','41.657278','-91.538461',"+R.drawable.bi16+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -435,8 +437,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Iowa Memorial Union', '125 North Madison Street','41.663106','-91.538247');");
+				+ lng+ ","+bi
+				+ ") VALUES('Iowa Memorial Union', '125 North Madison Street','41.663106','-91.538247',"+R.drawable.bi17+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -444,8 +446,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Lindquist Center', '240 South Madison Street','41.658529','-91.537228');");
+				+ lng+ ","+bi
+				+ ") VALUES('Lindquist Center', '240 South Madison Street','41.658529','-91.537228',"+R.drawable.bi18+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -453,8 +455,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Seaman Center', '103 South Capitol Street','41.659683','-91.536616');");
+				+ lng+ ","+bi
+				+ ") VALUES('Seaman Center', '103 South Capitol Street','41.659683','-91.536616',"+R.drawable.bi19+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -462,8 +464,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Old Capitol Mall', '200 South Capitol Street','41.659378','-91.535447');");
+				+ lng+ ","+bi
+				+ ") VALUES('Old Capitol Mall', '200 South Capitol Street','41.659378','-91.535447',"+R.drawable.bi20+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -471,8 +473,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Pomerantz Center','213 North Clinton Street','41.663893','-91.535720');");
+				+ lng+ ","+bi
+				+ ") VALUES('Pomerantz Center','213 North Clinton Street','41.663893','-91.535720',"+R.drawable.bi21+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -480,8 +482,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Black Honors Center', '221 North Clinton','41.664354','-91.535656');");
+				+ lng+ ","+bi
+				+ ") VALUES('Black Honors Center', '221 North Clinton','41.664354','-91.535656',"+R.drawable.bi22+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -489,8 +491,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Lutheran Campus Ministry','109 E. Market Street, Iowa City, IA 52245','41.663961','-91.534894');");
+				+ lng+ ","+bi
+				+ ") VALUES('Lutheran Campus Ministry','109 E. Market Street, Iowa City, IA 52245','41.663961','-91.534894',"+R.drawable.bi23+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -498,8 +500,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Duam Hall', '225 North Clinton Street', '41.664478','-91.535087');");
+				+ lng+ ","+bi
+				+ ") VALUES('Duam Hall', '225 North Clinton Street', '41.664478','-91.535087',"+R.drawable.bi24+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -507,8 +509,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Burge Residence Hall', '301 North Clinton Street','41.665244','-91.535216');");
+				+ lng+ ","+bi
+				+ ") VALUES('Burge Residence Hall', '301 North Clinton Street','41.665244','-91.535216',"+R.drawable.bi25+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -516,8 +518,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Iowa Advanced Technology Labs','205 North Madison Street','41.664178','-91.538081');");
+				+ lng+ ","+bi
+				+ ") VALUES('Iowa Advanced Technology Labs','205 North Madison Street','41.664178','-91.538081',"+R.drawable.bi26+");");
 
 		database.execSQL("INSERT INTO Building ("
 				+ bn
@@ -526,8 +528,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Womens Resource and Action Center','130 North Madison', '41.663415','-91.537273');");
+				+ lng+ ","+bi
+				+ ") VALUES('Womens Resource and Action Center','130 North Madison', '41.663415','-91.537273',"+R.drawable.bi27+");");
 
 		database.execSQL("INSERT INTO Building ("
 				+ bn
@@ -536,8 +538,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('North Campus Parking', '339 North Madison Street','41.665256','-91.536541');");
+				+ lng+ ","+bi
+				+ ") VALUES('North Campus Parking', '339 North Madison Street','41.665256','-91.536541',"+R.drawable.bi28+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -545,8 +547,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('North Hall', '20 West Davenport Street', '41.666013','-91.536654');");
+				+ lng+ ","+bi
+				+ ") VALUES('North Hall', '20 West Davenport Street', '41.666013','-91.536654',"+R.drawable.bi29+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -554,8 +556,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Stanley Residence Hall', '10 East Davenport Street','41.666286','-91.535854');");
+				+ lng+ ","+bi
+				+ ") VALUES('Stanley Residence Hall', '10 East Davenport Street','41.666286','-91.535854',"+R.drawable.bi30+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -563,8 +565,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Currier Residence Hall', '413 North Clinton Street','41.666358','-91.535044');");
+				+ lng+ ","+bi
+				+ ") VALUES('Currier Residence Hall', '413 North Clinton Street','41.666358','-91.535044',"+R.drawable.bi31+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -572,8 +574,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Dey House', '507 North Clinton Street','41.667245','-91.535060');");
+				+ lng+ ","+bi
+				+ ") VALUES('Dey House', '507 North Clinton Street','41.667245','-91.535060',"+R.drawable.bi32+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -581,8 +583,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Glenn Schaeffer Library','507 North Clinton Street','41.667429','-91.535105');");
+				+ lng+ ","+bi
+				+ ") VALUES('Glenn Schaeffer Library','507 North Clinton Street','41.667429','-91.535105',"+R.drawable.bi33+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -590,8 +592,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Jefferson Bldg', '129 East Washington Street','41.659895','-91.533344');");
+				+ lng+ ","+bi
+				+ ") VALUES('Jefferson Bldg', '129 East Washington Street','41.659895','-91.533344',"+R.drawable.bi34+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -599,8 +601,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Phillips Hall', '16 North Clinton Street','41.661825','-91.534191');");
+				+ lng+ ","+bi
+				+ ") VALUES('Phillips Hall', '16 North Clinton Street','41.661825','-91.534191',"+R.drawable.bi35+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -608,8 +610,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Biology Bldg', '129 East Jefferson Street','41.661859','-91.533392');");
+				+ lng+ ","+bi
+				+ ") VALUES('Biology Bldg', '129 East Jefferson Street','41.661859','-91.533392',"+R.drawable.bi36+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -617,8 +619,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Biology Bldg East','210 East Iowa Avenue','41.661617','-91.532673');");
+				+ lng+ ","+bi
+				+ ") VALUES('Biology Bldg East','210 East Iowa Avenue','41.661617','-91.532673',"+R.drawable.bi37+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -626,8 +628,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Sciences Library', '120 East Iowa Avenue','41.662029','-91.533827');");
+				+ lng+ ","+bi
+				+ ") VALUES('Sciences Library', '120 East Iowa Avenue','41.662029','-91.533827',"+R.drawable.bi38+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -635,8 +637,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Van Allen Hall', '30 North Dubuque Street','41.662166','-91.532148');");
+				+ lng+ ","+bi
+				+ ") VALUES('Van Allen Hall', '30 North Dubuque Street','41.662166','-91.532148',"+R.drawable.bi39+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -644,8 +646,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Spence Laboratories of Psychology','308 East Iowa Avenue', '41.661553','-91.531311');");
+				+ lng+ ","+bi
+				+ ") VALUES('Spence Laboratories of Psychology','308 East Iowa Avenue', '41.661553','-91.531311',"+R.drawable.bi40+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -653,8 +655,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Seashore Hall', '301 East Jefferson Street','41.661942','-91.531295');");
+				+ lng+ ","+bi
+				+ ") VALUES('Seashore Hall', '301 East Jefferson Street','41.661942','-91.531295',"+R.drawable.bi41+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -662,8 +664,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Stuit Hall', '335 East Jefferson Street','41.662202','-91.530479');");
+				+ lng+ ","+bi
+				+ ") VALUES('Stuit Hall', '335 East Jefferson Street','41.662202','-91.530479',"+R.drawable.bi42+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -671,8 +673,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('University Services Blgd','1 West Prentiss', '41.654082','-91.536664');");
+				+ lng+ ","+bi
+				+ ") VALUES('University Services Blgd','1 West Prentiss', '41.654082','-91.536664',"+R.drawable.bi43+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -680,8 +682,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Hillcrest Hall', '25 Byington Road','41.659260','-91.542399');");
+				+ lng+ ","+bi
+				+ ") VALUES('Hillcrest Hall', '25 Byington Road','41.659260','-91.542399',"+R.drawable.bi44+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -689,8 +691,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Hillcrest Residence Hall','25 Byington Road', '41.659268','-91.542844');");
+				+ lng+ ","+bi
+				+ ") VALUES('Hillcrest Residence Hall','25 Byington Road', '41.659268','-91.542844',"+R.drawable.bi45+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -698,8 +700,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('English Philosophy Building','308 English Philosophy Bldg, Iowa City, IA 52242', '41.660788103266725','-91.53988234698772');");
+				+ lng+ ","+bi
+				+ ") VALUES('English Philosophy Building','308 English Philosophy Bldg, Iowa City, IA 52242', '41.660788103266725','-91.53988234698772',"+R.drawable.bi46+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -707,8 +709,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Adler Journalism and Mass Communication Building','104 West Washington, Iowa City, IA 52242', '41.66060775558548','-91.53880879282951');");
+				+ lng+ ","+bi
+				+ ") VALUES('Adler Journalism and Mass Communication Building','104 West Washington, Iowa City, IA 52242', '41.66060775558548','-91.53880879282951',"+R.drawable.bi47+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -716,8 +718,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Becker Communications Studies Bldg','25 South Madison Street, Iowa City, IA 52242', '41.66049503802824','-91.53813119977713');");
+				+ lng+ ","+bi
+				+ ") VALUES('Becker Communications Studies Bldg','25 South Madison Street, Iowa City, IA 52242', '41.66049503802824','-91.53813119977713',"+R.drawable.bi48+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -725,8 +727,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Boyd Law Building','220 Boyd Law Bldg, Iowa City, IA 52242', '41.65748189935511','-91.54279489070177');");
+				+ lng+ ","+bi
+				+ ") VALUES('Boyd Law Building','220 Boyd Law Bldg, Iowa City, IA 52242', '41.65748189935511','-91.54279489070177',"+R.drawable.bi49+");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn
 				+ ","
@@ -734,8 +736,8 @@ public class DB_Operations implements TableDefinition {
 				+ ","
 				+ lat
 				+ ","
-				+ lng
-				+ ") VALUES('Field House','225 South Grand Avenue, Iowa City, IA 52242', '41.65844078860639','-91.54661938548088');");
+				+ lng+ ","+bi
+				+ ") VALUES('Field House','225 South Grand Avenue, Iowa City, IA 52242', '41.65844078860639','-91.54661938548088',"+R.drawable.bi50+");");
 
 		// need to add more
 	}

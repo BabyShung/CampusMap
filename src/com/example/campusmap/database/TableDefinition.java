@@ -14,7 +14,7 @@ public interface TableDefinition extends BaseColumns{
 	public static final String LOCATION_LAT = "Location_lat";
 	public static final String LOCATION_LNG = "Location_lng";
 	public static final String QUERY_TIME = "QueryTime";
-	
+	public static final String BUILDING_ICON = "BuildingIcon";
 	
 	//Route table
 	public static final String ROUTE_TABLE = "Route";

@@ -36,7 +36,8 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 				+ BUILDING_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
 				+ BUILDING_NAME + " VARCHAR," + BUILDING_ADDRESS + " VARCHAR, "
 				+ LOCATION_LAT + " DOUBLE," + LOCATION_LNG + " DOUBLE, "
-				+ QUERY_TIME + " INTEGER default 0, "+ CREATE_TIME
+				+ QUERY_TIME + " INTEGER default 0, "
+				+ BUILDING_ICON + " INTEGER, "+CREATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), "
 				+ UPDATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))"

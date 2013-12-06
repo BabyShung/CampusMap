@@ -9,8 +9,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -18,8 +16,10 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
+
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.db_object.DB_Building;
 
@@ -35,12 +35,15 @@ public class SearchActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		System.out.println("*******");
 		setContentView(R.layout.activity_search);
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		buildingList = new ArrayList<String>();
-
+		System.out.println("*******2222");
 		initData();
+		System.out.println("******4444*");
 		populateATV();
+		System.out.println("******3333*");
 	}
 
 	private void initData() {
@@ -109,12 +112,11 @@ public class SearchActivity extends Activity {
 			else
 				timesText.setText(query_time + " times");
 
-			/*
-			 * //Fill the icons we don't have Icons for buildings in DB yet
-			 * ImageView imageView =
-			 * (ImageView)itemView.findViewById(R.id.item_icon);
-			 * imageView.setImageResource(currentBuilding.getIconID());
-			 */
+			
+			 //Fill the icons we don't have Icons for buildings in DB yet
+			 ImageView imageView =(ImageView)itemView.findViewById(R.id.item_icon);
+			imageView.setImageResource(currentBuilding.getBuildingIcon());  //int bi_1=0x7f020000;
+			 
 			return itemView;
 
 		}
