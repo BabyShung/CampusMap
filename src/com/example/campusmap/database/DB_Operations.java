@@ -45,7 +45,10 @@ public class DB_Operations implements TableDefinition {
 		database.close();
 	}
 
-	// ---------Cursor should be private--------------------------
+	/** ---------Cursor should be private------------------
+	 * 
+	 * @return
+	 */
 	private Cursor readData() {
 		String[] FROM = { BUILDING_NAME, QUERY_TIME,BUILDING_ICON, UPDATE_TIME };
 		String ORDER_BY = UPDATE_TIME + " DESC," + QUERY_TIME + " DESC,"
@@ -55,15 +58,17 @@ public class DB_Operations implements TableDefinition {
 		return cursor;
 	}
 
-	private Cursor readDataFromABuildingName(String bn) {
-		String[] FROM = { QUERY_TIME };
+	private Cursor queryOneColumn_readDataFromABuildingName(String bn, String columnName) {
+		String[] FROM = { columnName };
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, BUILDING_NAME
 				+ "='" + bn + "'", null, null, null, null);
 		return cursor;
 	}
 
-	private Cursor readBuildingNameFromALatLng(LatLng point) {
-		String[] FROM = { BUILDING_NAME };
+	
+	
+	private Cursor queryOneColumn_readDataFromALatLng(LatLng point, String columnName) {
+		String[] FROM = { columnName };
 		Cursor cursor = database.query(BUILDING_TABLE, FROM, LOCATION_LAT
 				+ "='" + point.latitude + "' and " + LOCATION_LNG + "='"
 				+ point.longitude + "'", null, null, null, null);
@@ -174,7 +179,7 @@ public class DB_Operations implements TableDefinition {
 
 	// input a centerPoint LatLng, return its BN
 	public String getBuildingNameFromLatLng(LatLng point) {
-		Cursor c = this.readBuildingNameFromALatLng(point);
+		Cursor c = this.queryOneColumn_readDataFromALatLng(point,BUILDING_NAME);
 		if (c.getCount() != 0) {
 			c.moveToFirst();
 			int iBN = c.getColumnIndex(BUILDING_NAME);
@@ -183,6 +188,19 @@ public class DB_Operations implements TableDefinition {
 		} else
 			return null;
 	}
+	
+	// input a centerPoint LatLng, return its Bid
+	public int getBidFromLatLng(LatLng point) {
+		Cursor c = this.queryOneColumn_readDataFromALatLng(point,BUILDING_ID);
+		if (c.getCount() != 0) {
+			c.moveToFirst();
+			int iBid = c.getColumnIndex(BUILDING_ID);
+
+			return c.getInt(iBid);
+		} else
+			return -1;
+	}
+	
 
 	// ----------------------------------------------------------------------------------------
 
@@ -212,7 +230,7 @@ public class DB_Operations implements TableDefinition {
 	// ***** Aish, if you have time, can think about what to update
 
 	public void updateQueryTimesForABuilding(String bn) {
-		Cursor c = readDataFromABuildingName(bn);
+		Cursor c = queryOneColumn_readDataFromABuildingName(bn,QUERY_TIME);
 		if (c.getCount() != 0) {
 			c.moveToFirst();
 			int qt = c.getInt(0);

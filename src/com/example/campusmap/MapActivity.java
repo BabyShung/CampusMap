@@ -1,6 +1,7 @@
 package com.example.campusmap;
 
 import java.util.ArrayList;
+import java.util.Map;
 import java.util.Timer;
 
 import net.simonvt.messagebar.MessageBar;
@@ -129,25 +130,69 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		 * 
 		 */
 		// find the nearest building
-		// DB_Operations op = new DB_Operations(this);
-		// op.open();
-		// ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
-		//
-		// LatLng origin = new LatLng(myLocation.getLatitude(),
-		// myLocation.getLongitude());
-		// NearestPoint np = new NearestPoint(origin, al);
-		// LatLng result = np.getNearestPoint();
-		//
-		// // use this point to get the buildingName in DB
-		// String bn = op.getBuildingNameFromLatLng(result);
-		// if (bd.pointIsInPolygon(origin)) {
-		// Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
-		// .show();
-		// } else {
-		// Toast.makeText(this, "Your nearest building is " + bn,
-		// Toast.LENGTH_LONG).show();
-		// }
-		// op.close();
+		 DB_Operations op = new DB_Operations(this);
+		 op.open();
+		 ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
+		
+		 LatLng origin = new LatLng(myLastLocation.getLatitude(),
+				 myLastLocation.getLongitude());
+		 NearestPoint np = new NearestPoint(origin, al);
+
+		 //calculate and return 3 center points closest to my location
+		 LatLng[] returnThree = np.returnClosestThree();
+		 
+
+		 
+		 //use center points to get 3 Bid
+		 int f_bid = op.getBidFromLatLng(returnThree[0]);
+		 int s_bid = op.getBidFromLatLng(returnThree[1]);
+		 int t_bid = op.getBidFromLatLng(returnThree[2]);
+		 Map<Integer, Building> tmpBS = bd.getBuildingSet();
+		 Building fb = tmpBS.get(f_bid);
+		 Building sb = tmpBS.get(s_bid);
+		 Building tb = tmpBS.get(t_bid);
+	
+		 //for each building, calculate two closest points and get Hao's defined distance
+		 
+		 LatLng[] F_returnTwo = np.returnClosestTwoPoints(fb.getPoints());
+		 for(LatLng tpp: F_returnTwo){
+			 System.out.println(tpp);
+		 }
+		 System.out.println("-------");
+		 LatLng[] S_returnTwo = np.returnClosestTwoPoints(sb.getPoints());
+		 for(LatLng tpp: S_returnTwo){
+			 System.out.println(tpp);
+		 }
+		 System.out.println("-------");
+		 LatLng[] T_returnTwo = np.returnClosestTwoPoints(tb.getPoints());
+		 for(LatLng tpp: T_returnTwo){
+			 System.out.println(tpp);
+		 }
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 
+		 String bn1 = op.getBuildingNameFromLatLng(returnThree[0]);
+		 System.out.println(bn1 + " " + f_bid);
+		 String bn2 = op.getBuildingNameFromLatLng(returnThree[1]);
+		 System.out.println(bn2+ " " + s_bid);
+		 String bn3 = op.getBuildingNameFromLatLng(returnThree[2]);
+		 System.out.println(bn3+ " " + t_bid);
+		
+		 // use this point to get the buildingName in DB
+//		 String bn = op.getBuildingNameFromLatLng(result);
+//		 if (bd.pointIsInPolygon(origin)) {
+//		 Toast.makeText(this, "You are now in " + bn, Toast.LENGTH_LONG)
+//		 .show();
+//		 } else {
+//		 Toast.makeText(this, "Your nearest building is " + bn,
+//		 Toast.LENGTH_LONG).show();
+//		 }
+//		 op.close();
 
 	}
 

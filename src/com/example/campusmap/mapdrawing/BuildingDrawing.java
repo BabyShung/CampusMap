@@ -22,6 +22,10 @@ public class BuildingDrawing {
 		drawAllTheCampusBuildings();
 	}
 
+	public Map<Integer, Building> getBuildingSet(){
+		return buildingSet;
+	}
+	
 	// ALGO: return true if point is in polygon
 	public boolean pointIsInPolygon(LatLng touchPoint) {
 		int i;
