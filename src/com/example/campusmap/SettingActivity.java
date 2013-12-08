@@ -1,16 +1,30 @@
 package com.example.campusmap;
 
+import java.util.ArrayList;
+
+import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.db_object.DB_Building;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.AutoCompleteTextView;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.Toast;
 
 public class SettingActivity extends Activity implements OnClickListener {
 
+	private InputMethodManager imm;
+	private ArrayList<DB_Building> value;
+	private ArrayList<String> buildingList;
+	private DB_Operations datasource;
+/*	private ListView LV;
+	private AutoCompleteTextView ATV;*/
 	private Button button1;
 	private Button button2;
 	private Button button3;
@@ -50,6 +64,7 @@ public class SettingActivity extends Activity implements OnClickListener {
 		switch (v.getId()) {
 		case R.id.setting_button1:
 			alertDialog.setTitle("Clear My Search Query History");
+			clearSearchHistory();
 			break;
 		case R.id.setting_button2:
 			alertDialog.setTitle("Delete All My Route History");
@@ -60,6 +75,13 @@ public class SettingActivity extends Activity implements OnClickListener {
 		}
 	}
 
+	private void clearSearchHistory()
+	{
+		datasource = new DB_Operations(this);
+		datasource.open();
+		datasource.updateQueryTime_setToNULL();
+		datasource.close(); 
+	}
 	private void setAlerDiaglogButtonPositive(final View v) {
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "CONFIRM",
 				new DialogInterface.OnClickListener() {
@@ -94,20 +116,21 @@ public class SettingActivity extends Activity implements OnClickListener {
 
 	// clear my search query history
 	protected void button1Event() {
-		Toast.makeText(SettingActivity.this, "111",
+		Toast.makeText(SettingActivity.this, "Cleared history",
 				Toast.LENGTH_LONG).show();
 	}
 
 	// delete all my routes history
 	protected void button2Event() {
-		Toast.makeText(SettingActivity.this, "222",
+		Toast.makeText(SettingActivity.this, "Routed deleted",
 				Toast.LENGTH_LONG).show();
 	}
 	// switch map type
 	protected void button3Event() {
-		Toast.makeText(SettingActivity.this, "333",
+		Toast.makeText(SettingActivity.this, "Type Switched",
 				Toast.LENGTH_LONG).show();
 	}
 
+	
 
 }

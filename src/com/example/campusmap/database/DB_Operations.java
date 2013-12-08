@@ -65,7 +65,15 @@ public class DB_Operations implements TableDefinition {
 		return cursor;
 	}
 
-	
+	private Cursor queryOneColumn_readDataFromAColumnName(String columnName) {
+		
+		//int queryValue = 0;
+		String[] FROM = { columnName };
+		Cursor cursor = database.query(BUILDING_TABLE, FROM, QUERY_TIME
+				,null, null, null, null, null);
+		
+		return cursor;
+	}
 	
 	private Cursor queryOneColumn_readDataFromALatLng(LatLng point, String columnName) {
 		String[] FROM = { columnName };
@@ -229,6 +237,21 @@ public class DB_Operations implements TableDefinition {
 
 	// ***** Aish, if you have time, can think about what to update
 
+	public void updateQueryTime_setToNULL()
+	{
+		Cursor c = queryOneColumn_readDataFromAColumnName(QUERY_TIME);
+		if (c.getCount() != 0) {
+			c.moveToFirst();
+			int qt = 0;
+			
+			ContentValues cv = new ContentValues();
+			cv.put(QUERY_TIME, qt);
+			
+			database.update(BUILDING_TABLE, cv,
+					null, null);
+			System.out.println("updated! set to null..");
+		}
+	}
 	public void updateQueryTimesForABuilding(String bn) {
 		Cursor c = queryOneColumn_readDataFromABuildingName(bn,QUERY_TIME);
 		if (c.getCount() != 0) {
