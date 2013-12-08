@@ -1,4 +1,6 @@
 package com.example.campusmap.file_upload;
+import com.example.campusmap.db_object.DB_Route;
+
 import android.content.Context;
 import android.os.AsyncTask;
 import android.widget.Toast;
@@ -7,10 +9,11 @@ import android.widget.Toast;
 public class fileUploadTask extends AsyncTask<Void, Integer, String> {
 
 	private Context mContext;
-	private String JustFileName;
+	private DB_Route dbr;
 	private fileUpload fu;
-	public fileUploadTask(String JustFileName, Context mContext) {
-		this.JustFileName = JustFileName;
+	
+	public fileUploadTask(DB_Route dbr, Context mContext) {
+		this.dbr = dbr;
 		this.mContext = mContext;
 	}
 	
@@ -18,7 +21,7 @@ public class fileUploadTask extends AsyncTask<Void, Integer, String> {
 
 	@Override
 	protected String doInBackground(Void... arg0) {
-		fu = new fileUpload(JustFileName);
+		fu = new fileUpload(dbr);
 		fu.upload();
 		return null;
 	}

@@ -264,20 +264,21 @@ containing a value of this type.
         public static final int common_signin_btn_text_pressed_dark=0x7f020048;
         public static final int common_signin_btn_text_pressed_light=0x7f020049;
         public static final int ic_launcher=0x7f02004a;
-        public static final int ic_messagebar_undo=0x7f02004b;
-        public static final int ic_plusone_medium_off_client=0x7f02004c;
-        public static final int ic_plusone_small_off_client=0x7f02004d;
-        public static final int ic_plusone_standard_off_client=0x7f02004e;
-        public static final int ic_plusone_tall_off_client=0x7f02004f;
-        public static final int icon_building=0x7f020050;
-        public static final int mb__item_background_holo_dark=0x7f020051;
-        public static final int mb__list_focused_holo=0x7f020052;
-        public static final int mb__list_longpressed_holo=0x7f020053;
-        public static final int mb__list_pressed_holo_dark=0x7f020054;
-        public static final int mb__list_selector_background_transition_holo_dark=0x7f020055;
-        public static final int mb__list_selector_disabled_holo_dark=0x7f020056;
-        public static final int mb__messagebar_background=0x7f020057;
-        public static final int mb__messagebar_divider=0x7f020058;
+        public static final int ic_messagebar_stop=0x7f02004b;
+        public static final int ic_messagebar_undo=0x7f02004c;
+        public static final int ic_plusone_medium_off_client=0x7f02004d;
+        public static final int ic_plusone_small_off_client=0x7f02004e;
+        public static final int ic_plusone_standard_off_client=0x7f02004f;
+        public static final int ic_plusone_tall_off_client=0x7f020050;
+        public static final int icon_building=0x7f020051;
+        public static final int mb__item_background_holo_dark=0x7f020052;
+        public static final int mb__list_focused_holo=0x7f020053;
+        public static final int mb__list_longpressed_holo=0x7f020054;
+        public static final int mb__list_pressed_holo_dark=0x7f020055;
+        public static final int mb__list_selector_background_transition_holo_dark=0x7f020056;
+        public static final int mb__list_selector_disabled_holo_dark=0x7f020057;
+        public static final int mb__messagebar_background=0x7f020058;
+        public static final int mb__messagebar_divider=0x7f020059;
     }
     public static final class id {
         public static final int hybrid=0x7f040007;

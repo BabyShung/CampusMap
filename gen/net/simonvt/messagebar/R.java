@@ -13,14 +13,14 @@ public final class R {
 		public static final int messageBarTextStyle = 0x7f010001;
 	}
 	public static final class drawable {
-		public static final int mb__item_background_holo_dark = 0x7f020051;
-		public static final int mb__list_focused_holo = 0x7f020052;
-		public static final int mb__list_longpressed_holo = 0x7f020053;
-		public static final int mb__list_pressed_holo_dark = 0x7f020054;
-		public static final int mb__list_selector_background_transition_holo_dark = 0x7f020055;
-		public static final int mb__list_selector_disabled_holo_dark = 0x7f020056;
-		public static final int mb__messagebar_background = 0x7f020057;
-		public static final int mb__messagebar_divider = 0x7f020058;
+		public static final int mb__item_background_holo_dark = 0x7f020052;
+		public static final int mb__list_focused_holo = 0x7f020053;
+		public static final int mb__list_longpressed_holo = 0x7f020054;
+		public static final int mb__list_pressed_holo_dark = 0x7f020055;
+		public static final int mb__list_selector_background_transition_holo_dark = 0x7f020056;
+		public static final int mb__list_selector_disabled_holo_dark = 0x7f020057;
+		public static final int mb__messagebar_background = 0x7f020058;
+		public static final int mb__messagebar_divider = 0x7f020059;
 	}
 	public static final class id {
 		public static final int mbButton = 0x7f040002;

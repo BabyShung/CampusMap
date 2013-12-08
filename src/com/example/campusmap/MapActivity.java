@@ -126,11 +126,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		}
 		GPS_Network_Initialization();
 
-		
-		
-		
-
-
 	}
 
 	private void setUpMyLocationCamera(Location l, int zoomto) {
@@ -308,7 +303,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 								MapActivity.this, map, from, from, mMessageBar);
 						campusRouteTask.execute();
 
-
 					}
 				});
 
@@ -335,9 +329,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						// //set up MyLocation.class, for recording
 						// GPS_Network_Initialization();
 						//
-						 // Async task, begin the route
-						 locationTask = new MyLocationTask(ml);
-						 locationTask.execute();
+						// Async task, begin the route
+						locationTask = new MyLocationTask(ml);
+						locationTask.execute();
 
 					}
 				});
@@ -363,6 +357,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	protected void onDestroy() {
 		LocalBroadcastManager.getInstance(this).unregisterReceiver(
 				BuildingNameReceiver);
+
+		// remove updates from Mylocation listeners
+		if (ml != null) {
+			ml.removeLMUpdate();
+		}
+		Toast.makeText(this, "Good Bye!", Toast.LENGTH_SHORT).show();
 		super.onDestroy();
 	}
 
@@ -377,18 +377,33 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
+		Bundle b = new Bundle();
+		b.putInt("onMsgClick", 3);
 		switch (item.getItemId()) {
 		case R.id.route1:
-			Toast.makeText(this, "You picked route 1!", Toast.LENGTH_SHORT)
-					.show();
+
+			mMessageBar.show("You picked red route! Let's go!", "Stop",
+					R.drawable.ic_messagebar_stop, b);
+
+			//start recording
+			//....
 			break;
 		case R.id.route2:
-			Toast.makeText(this, "You picked route 2!", Toast.LENGTH_SHORT)
-					.show();
+			mMessageBar.show("You picked blue route! Let's go!", "Stop",
+					R.drawable.ic_messagebar_stop, b);
+			
+			//start recording
+			//....
+			
 			break;
 		case R.id.route3:
-			Toast.makeText(this, "You picked route 3!", Toast.LENGTH_SHORT)
-					.show();
+			mMessageBar.show("You picked black route! Let's go!", "Stop",
+					R.drawable.ic_messagebar_stop, b);
+			
+			//start recording
+			//....
+			
+			
 			break;
 
 		}
@@ -401,6 +416,23 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	 */
 	@Override
 	public void onMessageClick(Parcelable token) {
-		openOptionsMenu();
+		Bundle b = (Bundle) token;
+		final int onMsgClick = b.getInt("onMsgClick");
+
+		switch (onMsgClick) {
+		case 1:
+
+			openOptionsMenu();
+
+			break;
+		case 3:
+			//stop recording
+			
+			
+			Toast.makeText(this, "Yeah~!", Toast.LENGTH_SHORT).show();
+			break;
+
+		}
+
 	}
 }

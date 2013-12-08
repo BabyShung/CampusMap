@@ -9,6 +9,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.db_object.DB_Route;
 
 import android.os.Environment;
 
@@ -16,16 +17,20 @@ public class fileUpload {
 
 	private int serverResponseCode = 0;
 	private String ServerUri = null;
+	private DB_Route dbr;
 
 	/********** File Path *************/
 	private File uploadFilePath;
 	private final String uploadFileName;
 	private boolean uploadSucceed;
+
 	// = "service_lifecycle.png";
 
-	public fileUpload(String fn) {
+	public fileUpload(DB_Route dbr) {
 
-		uploadFileName = fn;
+		this.dbr = dbr;
+
+		uploadFileName = dbr.getFileName();
 
 		uploadFilePath = checkDownloadFolderExist();
 
@@ -37,10 +42,10 @@ public class fileUpload {
 		uploadFile(uploadFilePath + "/" + uploadFileName);
 	}
 
-	public boolean isUploadSucceed(){
+	public boolean isUploadSucceed() {
 		return uploadSucceed;
 	}
-	
+
 	public File checkDownloadFolderExist() {
 		File tmp;
 		tmp = Environment.getExternalStoragePublicDirectory("CampusMap/Routes");
@@ -85,14 +90,22 @@ public class fileUpload {
 				conn.setRequestProperty("Content-Type",
 						"multipart/form-data;boundary=" + boundary);
 
+				String combinedString =  dbr.getStarting_lat() 
+						+ "_" + dbr.getStarting_lng()
+						+ "_" + dbr.getEnding_lat()
+						+ "_" + dbr.getEnding_lng()
+						+ "_" + dbr.getDistance()
+						+ "_" + dbr.getTakeTime()
+						+ "_" + dbr.getFileName();
+
 				// $_POST["uploaded_file"] = filename (including path)
 				// upl is corresponded to the input name, php server as well
-				conn.setRequestProperty("upl", fileName);
+				conn.setRequestProperty("upl", combinedString);
 
 				dos = new DataOutputStream(conn.getOutputStream());
 				dos.writeBytes(twoHyphens + boundary + lineEnd);
 				dos.writeBytes("Content-Disposition: form-data; name='upl';filename='"
-						+ fileName + "'" + lineEnd);
+						+ combinedString + "'" + lineEnd);
 				dos.writeBytes(lineEnd);
 
 				// create a buffer of maximum size
@@ -124,7 +137,6 @@ public class fileUpload {
 					uploadSucceed = true;
 				} else {
 
-				
 				}
 				// close the streams //
 				fileInputStream.close();
@@ -134,14 +146,12 @@ public class fileUpload {
 				ex.printStackTrace();
 			} catch (IOException e) {
 				e.printStackTrace();
-				
-				
-				//upload failure, might be network problem
-				//Thus store the route in DB
+
+				// upload failure, might be network problem
+				// Thus store the route in DB
 				insertRouteIntoHistoryTable(uploadFileName);
 				System.out.println("Upload failed, insert into db");
-				
-				
+
 			}
 			return serverResponseCode;
 		} // End else block
@@ -150,7 +160,7 @@ public class fileUpload {
 	private void insertRouteIntoHistoryTable(String fileName) {
 		DB_Operations op = new DB_Operations();
 		op.open();
-		op.insertARoute(fileName,false);//need to add more attributes
+		op.insertARoute(dbr, false);// need to add more attributes
 		op.close();
 	}
 }

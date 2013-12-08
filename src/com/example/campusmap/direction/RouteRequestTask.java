@@ -2,6 +2,7 @@ package com.example.campusmap.direction;
 
 import net.simonvt.messagebar.MessageBar;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.widget.Toast;
 
 import com.example.campusmap.MapActivity;
@@ -43,16 +44,21 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 	@Override
 	protected void onPostExecute(String r) {
 		super.onPostExecute(r);
+		
 		// also draw the route as well
 		//Route tmpR = new Route(new FileOperations());
 		//tmpR.showTestRoute(returnFileName, map, Color.RED);
+		
 		if(cmd.returnJSONObj()==null){
 			Toast.makeText(ma, "Network error",
 					Toast.LENGTH_LONG).show();
 		}else{
-		cmd.getStatus();
-		mMessageBar.show("Request route success!", "Select",R.drawable.ic_messagebar_undo);
-		//ma.openOptionsMenu();
+			cmd.getStatus();
+			
+	        Bundle b = new Bundle();
+	        b.putInt("onMsgClick", 1);
+			mMessageBar.show("Request route success!", "Select",R.drawable.ic_messagebar_undo,b);
+			//ma.openOptionsMenu();
 		}
 	}
 }
