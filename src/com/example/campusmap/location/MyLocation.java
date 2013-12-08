@@ -2,19 +2,26 @@ package com.example.campusmap.location;
 
 import java.util.Timer;
 import java.util.TimerTask;
-import com.example.campusmap.MapActivity;
-import com.example.campusmap.direction.Route;
-import com.example.campusmap.file.FileOperations;
-import com.example.campusmap.file_upload.fileUploadTask;
-import com.google.android.gms.maps.GoogleMap;
+
 import android.content.Context;
+import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.widget.Toast;
-import android.location.GpsStatus;
+
+import com.example.campusmap.MapActivity;
+import com.example.campusmap.direction.Route;
+import com.example.campusmap.file.FileOperations;
+import com.example.campusmap.file_upload.fileUploadTask;
+import com.example.campusmap.geometry.EnterWhichBuilding;
+import com.example.campusmap.mapdrawing.BuildingDrawing;
+import com.example.campusmap.mapdrawing.BuildingDrawing.Building;
+import com.example.campusmap.routefilter.Location_Hao;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.model.LatLng;
 
 //This class will be execute in Async task
 public class MyLocation implements Runnable {
@@ -24,7 +31,7 @@ public class MyLocation implements Runnable {
 	private LocationResult locationResult;
 	private boolean gps_enabled = false;
 	private boolean gps_flag = false;
-	private boolean gps_indoor_recording_flag = true;
+	private boolean gps_indoor_recording_flag = false;
 	private boolean network_enabled = false;
 	private boolean timer_cancelled = false;
 	private MapActivity mContext;
@@ -39,20 +46,19 @@ public class MyLocation implements Runnable {
 	private boolean isGPSFix;
 	private Long mLastLocationMillis;
 	private HaoGPSListener myGpsListener;
+	private BuildingDrawing bd;
+	private int counter = 0;
 
 	// abstract class for call back
 	public static abstract class LocationResult {
 		public abstract void gotLocation(Location location);
 	}
 
-	// constructor
-	public MyLocation(){
-		
-	}
-	
-	public MyLocation(MapActivity homeActivity, GoogleMap map) {
+	public MyLocation(MapActivity homeActivity, GoogleMap map,
+			BuildingDrawing bd) {
 		this.mContext = homeActivity;
 		this.map = map;
+		this.bd = bd;
 		fo = new FileOperations();
 		rr = new Route(fo);
 		this.myGpsListener = new HaoGPSListener();
@@ -62,6 +68,7 @@ public class MyLocation implements Runnable {
 	public void beginRoute() {
 		// initialize file and start a thread for recording
 		rr.toggleRecordState();
+		gps_flag = false;
 		fo.fileInitialization("txt");
 		startThread();
 	}
@@ -98,11 +105,13 @@ public class MyLocation implements Runnable {
 
 			// Async task, upload to server
 			// send the proceeded txt to the cloud, also insert in server db
-			uploadTask = new fileUploadTask(fo.getProcessedFileName(),mContext);
+			uploadTask = new fileUploadTask(fo.getProcessedFileName(), mContext);
 			uploadTask.execute();
 
 			// insert route data into device db
 			fo.insertDataIntoDB();
+
+			counter = 0;
 
 			// iterrupt
 			locationTask.cancel(true);
@@ -122,42 +131,74 @@ public class MyLocation implements Runnable {
 			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
 				if (MyLastLocation != null) {
 					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 5000;
-				}else{
-					MyLastLocation = getMyLastLocation();
+				} else {
+					return;
+					// MyLastLocation = getMyLastLocation();
 				}
 
 				if (isGPSFix) { // A fix has been acquired.
-					System.out.println("GPS exists");
+					System.out.println("GPS running and counter:" + counter);
+
+					if (counter >= 8 && gps_indoor_recording_flag == false) {
+						counter = 0;
+						// can keep on recording
+						gps_indoor_recording_flag = true;
+						gps_flag = false;
+					}
+
 				} else { // The fix has been lost.
 					System.out.println("GPS lost");
-					if(!gps_flag){
-						Toast.makeText(mContext, "GPS signal lost", Toast.LENGTH_SHORT)
-						.show();
+
+					counter = 0;
+
+					if (!gps_flag) { // just one time
+						Toast.makeText(mContext, "GPS signal lost",
+								Toast.LENGTH_SHORT).show();
 						gps_flag = true;
-						
-						//set the flag so that no more recording
+
+						// set the flag so that no more recording
 						gps_indoor_recording_flag = false;
-						//judge which building I go, return a building obj
-						
-						
-						//add that center point and add into the route
+
+						// judge which building I go, return a building obj
+						EnterWhichBuilding ewb = new EnterWhichBuilding(
+								mContext, MyLastLocation, bd);
+						Building closestBuilding = ewb
+								.getWhichBuildingEntered();
+						Toast.makeText(
+								mContext,
+								"You entered "
+										+ closestBuilding.getBuildingName(),
+								Toast.LENGTH_LONG).show();
+						LatLng enteredBLL = ewb.getEnteredBuildingLatLng();
+						System.out.println("Entered Building:  " + enteredBLL);
+
+						// add that center point and add into the route
 						if (rr.recordHasStarted()) {
-							//rr.bufferStore(location);
+							long ctime = System.currentTimeMillis();
+							Location_Hao lh = new Location_Hao(
+									enteredBLL.latitude, enteredBLL.longitude,
+									ctime);
+							rr.bufferStore(lh);
 						}
-						
 					}
 				}
 
 				break;
-			case GpsStatus.GPS_EVENT_FIRST_FIX:
+			case GpsStatus.GPS_EVENT_FIRST_FIX: // execute only once
+
 				Toast.makeText(mContext, "GPS first time fixed",
 						Toast.LENGTH_SHORT).show();
-				
+
+				// sure can record
+				gps_indoor_recording_flag = true;
 				gps_flag = false;
-				
-				//if the route has started, set back the flag so that it can keep on recording
-				
+				counter = 0;
+
+				// if the route has started, set back the flag so that it can
+				// keep on recording
+
 				System.out.println("****First Time");
+
 				isGPSFix = true;
 
 				break;
@@ -282,24 +323,24 @@ public class MyLocation implements Runnable {
 		if (!timer_cancelled) {
 			timer_cancelled = true; // no more execute this if
 			timer1.cancel();
-			
+
 		}
 
 		locationResult.gotLocation(location);
-		
-		if (location != null)
-		{
+
+		if (location != null) {
 			mLastLocationMillis = SystemClock.elapsedRealtime();
 			// Do something.
 			MyLastLocation = location;
-		}else{
+			counter++;
+		} else {
 			return;
 		}
 
-
-
-		if (rr.recordHasStarted()&&gps_indoor_recording_flag) {
-			rr.bufferStore(location);
+		if (rr.recordHasStarted() && gps_indoor_recording_flag) {
+			Location_Hao lh = new Location_Hao(location.getLatitude(),
+					location.getLongitude(), location.getTime());
+			rr.bufferStore(lh);
 		}
 	}
 

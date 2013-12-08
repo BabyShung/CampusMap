@@ -20,11 +20,12 @@ public class NearestPoint {
 		pointsForBuildingSet = new ArrayList<LatLng>();
 	}
 
-	public LatLng[] returnClosestThree() {
+	public LatLng[] returnClosestFour() {
 		LatLng closest_1 = getNearestPoint();
 		LatLng closest_2 = getNearestPoint();
 		LatLng closest_3 = getNearestPoint();
-		return new LatLng[]{ closest_1, closest_2, closest_3  };
+		LatLng closest_4 = getNearestPoint();
+		return new LatLng[]{ closest_1, closest_2, closest_3, closest_4  };
 	}
 	
 	public LatLng[] returnClosestTwoPoints(LatLng[] points) {
