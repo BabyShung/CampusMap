@@ -16,17 +16,14 @@ public class fileUploadTask extends AsyncTask<Void, Integer, String> {
 		this.dbr = dbr;
 		this.mContext = mContext;
 	}
-	
-	protected void onPreExecute(String b) {}
-
+ 
 	@Override
 	protected String doInBackground(Void... arg0) {
 		fu = new fileUpload(dbr);
 		fu.upload();
 		return null;
 	}
-
-	protected void onProgressUpdated(Integer... progress) {}
+ 
 	@Override
 	protected void onPostExecute(String r) {
 		super.onPostExecute(r);

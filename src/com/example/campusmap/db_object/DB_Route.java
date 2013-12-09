@@ -25,7 +25,7 @@ public class DB_Route {
 	public DB_Route(double Starting_lat, double Starting_lng,
 			double Ending_lat, double Ending_lng, double Distance, long TakeTime) {
 		this.Starting_lat = Starting_lat;
-		this.Starting_lng = Starting_lat;
+		this.Starting_lng = Starting_lng;
 		this.Ending_lat = Ending_lat;
 		this.Ending_lng = Ending_lng;
 		this.Distance = Distance;

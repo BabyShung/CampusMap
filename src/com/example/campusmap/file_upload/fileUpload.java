@@ -32,8 +32,8 @@ public class fileUpload {
 
 		uploadFileName = dbr.getFileName();
 
-		uploadFilePath = checkDownloadFolderExist();
-
+		uploadFilePath = checkDownloadFolderExist(); 
+		
 		ServerUri = "http://1.campusgps.sinaapp.com/post.php";
 
 	}
@@ -56,8 +56,7 @@ public class fileUpload {
 
 	public int uploadFile(String sourceFileUri) {
 
-		String fileName = sourceFileUri;
-
+		String fileName = sourceFileUri; 
 		HttpURLConnection conn = null;
 		DataOutputStream dos = null;
 		String lineEnd = "\r\n";
@@ -91,16 +90,19 @@ public class fileUpload {
 						"multipart/form-data;boundary=" + boundary);
 
 				String combinedString =  dbr.getStarting_lat() 
-						+ "_" + dbr.getStarting_lng()
-						+ "_" + dbr.getEnding_lat()
-						+ "_" + dbr.getEnding_lng()
-						+ "_" + dbr.getDistance()
-						+ "_" + dbr.getTakeTime()
-						+ "_" + dbr.getFileName();
+						+ "@" + dbr.getStarting_lng()
+						+ "@" + dbr.getEnding_lat()
+						+ "@" + dbr.getEnding_lng()
+						+ "@" + dbr.getDistance()
+						+ "@" + dbr.getTakeTime()
+						+ "@" + dbr.getFileName();
 
+
+				
+				
 				// $_POST["uploaded_file"] = filename (including path)
 				// upl is corresponded to the input name, php server as well
-				conn.setRequestProperty("upl", combinedString);
+				conn.setRequestProperty("upl", fileName);
 
 				dos = new DataOutputStream(conn.getOutputStream());
 				dos.writeBytes(twoHyphens + boundary + lineEnd);

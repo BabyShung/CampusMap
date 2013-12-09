@@ -70,6 +70,19 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		this.myGpsListener = new HaoGPSListener();
+		
+		
+		
+		//testing
+//		
+//		DB_Route dbr = new DB_Route(41.659926,-91.537904, 41.659946,-91.536904,100,120);
+//		dbr.setFileName("MyRoute1_a.txt");
+//
+//		uploadTask = new fileUploadTask(dbr, mContext);
+//		uploadTask.execute();
+//		
+		
+		
 	}
 
 	// ---------------------------begin route, stop route-----------------------
@@ -233,6 +246,12 @@ public class MyLocation implements Runnable {
 							Location_Hao lh = new Location_Hao(
 									enteredBLL.latitude, enteredBLL.longitude,
 									ctime);
+							
+							//can I fix that?
+							rr.bufferStore(lh);
+							rr.bufferStore(lh);
+							rr.bufferStore(lh);
+							rr.bufferStore(lh);
 							rr.bufferStore(lh);
 						}
 					}
