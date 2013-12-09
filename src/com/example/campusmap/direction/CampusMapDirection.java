@@ -63,7 +63,7 @@ public class CampusMapDirection {
 		    while ((line = reader.readLine()) != null)
 		    {
 		        sb.append(line + "\n");
-		        System.out.println("***************-----*******  "+line);
+		        System.out.println("***"+line);
 		    }
 		    result = sb.toString();
 		    jObject = new JSONObject(result);
@@ -90,6 +90,26 @@ public class CampusMapDirection {
 		}
 		System.out.println("status-----> "+ status);
 		return status;
+	}
+	
+	public int test(){
+		int r1, r2 ,r3, r4, r5;
+		r1= r2 =r3= r4= r5 = -1;
+		try {
+			r1 = jObject.getInt("r1_d");
+			r2 = jObject.getInt("r2_d");
+			r3 = jObject.getInt("r3_d");
+			r4 = jObject.getInt("r4_d");
+			r5 = jObject.getInt("r5_d");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
+		System.out.println("testing-----> "+ r1);
+		System.out.println("testing-----> "+ r2);
+		System.out.println("testing-----> "+ r3);
+		System.out.println("testing-----> "+ r4);
+		System.out.println("testing-----> "+ r5);
+		return r1;
 	}
 
 }

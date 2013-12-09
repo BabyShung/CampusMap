@@ -34,6 +34,8 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 	protected String doInBackground(String... arg0) {
 
 		cmd = new CampusMapDirection();
+		
+		//send request to server
 		cmd.initializeJSONOject(fromPosition, toPosition);
 
 		
@@ -54,7 +56,7 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 					Toast.LENGTH_LONG).show();
 		}else{
 			cmd.getStatus();
-			
+			cmd.test();
 	        Bundle b = new Bundle();
 	        b.putInt("onMsgClick", 1);
 			mMessageBar.show("Request route success!", "Select",R.drawable.ic_messagebar_undo,b);

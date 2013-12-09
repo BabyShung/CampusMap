@@ -9,13 +9,14 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.concurrent.TimeUnit;
 
+import android.os.Environment;
+
 import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.db_object.DB_Route;
+import com.example.campusmap.geometry.GoogleLatLngDistance;
 import com.example.campusmap.routefilter.KalmanLatLong;
 import com.example.campusmap.routefilter.Location_Hao;
 import com.google.android.gms.maps.model.LatLng;
-
-import android.os.Environment;
 
 public class FileOperations {
 
@@ -244,18 +245,22 @@ public class FileOperations {
 				long last_time = Long.parseLong(tmpLast[2]);
 				long delta = last_time - first_time;
 
+				//time,unit: second
 				long takeTime = TimeUnit.MILLISECONDS.toSeconds(delta);
+				
 				// calculate distance
-
 				Location_Hao current1;
 				Location_Hao current2;
 				double distance = 0;
-
+				
+				//distance between two LatLng points
+				GoogleLatLngDistance glld = new GoogleLatLngDistance();
+				
 				for (int i = 0; i < tmp.length - 1; i++) {
 					current1 = new Location_Hao(tmp[i]);
 					current2 = new Location_Hao(tmp[i + 1]);
 
-					distance += current1.euclideanDistance(current1, current2);
+					distance += glld.GetDistance(current1.getX(), current1.getY(), current2.getX(), current2.getY());
 				}
 				// else not append and move onto next line
 				line = bufferReader.readLine();
