@@ -68,13 +68,22 @@ public class SettingActivity extends Activity implements OnClickListener {
 			break;
 		case R.id.setting_button2:
 			alertDialog.setTitle("Delete All My Route History");
+			clearAllRouteHistory();
 			break;
 		case R.id.setting_button3:
 			alertDialog.setTitle("Switch Map Type");
 			break;
 		}
 	}
-
+	
+	
+	private void clearAllRouteHistory()
+	{
+		datasource = new DB_Operations(this);
+		datasource.open();
+		datasource.deleteAllRoute();
+		datasource.close(); 
+	}
 	private void clearSearchHistory()
 	{
 		datasource = new DB_Operations(this);

@@ -302,6 +302,15 @@ public class DB_Operations implements TableDefinition {
 		database.delete(table, ROUTE_ID + "=" + id, null);
 		System.out.println("deleted..");
 	}
+	
+	public void deleteAllRoute() {
+		String table;
+		
+		table = ROUTE_TABLE;
+		
+		database.delete(table, null, null);
+		System.out.println("deleted all routes..");
+	}
 
 	/**
 	 * other methods
