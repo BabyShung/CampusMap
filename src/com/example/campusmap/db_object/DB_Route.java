@@ -9,33 +9,34 @@ public class DB_Route {
 	private double Ending_lng;
 	private double Distance;
 	private long TakeTime;
+	private String Destination;
 	private String CreateTime;
 
 	public DB_Route() {
 	}
 
 	// take from db
-	public DB_Route(int Rid, String fileName, String CreateTime) {
-		this.Rid = Rid;
-		this.fileName = fileName;
-		this.CreateTime = CreateTime;
-	}
+//	public DB_Route(int Rid, String fileName, String CreateTime) {
+//		this.Rid = Rid;
+//		this.fileName = fileName;
+//		this.CreateTime = CreateTime;
+//	}
 
 	// prepare to store in db
 	public DB_Route(double Starting_lat, double Starting_lng,
-			double Ending_lat, double Ending_lng, double Distance, long TakeTime) {
+			double Ending_lat, double Ending_lng, double Distance, long TakeTime ) {
 		this.Starting_lat = Starting_lat;
 		this.Starting_lng = Starting_lng;
 		this.Ending_lat = Ending_lat;
 		this.Ending_lng = Ending_lng;
 		this.Distance = Distance;
 		this.TakeTime = TakeTime;
-		
+
 	}
 	
 	// read from db, route act
 	public DB_Route(int Rid,String fileName, double Starting_lat, double Starting_lng,
-			double Ending_lat, double Ending_lng, double Distance, long TakeTime,String CreateTime) {
+			double Ending_lat, double Ending_lng, double Distance, long TakeTime,String Destination,String CreateTime) {
 		this.Rid = Rid;
 		this.fileName = fileName;
 		this.Starting_lat = Starting_lat;
@@ -44,6 +45,7 @@ public class DB_Route {
 		this.Ending_lng = Ending_lng;
 		this.Distance = Distance;
 		this.TakeTime = TakeTime;
+		this.Destination = Destination;
 		this.CreateTime = CreateTime;
 	}
 
@@ -53,6 +55,10 @@ public class DB_Route {
 
 	public void setFileName(String fn) {
 		this.fileName = fn;
+	}
+	
+	public void setDestination(String des) {
+		this.Destination = des;
 	}
 
 	/**
@@ -87,6 +93,10 @@ public class DB_Route {
 		return this.TakeTime;
 	}
 
+	public String getDestination() {
+		return this.Destination;
+	}
+	
 	public String getCreateTime() {
 		return this.CreateTime;
 	}

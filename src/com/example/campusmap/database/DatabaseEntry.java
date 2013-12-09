@@ -51,7 +51,8 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 				+ ROUTE_FILENAME + " VARCHAR, " + STARTING_LAT + " DOUBLE, "
 				+ STARTING_LNG + " DOUBLE, " + ENDING_LAT + " DOUBLE, "
 				+ ENDING_LNG + " DOUBLE, " + DISTANCE + " DOUBLE, " + TAKETIME
-				+ " INTEGER, "  + CREATE_TIME
+				+ " INTEGER, " + DESTINATION
+				+ " VARCHAR, "  + CREATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), "
 				+ UPDATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))"
@@ -65,7 +66,8 @@ public class DatabaseEntry extends SQLiteOpenHelper implements TableDefinition {
 				+ ROUTE_FILENAME + " VARCHAR, " + STARTING_LAT + " DOUBLE, "
 				+ STARTING_LNG + " DOUBLE, " + ENDING_LAT + " DOUBLE, "
 				+ ENDING_LNG + " DOUBLE, " + DISTANCE + " DOUBLE, " + TAKETIME
-				+ " INTEGER, "  + CREATE_TIME
+				+ " INTEGER, " + DESTINATION
+				+ " VARCHAR, "  + CREATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime')), "
 				+ UPDATE_TIME
 				+ " TimeStamp NOT NULL DEFAULT (datetime('now','localtime'))"

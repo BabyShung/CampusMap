@@ -95,6 +95,7 @@ public class fileUpload {
 						+ "@" + dbr.getEnding_lng()
 						+ "@" + dbr.getDistance()
 						+ "@" + dbr.getTakeTime()
+						+ "@" + dbr.getDestination()
 						+ "@" + dbr.getFileName();
 
 

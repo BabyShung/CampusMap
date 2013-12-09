@@ -26,7 +26,7 @@ public interface TableDefinition extends BaseColumns{
 	public static final String ENDING_LNG = "Ending_lng";
 	public static final String DISTANCE = "Distance";
 	public static final String TAKETIME = "TakeTime";
-
+	public static final String DESTINATION = "Destination";
 	
 	public static final String CREATE_TIME = "CreateTime";
 	public static final String UPDATE_TIME = "UpdateTime";

@@ -70,6 +70,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private RouteRequestTask campusRouteTask;
 	private MessageBar mMessageBar;
 	private LocationManager lm;
+	private String destination;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -205,11 +206,11 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				}
 			}
 
-			String bn = intent.getStringExtra("BuildingName");
+			String destination = intent.getStringExtra("BuildingName");
 			// search the building lat & lng by bn
 			DB_Operations op = new DB_Operations();
 			op.open();
-			LatLng to = op.getLatLngFromDB(bn);
+			LatLng to = op.getLatLngFromDB(destination);
 			op.close();
 			// start an ansync task
 			if (myLastLocation != null) {
@@ -288,7 +289,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	@Override
 	public void onInfoWindowClick(Marker marker) {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		alertDialog.setTitle(marker.getTitle());
+		
+		destination = marker.getTitle();
+		
+		alertDialog.setTitle(destination);
 		alertDialog.setMessage(marker.getSnippet());
 
 		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Get route",
@@ -299,6 +303,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						LatLng from = new LatLng(myLastLocation.getLatitude(),
 								myLastLocation.getLongitude());
 
+						
+						//from from ?? check later
 						campusRouteTask = new RouteRequestTask(
 								MapActivity.this, map, from, from, mMessageBar);
 						campusRouteTask.execute();
@@ -330,7 +336,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						// GPS_Network_Initialization();
 						//
 						// Async task, begin the route
-						locationTask = new MyLocationTask(ml);
+						locationTask = new MyLocationTask(ml,destination);
 						locationTask.execute();
 
 					}

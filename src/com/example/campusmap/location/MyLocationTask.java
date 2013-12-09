@@ -7,8 +7,10 @@ public class MyLocationTask extends AsyncTask<Void, Integer, String> {
 
 	private MyLocation ml;
 
-	public MyLocationTask(MyLocation ml) {
+	
+	public MyLocationTask(MyLocation ml,String destination) {
 		this.ml = ml;
+		this.ml.setDestination(destination);
 	}
 
 	protected void onPreExecute(String b) {

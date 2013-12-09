@@ -104,9 +104,10 @@ public class DB_Operations implements TableDefinition {
 			table = ROUTE_HISTORY_TABLE;
 		}
 		String[] FROM = { ROUTE_ID, ROUTE_FILENAME, STARTING_LAT, STARTING_LNG,
-				ENDING_LAT, ENDING_LNG, DISTANCE, TAKETIME, CREATE_TIME };
+				ENDING_LAT, ENDING_LNG, DISTANCE, TAKETIME,DESTINATION, CREATE_TIME };
+		String ORDER_BY = CREATE_TIME + " DESC";
 		Cursor cursor = database.query(table, FROM, null, null, null, null,
-				null);
+				ORDER_BY);
 		return cursor;
 
 	}
@@ -175,6 +176,7 @@ public class DB_Operations implements TableDefinition {
 		int iRelng = c.getColumnIndex(ENDING_LNG);
 		int iRd = c.getColumnIndex(DISTANCE);
 		int iRtt = c.getColumnIndex(TAKETIME);
+		int iRdes = c.getColumnIndex(DESTINATION);
 		int iRCT = c.getColumnIndex(CREATE_TIME);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
 			//convert int to long
@@ -184,7 +186,7 @@ public class DB_Operations implements TableDefinition {
 			result.add(new DB_Route(c.getInt(iRid), c.getString(iRfn),
 					c.getDouble(iRslat),c.getDouble(iRslng),
 					c.getDouble(iRelat),c.getDouble(iRelng),
-					c.getDouble(iRd),taketime,
+					c.getDouble(iRd),taketime,c.getString(iRdes),
 					c.getString(iRCT)));
 		}
 		return result;
@@ -252,6 +254,7 @@ public class DB_Operations implements TableDefinition {
 		cv.put(ENDING_LNG, drb.getEnding_lng());
 		cv.put(DISTANCE, drb.getDistance());
 		cv.put(TAKETIME, take_time_converted);
+		cv.put(DESTINATION, drb.getDestination());
 		String table;
 		if (connected) {
 			table = ROUTE_TABLE;

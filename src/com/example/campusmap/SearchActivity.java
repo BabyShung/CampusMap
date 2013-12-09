@@ -35,15 +35,16 @@ public class SearchActivity extends Activity {
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		System.out.println("*******");
+
 		setContentView(R.layout.activity_search);
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		buildingList = new ArrayList<String>();
-		System.out.println("*******2222");
+		
+
 		initData();
-		System.out.println("******4444*");
+		
 		populateATV();
-		System.out.println("******3333*");
+
 	}
 
 	private void initData() {
@@ -71,7 +72,7 @@ public class SearchActivity extends Activity {
 		LV.setAdapter(adapter);
 		LV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> ATV, View view,
+			public void onItemClick(AdapterView<?> lv, View view,
 					int position, long id) {
 				popDialog(value.get(position).getBuildingName());
 

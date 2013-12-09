@@ -401,22 +401,7 @@ public class FileOperations {
 		}
 	}
 
-	/**
-	 * insert all the route info into device DB
-	 */
-	public void insertDataIntoDB(DB_Route dbr) {
-
-		// dbr.taketime is long! how to solve?
-
-		/**
-		 * 1.fn 2.Startlat, Startlng 3.EndLat,EndLng 4.distance 5.route_time
-		 */
  
-		DB_Operations op = new DB_Operations();
-		op.open();
-		op.insertARoute(dbr, true);// need to add more attributes
-		op.close();
-	}
 
 	public void checkDownloadFolderExist() {
 		// set path, we are going to save the txt file into download folder

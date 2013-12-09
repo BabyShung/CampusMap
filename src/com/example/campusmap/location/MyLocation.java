@@ -13,6 +13,7 @@ import android.os.SystemClock;
 import android.widget.Toast;
 
 import com.example.campusmap.MapActivity;
+import com.example.campusmap.database.DB_Operations;
 import com.example.campusmap.db_object.DB_Route;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.file.FileOperations;
@@ -53,7 +54,11 @@ public class MyLocation implements Runnable {
 	private HaoGPSListener myGpsListener;
 	private BuildingDrawing bd;
 	private int counter = 0;
+	private String destination;
 
+	public void setDestination(String des) {
+		this.destination = des;
+	}
 	// abstract class for call back
 	public static abstract class LocationResult {
 		public abstract void gotLocation(Location location);
@@ -75,14 +80,21 @@ public class MyLocation implements Runnable {
 		rr = new Route(fo);
 		this.myGpsListener = new HaoGPSListener();
 
-		// testing
+		/**
+		 * testing
+		 */
 		//
 		// DB_Route dbr = new DB_Route(41.659926,-91.537904,
 		// 41.659946,-91.536904,100,120);
 		// dbr.setFileName("MyRoute1_a.txt");
-		//
-		// uploadTask = new fileUploadTask(dbr, mContext);
-		// uploadTask.execute();
+		// dbr.setDestination("main lib");
+//		 uploadTask = new fileUploadTask(dbr, mContext);
+//		 uploadTask.execute();
+//			DB_Operations op = new DB_Operations();
+//			op.open();
+//			op.insertARoute(dbr, true);// need to add more attributes
+//			op.close();
+		 
 		//
 
 	}
@@ -148,6 +160,8 @@ public class MyLocation implements Runnable {
 			} else {
 
 				returnRoute.setFileName(fo.getProcessedFileName());
+			
+				returnRoute.setDestination(destination);
 
 				/**
 				 * Async task, upload txt file to server also insert in server
@@ -156,10 +170,15 @@ public class MyLocation implements Runnable {
 				uploadTask = new fileUploadTask(returnRoute, mContext);
 				uploadTask.execute();
 
+		
 				/**
-				 * insert route data into device db
+				 * 1.fn 2.Startlat, Startlng 3.EndLat,EndLng 4.distance 5.route_time
 				 */
-				fo.insertDataIntoDB(returnRoute);
+		 
+				DB_Operations op = new DB_Operations();
+				op.open();
+				op.insertARoute(returnRoute, true);// need to add more attributes
+				op.close();
 			}
 
 			// counter for gps signal

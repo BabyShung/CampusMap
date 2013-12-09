@@ -38,7 +38,7 @@ public class RouteActivity extends Activity {
 		LV.setAdapter(adapter);
 		LV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> ATV, View view,
+			public void onItemClick(AdapterView<?> lv, View view,
 					int position, long id) {
 				//....click item event
 
@@ -63,11 +63,11 @@ public class RouteActivity extends Activity {
 
 			// Find route to work with
 			DB_Route currentRoute = routeList.get(position);
-
+			System.out.println("88888888   "+currentRoute.getFileName());
 			// Fill the route name
 			TextView nameText = (TextView) itemView
 					.findViewById(R.id.route_item_name);
-			nameText.setText(currentRoute.getRid());
+			nameText.setText(currentRoute.getFileName());
 			
 			return itemView;
 
