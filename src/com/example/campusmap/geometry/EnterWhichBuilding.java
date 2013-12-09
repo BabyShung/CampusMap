@@ -25,12 +25,18 @@ public class EnterWhichBuilding {
 		this.bd = bd;
 	}
 
+	/**
+	 * determine which building we entered
+	 * @author haozheng
+	 */
 	public Building getWhichBuildingEntered() {
 
 		DB_Operations op = new DB_Operations(mContext);
 		op.open();
+		
 		ArrayList<LatLng> al = op.getCenterPointsFromBuildings();
 
+		//origin
 		LatLng origin = new LatLng(MyLastLocation.getLatitude(),
 				MyLastLocation.getLongitude());
 
@@ -97,6 +103,8 @@ public class EnterWhichBuilding {
 		}
 
 		System.out.println("######min HaoDistance     " + minHaoDistance);
+		
+		
 		String bn1 = op.getBuildingNameFromLatLng(returnFour[0]);
 		System.out.println(bn1 + " " + first_bid);
 		String bn2 = op.getBuildingNameFromLatLng(returnFour[1]);

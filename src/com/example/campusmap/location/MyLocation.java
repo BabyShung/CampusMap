@@ -18,6 +18,7 @@ import com.example.campusmap.direction.Route;
 import com.example.campusmap.file.FileOperations;
 import com.example.campusmap.file_upload.fileUploadTask;
 import com.example.campusmap.geometry.EnterWhichBuilding;
+import com.example.campusmap.geometry.GoogleLatLngDistance;
 import com.example.campusmap.mapdrawing.BuildingDrawing;
 import com.example.campusmap.mapdrawing.BuildingDrawing.Building;
 import com.example.campusmap.routefilter.Location_Hao;
@@ -27,6 +28,9 @@ import com.google.android.gms.maps.model.LatLng;
 //This class will be execute in Async task
 public class MyLocation implements Runnable {
 
+	private final static int GPS_LOST_TIME = 3000; 
+	private final static int GPS_LOST_COUNTER = 10; 
+	
 	private Timer timer1;
 	private LocationManager lm;
 	private LocationResult locationResult;
@@ -70,19 +74,17 @@ public class MyLocation implements Runnable {
 		fo = new FileOperations();
 		rr = new Route(fo);
 		this.myGpsListener = new HaoGPSListener();
-		
-		
-		
-		//testing
-//		
-//		DB_Route dbr = new DB_Route(41.659926,-91.537904, 41.659946,-91.536904,100,120);
-//		dbr.setFileName("MyRoute1_a.txt");
-//
-//		uploadTask = new fileUploadTask(dbr, mContext);
-//		uploadTask.execute();
-//		
-		
-		
+
+		// testing
+		//
+		// DB_Route dbr = new DB_Route(41.659926,-91.537904,
+		// 41.659946,-91.536904,100,120);
+		// dbr.setFileName("MyRoute1_a.txt");
+		//
+		// uploadTask = new fileUploadTask(dbr, mContext);
+		// uploadTask.execute();
+		//
+
 	}
 
 	// ---------------------------begin route, stop route-----------------------
@@ -137,32 +139,29 @@ public class MyLocation implements Runnable {
 			for (int i = 0; i < 30; i++)
 				fo.processRecord_kalman_filter("a");
 
-			//3. calculate all other route info
-			DB_Route returnRoute = fo.calculate_distance_time_andGet_StartEndLatLng();
-			
-			
-			
-			if(returnRoute == null){	//invalid route,too short
-				
-			}else{
-			
+			// 3. calculate all other route info
+			DB_Route returnRoute = fo
+					.calculate_distance_time_andGet_StartEndLatLng();
+
+			if (returnRoute == null) { // invalid route,too short
+
+			} else {
+
 				returnRoute.setFileName(fo.getProcessedFileName());
-				
+
 				/**
-				 * Async task, upload txt file to server
-				 * also insert in server db
+				 * Async task, upload txt file to server also insert in server
+				 * db
 				 */
 				uploadTask = new fileUploadTask(returnRoute, mContext);
 				uploadTask.execute();
-	
-				
-				
+
 				/**
 				 * insert route data into device db
 				 */
 				fo.insertDataIntoDB(returnRoute);
 			}
-			
+
 			// counter for gps signal
 			counter = 0;
 
@@ -186,7 +185,7 @@ public class MyLocation implements Runnable {
 			switch (event) {
 			case GpsStatus.GPS_EVENT_SATELLITE_STATUS:
 				if (MyLastLocation != null) {
-					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < 5000;
+					isGPSFix = (SystemClock.elapsedRealtime() - mLastLocationMillis) < GPS_LOST_TIME;
 				} else {
 					return;
 					// MyLastLocation = getMyLastLocation();
@@ -195,33 +194,34 @@ public class MyLocation implements Runnable {
 				if (isGPSFix) { // A fix has been acquired.
 					System.out.println("GPS running and counter:" + counter);
 
-					//counter>=8, meaning signal comes back
-					if (counter >= 8) {
-						
-						//reset counter
+					// counter>=10, meaning signal comes back
+					if (counter >= GPS_LOST_COUNTER) {
+
+						// reset counter
 						counter = 0;
-						
-						//reset so that if signal lost again,can check which building we entered
+
+						// reset so that if signal lost again,can check which
+						// building we entered
 						gps_lost_flag = false;
-						
+
 						// check can keep on recording
-						if(gps_indoor_recording_flag == false){
-						
+						if (gps_indoor_recording_flag == false) {
+
 							gps_indoor_recording_flag = true;
 						}
-						
+
 					}
 
-				} else { // lost signal for consecutive 5 seconds
+				} else { // lost signal for consecutive 4 seconds
 					System.out.println("GPS lost");
 
 					counter = 0;
 
 					if (!gps_lost_flag) { // just one time
-						
+
 						Toast.makeText(mContext, "GPS signal lost",
 								Toast.LENGTH_SHORT).show();
-						
+
 						gps_lost_flag = true;
 
 						// set the flag so that no more recording
@@ -232,27 +232,43 @@ public class MyLocation implements Runnable {
 								mContext, MyLastLocation, bd);
 						Building closestBuilding = ewb
 								.getWhichBuildingEntered();
-						Toast.makeText(
-								mContext,
-								"You entered "
-										+ closestBuilding.getBuildingName(),
-								Toast.LENGTH_LONG).show();
+						// get the building LatLng
 						LatLng enteredBLL = ewb.getEnteredBuildingLatLng();
-						System.out.println("Entered Building:  " + enteredBLL);
+						GoogleLatLngDistance glld = new GoogleLatLngDistance();
+						double estimateDistance = glld.GetDistance(
+								enteredBLL.latitude, enteredBLL.longitude,
+								MyLastLocation.getLatitude(),
+								MyLastLocation.getLongitude());
+						if (estimateDistance <= 150) {
+							Toast.makeText(
+									mContext,
+									"You entered "
+											+ closestBuilding.getBuildingName(),
+									Toast.LENGTH_LONG).show();
 
-						// add that center point and add into the route
-						if (rr.recordHasStarted()) {
-							long ctime = System.currentTimeMillis();
-							Location_Hao lh = new Location_Hao(
-									enteredBLL.latitude, enteredBLL.longitude,
-									ctime);
-							
-							//can I fix that?
-							rr.bufferStore(lh);
-							rr.bufferStore(lh);
-							rr.bufferStore(lh);
-							rr.bufferStore(lh);
-							rr.bufferStore(lh);
+							System.out.println("Entered Building:  "
+									+ enteredBLL);
+
+							// add that center point and add into the route
+							if (rr.recordHasStarted()) {
+								long ctime = System.currentTimeMillis();
+								Location_Hao lh = new Location_Hao(
+										enteredBLL.latitude,
+										enteredBLL.longitude, ctime);
+
+								// can I fix that?
+								rr.bufferStore(lh);
+								rr.bufferStore(lh);
+								rr.bufferStore(lh);
+								rr.bufferStore(lh);
+								rr.bufferStore(lh);
+							}
+						}else{
+							Toast.makeText(
+									mContext,
+									"Your nearest building is "
+											+ closestBuilding.getBuildingName(),
+									Toast.LENGTH_LONG).show();
 						}
 					}
 				}
@@ -291,29 +307,29 @@ public class MyLocation implements Runnable {
 	 * @param location
 	 */
 	private void checkTimerAndRoute(Location location) {
-		
+
 		if (!timer_cancelled) {
 			timer_cancelled = true; // no more execute this if
 			timer1.cancel();
 
 		}
 
-		//update my location to map_activity
+		// update my location to map_activity
 		locationResult.gotLocation(location);
 
 		if (location != null) {
 			mLastLocationMillis = SystemClock.elapsedRealtime();
-			
-			//update my location to this class
+
+			// update my location to this class
 			MyLastLocation = location;
-			
-			//increment my signal counter
+
+			// increment my signal counter
 			counter++;
 		} else {
 			return;
 		}
 
-		//if a record has been started
+		// if a record has been started
 		if (rr.recordHasStarted() && gps_indoor_recording_flag) {
 			Location_Hao lh = new Location_Hao(location.getLatitude(),
 					location.getLongitude(), location.getTime());
@@ -490,8 +506,8 @@ public class MyLocation implements Runnable {
 			}
 		}
 	}
-	
-	public void removeLMUpdate(){
+
+	public void removeLMUpdate() {
 		lm.removeUpdates(locationListenerGps);
 		lm.removeUpdates(locationListenerNetwork);
 		lm.removeGpsStatusListener(myGpsListener);

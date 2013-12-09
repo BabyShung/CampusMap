@@ -103,7 +103,8 @@ public class DB_Operations implements TableDefinition {
 		} else {
 			table = ROUTE_HISTORY_TABLE;
 		}
-		String[] FROM = { ROUTE_ID, ROUTE_FILENAME, CREATE_TIME };
+		String[] FROM = { ROUTE_ID, ROUTE_FILENAME, STARTING_LAT, STARTING_LNG,
+				ENDING_LAT, ENDING_LNG, DISTANCE, TAKETIME, CREATE_TIME };
 		Cursor cursor = database.query(table, FROM, null, null, null, null,
 				null);
 		return cursor;
@@ -157,19 +158,34 @@ public class DB_Operations implements TableDefinition {
 		return centerPoints;
 	}
 
-	// get route info : Route_id, create_time
-	// Aish, you might add more columns here
+	/**
+	 *  get route info 
+	 * @param normal
+	 * @return
+	 */
 	public ArrayList<DB_Route> getRouteInfo(boolean normal) {
 		Cursor c = this.readRouteData(normal);
 		ArrayList<DB_Route> result = new ArrayList<DB_Route>();
 
 		int iRid = c.getColumnIndex(ROUTE_ID);
 		int iRfn = c.getColumnIndex(ROUTE_FILENAME);
+		int iRslat = c.getColumnIndex(STARTING_LAT);
+		int iRslng = c.getColumnIndex(STARTING_LNG);
+		int iRelat = c.getColumnIndex(ENDING_LAT);
+		int iRelng = c.getColumnIndex(ENDING_LNG);
+		int iRd = c.getColumnIndex(DISTANCE);
+		int iRtt = c.getColumnIndex(TAKETIME);
 		int iRCT = c.getColumnIndex(CREATE_TIME);
 		for (c.moveToFirst(); !c.isAfterLast(); c.moveToNext()) {
-
-			result.add(new DB_Route(c.getInt(iRid), c.getString(iRfn), c
-					.getString(iRCT)));
+			//convert int to long
+			int tt = c.getInt(iRtt);
+			long taketime = Long.parseLong(String.valueOf(tt));
+			
+			result.add(new DB_Route(c.getInt(iRid), c.getString(iRfn),
+					c.getDouble(iRslat),c.getDouble(iRslng),
+					c.getDouble(iRelat),c.getDouble(iRelng),
+					c.getDouble(iRd),taketime,
+					c.getString(iRCT)));
 		}
 		return result;
 	}
@@ -302,12 +318,12 @@ public class DB_Operations implements TableDefinition {
 		database.delete(table, ROUTE_ID + "=" + id, null);
 		System.out.println("deleted..");
 	}
-	
+
 	public void deleteAllRoute() {
 		String table;
-		
+
 		table = ROUTE_TABLE;
-		
+
 		database.delete(table, null, null);
 		System.out.println("deleted all routes..");
 	}
@@ -341,8 +357,7 @@ public class DB_Operations implements TableDefinition {
 		ArrayList<DB_Route> al = this.getRouteInfo(false);
 		if (al.size() > 0) {
 			for (DB_Route tmp : al) {
-				uploadTask = new fileUploadTask(tmp,
-						passed_context);
+				uploadTask = new fileUploadTask(tmp, passed_context);
 				uploadTask.execute();
 				// and then delete the row in RouteHistory
 				deleteARoute(tmp.getRid(), false);

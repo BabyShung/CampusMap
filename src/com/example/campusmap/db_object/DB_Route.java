@@ -30,6 +30,21 @@ public class DB_Route {
 		this.Ending_lng = Ending_lng;
 		this.Distance = Distance;
 		this.TakeTime = TakeTime;
+		
+	}
+	
+	// read from db, route act
+	public DB_Route(int Rid,String fileName, double Starting_lat, double Starting_lng,
+			double Ending_lat, double Ending_lng, double Distance, long TakeTime,String CreateTime) {
+		this.Rid = Rid;
+		this.fileName = fileName;
+		this.Starting_lat = Starting_lat;
+		this.Starting_lng = Starting_lng;
+		this.Ending_lat = Ending_lat;
+		this.Ending_lng = Ending_lng;
+		this.Distance = Distance;
+		this.TakeTime = TakeTime;
+		this.CreateTime = CreateTime;
 	}
 
 	public int getRid() {
@@ -72,6 +87,9 @@ public class DB_Route {
 		return this.TakeTime;
 	}
 
+	public String getCreateTime() {
+		return this.CreateTime;
+	}
 	@Override
 	public String toString() {
 		return "Route_" + Rid + ":   " + CreateTime;

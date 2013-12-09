@@ -81,6 +81,21 @@ public class RouteActivity extends Activity {
 		datasource = new DB_Operations(this);
 		datasource.open();
 		routeList = datasource.getRouteInfo(true);
+		
+		for(DB_Route tmp : routeList){
+			System.out.println(tmp.getRid());
+			System.out.println(tmp.getFileName());
+			System.out.println(tmp.getStarting_lat());
+			System.out.println(tmp.getStarting_lng());
+			System.out.println(tmp.getEnding_lat());
+			System.out.println(tmp.getEnding_lng());
+			System.out.println(tmp.getTakeTime());
+			System.out.println(tmp.getDistance());
+			System.out.println(tmp.getCreateTime());
+			System.out.println("^*****************^");
+		}
+		
+		
 		//setListAdapter(new ArrayAdapter<String>(RoutesActivity.this,
 		//		android.R.layout.simple_list_item_1, datasource.getRouteInfo()));
 		datasource.close();	

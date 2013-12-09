@@ -87,20 +87,22 @@ public class MainActivity extends Activity {
 		searchIntent = new Intent(this, SearchActivity.class);
 		searchSpec.setContent(searchIntent);
 
-		TabSpec settingSpec = mTabHost.newTabSpec("setting");
-		settingSpec.setIndicator("SETTING", null);
+		TabSpec routeSpec = mTabHost.newTabSpec("routes");
+		routeSpec.setIndicator("ROUTES", null);
+		routeIntent = new Intent(this, RouteActivity.class);
+		routeSpec.setContent(routeIntent);
+		
+		TabSpec settingSpec = mTabHost.newTabSpec("settings");
+		settingSpec.setIndicator("SETTINGS", null);
 		settingIntent = new Intent(this, SettingActivity.class);
 		settingSpec.setContent(settingIntent);
 
-		TabSpec routeSpec = mTabHost.newTabSpec("route");
-		routeSpec.setIndicator("ROUTE", null);
-		routeIntent = new Intent(this, RouteActivity.class);
-		routeSpec.setContent(routeIntent);
+
 
 		mTabHost.addTab(homeSpec);
 		mTabHost.addTab(searchSpec);
-		mTabHost.addTab(settingSpec);
 		mTabHost.addTab(routeSpec);
+		mTabHost.addTab(settingSpec);
 
 		setuplocalbroadcast();
 
