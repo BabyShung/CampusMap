@@ -63,7 +63,7 @@ public class CampusMapDirection {
 		    while ((line = reader.readLine()) != null)
 		    {
 		        sb.append(line + "\n");
-		        System.out.println("***"+line);
+		        System.out.println("Return JSON: "+line);
 		    }
 		    result = sb.toString();
 		    jObject = new JSONObject(result);

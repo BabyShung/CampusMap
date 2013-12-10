@@ -208,10 +208,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 			String destination = intent.getStringExtra("BuildingName");
 			// search the building lat & lng by bn
-			DB_Operations op = new DB_Operations();
-			op.open();
-			LatLng to = op.getLatLngFromDB(destination);
-			op.close();
+			
+			LatLng to = getCenterPointOfABuildingFromDB(destination);
+			
 			// start an ansync task
 			if (myLastLocation != null) {
 				Location fromL = myLastLocation;
@@ -220,8 +219,18 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				CallDirection(from, to);
 			}
 		}
+
+
 	};
 
+	private LatLng getCenterPointOfABuildingFromDB(String destination) {
+		DB_Operations op = new DB_Operations();
+		op.open();
+		LatLng to = op.getLatLngFromDB(destination);
+		op.close();
+		return to;
+	}
+	
 	@Override
 	public void onMapLongClick(LatLng point) {
 		MarkerOptions mo = marker_polyline.setupMarkerOptions(point, null,
@@ -290,7 +299,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	public void onInfoWindowClick(Marker marker) {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 		
+		//destination string
 		destination = marker.getTitle();
+		
+		
 		
 		alertDialog.setTitle(destination);
 		alertDialog.setMessage(marker.getSnippet());
@@ -303,10 +315,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						LatLng from = new LatLng(myLastLocation.getLatitude(),
 								myLastLocation.getLongitude());
 
+						//destination center point
+						LatLng to = getCenterPointOfABuildingFromDB(destination);
 						
-						//from from ?? check later
+						
 						campusRouteTask = new RouteRequestTask(
-								MapActivity.this, map, from, from, mMessageBar);
+								MapActivity.this, map, from, to, mMessageBar);
 						campusRouteTask.execute();
 
 					}
