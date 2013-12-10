@@ -4,6 +4,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.location.GpsStatus;
 import android.location.Location;
 import android.location.LocationListener;
@@ -96,6 +97,19 @@ public class MyLocation implements Runnable {
 //			op.close();
 		 
 		//
+		
+		
+		 //fo.TESTING("MyRoute4");
+        
+		 //actually show MyRouteX_a.txt
+         //rr.showTestRoute("MyRoute4.txt",map,Color.BLUE);
+
+//         rr.showTestRoute("MyRoute1_b",map,Color.BLACK);
+//         rr.showTestRoute("MyRoute1_c",map,Color.BLUE);
+//         rr.showTestRoute("MyRoute1_d",map,Color.YELLOW);
+//         rr.showTestRoute("MyRoute1_e",map,Color.DKGRAY);
+ 
+		
 
 	}
 
@@ -145,11 +159,14 @@ public class MyLocation implements Runnable {
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 
 			// 1. delete consecutive same lines
-			fo.processRecord_delete_consecutive();
+			//fo.processRecord_delete_consecutive();
 
 			// 2. smooth a little bit using kalmen filter
+			
+			fo.processRecord_kalman_filter("a",true);
+		
 			for (int i = 0; i < 30; i++)
-				fo.processRecord_kalman_filter("a");
+				fo.processRecord_kalman_filter("a",false);
 
 			// 3. calculate all other route info
 			DB_Route returnRoute = fo

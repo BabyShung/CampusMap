@@ -137,11 +137,12 @@ public class FileOperations {
 		checkDownloadFolderExist();
 		filePath = path + "/" + originalFileName + ".txt";
 		fileName = new File(path + "/" + originalFileName + ".txt");
-		processRecord_delete_consecutive();
-		// for(int i=0;i<5;i++)
-		// processRecord_delete_outliers("a");
-		for (int i = 0; i < 100; i++)
-			processRecord_kalman_filter("a");
+		//processRecord_delete_consecutive();
+ 
+		processRecord_kalman_filter("a",true);
+		
+		for (int i = 0; i < 5; i++)
+			processRecord_kalman_filter("a",false);
 	}
 
 	/**
@@ -185,10 +186,16 @@ public class FileOperations {
 	}
 
 	// in use
-	public void processRecord_kalman_filter(String beta) {// Kalman Filter
+	public void processRecord_kalman_filter(String beta,boolean firstTime) {// Kalman Filter
 															// Process!!
 		try {
-			bufferReader = new BufferedReader(new FileReader(filePath_p));
+			String tmpF;
+			if(firstTime){
+				tmpF = filePath;
+			}else{
+				tmpF = filePath_p;
+			}
+			bufferReader = new BufferedReader(new FileReader(tmpF));
 			String line = bufferReader.readLine();
 			file_p_Initialization("txt", fileName, beta, false);// save as
 																// "xx_beta.txt"
