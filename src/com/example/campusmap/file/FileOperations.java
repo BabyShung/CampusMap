@@ -137,12 +137,23 @@ public class FileOperations {
 		checkDownloadFolderExist();
 		filePath = path + "/" + originalFileName + ".txt";
 		fileName = new File(path + "/" + originalFileName + ".txt");
-		//processRecord_delete_consecutive();
- 
-		processRecord_kalman_filter("a",true);
+		processRecord_delete_consecutive();
+
 		
-		for (int i = 0; i < 5; i++)
-			processRecord_kalman_filter("a",false);
+		for (int i = 0; i < 5; i++){
+			processRecord_kalman_filter("a", false);
+		}
+
+		for (int i = 0; i < 4; i++){
+			processRecord_kalman_filter("a", false);
+			processRecord_delete_outliers("a");
+		}
+		
+		
+		
+		//for (int i = 0; i < 5; i++)
+			
+
 	}
 
 	/**
@@ -186,13 +197,14 @@ public class FileOperations {
 	}
 
 	// in use
-	public void processRecord_kalman_filter(String beta,boolean firstTime) {// Kalman Filter
-															// Process!!
+	public void processRecord_kalman_filter(String beta, boolean firstTime) {// Kalman
+																				// Filter
+		// Process!!
 		try {
 			String tmpF;
-			if(firstTime){
+			if (firstTime) {
 				tmpF = filePath;
-			}else{
+			} else {
 				tmpF = filePath_p;
 			}
 			bufferReader = new BufferedReader(new FileReader(tmpF));
@@ -252,22 +264,23 @@ public class FileOperations {
 				long last_time = Long.parseLong(tmpLast[2]);
 				long delta = last_time - first_time;
 
-				//time,unit: second
+				// time,unit: second
 				long takeTime = TimeUnit.MILLISECONDS.toSeconds(delta);
-				
+
 				// calculate distance
 				Location_Hao current1;
 				Location_Hao current2;
 				double distance = 0;
-				
-				//distance between two LatLng points
+
+				// distance between two LatLng points
 				GoogleLatLngDistance glld = new GoogleLatLngDistance();
-				
+
 				for (int i = 0; i < tmp.length - 1; i++) {
 					current1 = new Location_Hao(tmp[i]);
 					current2 = new Location_Hao(tmp[i + 1]);
 
-					distance += glld.GetDistance(current1.getX(), current1.getY(), current2.getX(), current2.getY());
+					distance += glld.GetDistance(current1.getX(),
+							current1.getY(), current2.getX(), current2.getY());
 				}
 				// else not append and move onto next line
 				line = bufferReader.readLine();
@@ -301,28 +314,31 @@ public class FileOperations {
 																// "xx_c.txt"
 			while (line != null) {
 				String[] tmp = line.split(";");
-				Location_Hao first = new Location_Hao(tmp[0]);
-				Location_Hao second = new Location_Hao(tmp[1]);
-				Location_Hao Li;
-				Location_Hao tmpP;
-				for (int i = 2; i < tmp.length; i++) {
-					Li = new Location_Hao(tmp[i]);
-					if (first.checkNextPointInScope(second, Li)) {
-						// true, do nothing
-					} else {// false, replace second with mid
-						tmpP = first.getMidPoint();
-						if (tmpP != null)
-							second = tmpP;
-						tmp[i - 1] = second.toString();
+				if (tmp.length >= 3) {
+
+					Location_Hao first = new Location_Hao(tmp[0]);
+					Location_Hao second = new Location_Hao(tmp[1]);
+					Location_Hao Li;
+					Location_Hao tmpP;
+					for (int i = 2; i < tmp.length; i++) {
+						Li = new Location_Hao(tmp[i]);
+						if (first.checkNextPointInScope(second, Li)) {
+							// true, do nothing
+						} else {// false, replace second with mid
+							tmpP = first.getMidPoint();
+							if (tmpP != null)
+								second = tmpP;
+							tmp[i - 1] = second.toString();
+						}
+						first = second;
+						second = Li;
 					}
-					first = second;
-					second = Li;
+					// now can store tmp into file again
+					for (String f : tmp) {
+						appendDataIntoFile_p(f + ";");
+					}
+					line = bufferReader.readLine();
 				}
-				// now can store tmp into file again
-				for (String f : tmp) {
-					appendDataIntoFile_p(f + ";");
-				}
-				line = bufferReader.readLine();
 			}
 			System.out.println("prcessed delete outliers..");
 			bufferReader.close();
@@ -407,8 +423,6 @@ public class FileOperations {
 			canR = false;
 		}
 	}
-
- 
 
 	public void checkDownloadFolderExist() {
 		// set path, we are going to save the txt file into download folder

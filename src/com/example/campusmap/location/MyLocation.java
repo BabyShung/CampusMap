@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class MyLocation implements Runnable {
 
 	private final static int GPS_LOST_TIME = 3000; 
-	private final static int GPS_LOST_COUNTER = 10; 
+	private final static int GPS_LOST_COUNTER = 8; 
 	
 	private Timer timer1;
 	private LocationManager lm;
@@ -159,13 +159,12 @@ public class MyLocation implements Runnable {
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 
 			// 1. delete consecutive same lines
-			//fo.processRecord_delete_consecutive();
-
-			// 2. smooth a little bit using kalmen filter
+			fo.processRecord_delete_consecutive();
+			 
+			for (int i = 0; i < 5; i++)
+				fo.processRecord_delete_outliers("a");
 			
-			fo.processRecord_kalman_filter("a",true);
-		
-			for (int i = 0; i < 30; i++)
+			for (int i = 0; i < 10; i++)
 				fo.processRecord_kalman_filter("a",false);
 
 			// 3. calculate all other route info
@@ -244,6 +243,9 @@ public class MyLocation implements Runnable {
 						if (gps_indoor_recording_flag == false) {
 
 							gps_indoor_recording_flag = true;
+							
+							Toast.makeText(mContext, "GPS signal back",
+									Toast.LENGTH_SHORT).show();
 						}
 
 					}
@@ -294,10 +296,7 @@ public class MyLocation implements Runnable {
 
 								// can I fix that?
 								rr.bufferStore(lh);
-								rr.bufferStore(lh);
-								rr.bufferStore(lh);
-								rr.bufferStore(lh);
-								rr.bufferStore(lh);
+		
 							}
 						}else{
 							Toast.makeText(
@@ -312,20 +311,19 @@ public class MyLocation implements Runnable {
 				break;
 			case GpsStatus.GPS_EVENT_FIRST_FIX: // execute only once
 
-				Toast.makeText(mContext, "GPS first time fixed",
-						Toast.LENGTH_SHORT).show();
+
 
 				// sure can record
-				gps_indoor_recording_flag = true;
-				gps_lost_flag = false;
-				counter = 0;
+//				gps_indoor_recording_flag = true;
+//				gps_lost_flag = false;
+//				counter = 0;
 
 				// if the route has started, set back the flag so that it can
 				// keep on recording
 
-				System.out.println("****First Time");
-
-				isGPSFix = true;
+//				System.out.println("****First Time");
+//
+//				isGPSFix = true;
 
 				break;
 			case GpsStatus.GPS_EVENT_STOPPED:
