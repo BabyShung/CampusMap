@@ -23,8 +23,13 @@ public class Route {
 	}
 
 	//test method, to show a specific route
-	public void showTestRoute(String justName, GoogleMap map, int c) {
-		String newS = justName.replace(".txt", "_a");
+	public void showTestRoute(String justName, GoogleMap map, int c,boolean isOriginal) {
+		String newS;
+		if(isOriginal){
+			newS = justName.replace(".txt", "");
+		}else{
+			newS = justName.replace(".txt", "_a");
+		}
 		ArrayList<LatLng> result = fo.readPointsFile(newS);
 		PolylineOptions rectline;
 		if (result != null) {

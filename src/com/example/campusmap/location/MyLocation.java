@@ -99,12 +99,17 @@ public class MyLocation implements Runnable {
 		//
 		
 		
-		 //fo.TESTING("MyRoute4");
+		// fo.TESTING("MyRoute5");
         
 		 //actually show MyRouteX_a.txt
-         //rr.showTestRoute("MyRoute4.txt",map,Color.BLUE);
-
-//         rr.showTestRoute("MyRoute1_b",map,Color.BLACK);
+        // rr.showTestRoute("MyRoute5.txt",map,Color.BLUE,false);
+         //rr.showTestRoute("MyRoute5.txt",map,Color.BLACK,true);
+         
+         
+		// fo.TESTING("MyRoute4");
+		 //actually show MyRouteX_a.txt
+        // rr.showTestRoute("MyRoute4.txt",map,Color.RED,false);
+         //rr.showTestRoute("MyRoute4.txt",map,Color.YELLOW,true);
 //         rr.showTestRoute("MyRoute1_c",map,Color.BLUE);
 //         rr.showTestRoute("MyRoute1_d",map,Color.YELLOW);
 //         rr.showTestRoute("MyRoute1_e",map,Color.DKGRAY);
@@ -158,13 +163,15 @@ public class MyLocation implements Runnable {
 			// add remaining elements and close buffer
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 
-			// 1. delete consecutive same lines
-			fo.processRecord_delete_consecutive();
-			 
-			for (int i = 0; i < 5; i++)
-				fo.processRecord_delete_outliers("a");
+			fo.processRecord_kalman_filter("a",true);
 			
-			for (int i = 0; i < 10; i++)
+			for (int i = 0; i < 5; i++)
+				fo.processRecord_kalman_filter("a",false);
+	 
+			for (int i = 0; i < 12; i++)
+				fo.processRecord_delete_outliers("a",false);
+					
+			for (int i = 0; i < 5; i++)
 				fo.processRecord_kalman_filter("a",false);
 
 			// 3. calculate all other route info

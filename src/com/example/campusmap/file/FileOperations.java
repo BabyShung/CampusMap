@@ -137,23 +137,20 @@ public class FileOperations {
 		checkDownloadFolderExist();
 		filePath = path + "/" + originalFileName + ".txt";
 		fileName = new File(path + "/" + originalFileName + ".txt");
-		processRecord_delete_consecutive();
-
 		
-		for (int i = 0; i < 5; i++){
-			processRecord_kalman_filter("a", false);
-		}
-
-		for (int i = 0; i < 4; i++){
-			processRecord_kalman_filter("a", false);
-			processRecord_delete_outliers("a");
-		}
+		//processRecord_delete_consecutive();
+		processRecord_kalman_filter("a",true);
 		
+		for (int i = 0; i < 5; i++)
+			processRecord_kalman_filter("a",false);
+ 
+		for (int i = 0; i < 12; i++)
+			processRecord_delete_outliers("a",false);
+				
+		for (int i = 0; i < 5; i++)
+			processRecord_kalman_filter("a",false);
 		
-		
-		//for (int i = 0; i < 5; i++)
-			
-
+ 
 	}
 
 	/**
@@ -287,13 +284,7 @@ public class FileOperations {
 
 				returnRouteObj = new DB_Route(first_lat, first_lng, last_lat,
 						last_lng, distance, takeTime);
-
-				System.out.println("*first_lat: " + first_lat);
-				System.out.println("*first_lng: " + first_lng);
-				System.out.println("*last_lat: " + last_lat);
-				System.out.println("*last_lng: " + last_lng);
-				System.out.println("*distance: " + distance);
-				System.out.println("*takeTime: " + takeTime);
+ 
 			}
 			System.out.println("Calculate a bunch of stuffs!");
 			bufferReader.close();
@@ -306,9 +297,16 @@ public class FileOperations {
 	}
 
 	// not in use
-	public void processRecord_delete_outliers(String beta) {
+	public void processRecord_delete_outliers(String beta, boolean firstTime) {
 		try {
-			bufferReader = new BufferedReader(new FileReader(filePath_p));
+			String tmpF;
+			if (firstTime) {
+				tmpF = filePath;
+			} else {
+				tmpF = filePath_p;
+			}
+			
+			bufferReader = new BufferedReader(new FileReader(tmpF));
 			String line = bufferReader.readLine();
 			file_p_Initialization("txt", fileName, beta, false);// save as
 																// "xx_c.txt"

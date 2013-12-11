@@ -336,7 +336,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 							// also draw the route as well
 							Route tmpR = new Route(new FileOperations());
-							tmpR.showTestRoute(returnFileName, map, Color.RED);
+							tmpR.showTestRoute(returnFileName, map, Color.RED,false);
 						}
 
 					}
