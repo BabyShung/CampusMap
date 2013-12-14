@@ -20,12 +20,14 @@ import org.w3c.dom.NodeList;
 import android.content.Context;
 import android.util.Log;
 
+import com.example.campusmap.routefilter.ReturnRoute;
 import com.google.android.gms.maps.model.LatLng;
 
 public class CampusMapDirection {
 
 	private JSONObject jObject;
  
+	private ArrayList<ReturnRoute> returnRoute;
 	
 	public CampusMapDirection() {
  
@@ -37,12 +39,16 @@ public class CampusMapDirection {
 	
 	public void initializeJSONOject(LatLng start, LatLng end) {
 
+		if(start==null || end == null ){
+			return;
+		}
+		
 		String url = "http://1.campusgps.sinaapp.com/direction.php?"
 				+ "olat=" + start.latitude + "&olng=" + start.longitude
 				+ "&dlat=" + end.latitude + "&dlng=" + end.longitude;
 
 		
-		
+ 
 		DefaultHttpClient httpclient = new DefaultHttpClient(new BasicHttpParams());
 		HttpGet httppost = new HttpGet(url);
 		// Depends on your web service
@@ -50,7 +56,9 @@ public class CampusMapDirection {
 
 		InputStream inputStream = null;
 		String result = null;
+ 
 		try {
+ 
 		    HttpResponse response = httpclient.execute(httppost);           
 		    HttpEntity entity = response.getEntity();
 
@@ -67,6 +75,7 @@ public class CampusMapDirection {
 		    }
 		    result = sb.toString();
 		    jObject = new JSONObject(result);
+ 
 		} catch (Exception e) { 
 		    // Oops
 		}
@@ -92,24 +101,66 @@ public class CampusMapDirection {
 		return status;
 	}
 	
-	public int test(){
-		int r1, r2 ,r3, r4, r5;
-		r1= r2 =r3= r4= r5 = -1;
+	public double test(){
+		double r1 = -1;
 		try {
-			r1 = jObject.getInt("r1_d");
-			r2 = jObject.getInt("r2_d");
-			r3 = jObject.getInt("r3_d");
-			r4 = jObject.getInt("r4_d");
-			r5 = jObject.getInt("r5_d");
+			r1 = jObject.getDouble("r1_distance");
+
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 		System.out.println("testing-----> "+ r1);
-		System.out.println("testing-----> "+ r2);
-		System.out.println("testing-----> "+ r3);
-		System.out.println("testing-----> "+ r4);
-		System.out.println("testing-----> "+ r5);
+		System.out.println("testing-----> "+ jObject.length());
 		return r1;
+	}
+
+	public void initRouteOBJ() {
+		
+		returnRoute = new ArrayList<ReturnRoute>();
+		ReturnRoute tmpR;
+		
+		
+		int numberOfRoute = (jObject.length()-1)/3;
+		
+		int distance;
+		int taketime;
+		ArrayList<LatLng> points;
+		for(int i = 1 ; i<=numberOfRoute; i++){
+			try {
+				
+				points = new ArrayList<LatLng>();
+				
+				distance = (int) jObject.getDouble("r"+i+"_distance");
+				taketime = jObject.getInt("r"+i+"_time");
+				
+				
+				String[] pointsArr = jObject.getString("r"+i+"_points").split(";");
+				String[] inner;
+				double tmplat;
+				double tmplng;
+				for(String tmp : pointsArr){
+					inner = tmp.split(",");
+					tmplat = Double.parseDouble(inner[0]);
+					tmplng = Double.parseDouble(inner[1]);
+					points.add(new LatLng(tmplat,tmplng));
+				}
+				
+				//add
+				tmpR = new ReturnRoute(distance,taketime,points);
+				returnRoute.add(tmpR);
+				
+				
+			} catch (JSONException e) {
+
+				e.printStackTrace();
+			}
+		}
+		
+	}
+
+	public ArrayList<ReturnRoute> getRoutesArrayList() {
+		return returnRoute;
+		
 	}
 
 }

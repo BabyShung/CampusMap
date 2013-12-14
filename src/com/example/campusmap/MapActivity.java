@@ -316,13 +316,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 								myLastLocation.getLongitude());
 
 						//destination center point
+
 						LatLng to = getCenterPointOfABuildingFromDB(destination);
-						
-						
+						System.out.println("******start------" + from);
+						System.out.println("******end-------"+to);
 						campusRouteTask = new RouteRequestTask(
 								MapActivity.this, map, from, to, mMessageBar);
 						campusRouteTask.execute();
-
+						
 					}
 				});
 

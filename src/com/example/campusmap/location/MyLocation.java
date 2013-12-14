@@ -30,8 +30,8 @@ import com.google.android.gms.maps.model.LatLng;
 //This class will be execute in Async task
 public class MyLocation implements Runnable {
 
-	private final static int GPS_LOST_TIME = 3000; 
-	private final static int GPS_LOST_COUNTER = 8; 
+	private final static int GPS_LOST_TIME = 5000; 
+	private final static int GPS_LOST_COUNTER = 10; 
 	
 	private Timer timer1;
 	private LocationManager lm;
@@ -102,7 +102,8 @@ public class MyLocation implements Runnable {
 		// fo.TESTING("MyRoute5");
         
 		 //actually show MyRouteX_a.txt
-        // rr.showTestRoute("MyRoute5.txt",map,Color.BLUE,false);
+         //rr.showTestRoute("MyRoute8.txt",map,Color.BLUE,false);
+         //rr.showTestRoute("MyRoute9.txt",map,Color.BLACK,false);
          //rr.showTestRoute("MyRoute5.txt",map,Color.BLACK,true);
          
          

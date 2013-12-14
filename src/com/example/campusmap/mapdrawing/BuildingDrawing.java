@@ -59,7 +59,7 @@ public class BuildingDrawing {
 
 	private void drawAllTheCampusBuildings() {
 		// buildingSet is used to search if a touch belongs to a building
-		buildingSet.put(1, new Building("Meclean Hall", "2 West Washington Street, Iowa City, IA 52242", new LatLng(
+		buildingSet.put(1, new Building("Mclean Hall", "2 West Washington Street, Iowa City, IA 52242", new LatLng(
 				41.661017, -91.536656), new LatLng(41.661017, -91.536420),
 				new LatLng(41.660418, -91.536420), new LatLng(41.660418,
 						-91.536656)));
