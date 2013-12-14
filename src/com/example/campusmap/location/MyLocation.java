@@ -99,12 +99,20 @@ public class MyLocation implements Runnable {
 		//
 		
 		
-		// fo.TESTING("MyRoute5");
-        
-		 //actually show MyRouteX_a.txt
-         //rr.showTestRoute("MyRoute8.txt",map,Color.BLUE,false);
-         //rr.showTestRoute("MyRoute9.txt",map,Color.BLACK,false);
-         //rr.showTestRoute("MyRoute5.txt",map,Color.BLACK,true);
+//		 fo.TESTING("MyRoute4");
+//		 fo.TESTING("MyRoute8");
+//		 fo.TESTING("MyRoute9");
+//		 fo.TESTING("MyRoute11");
+//		 fo.TESTING("MyRoute10");
+//		 fo.TESTING("MyRoute12");
+//		 //actually show MyRouteX_a.txt
+//			rr.showTestRoute("MyRoute12.txt",map,Color.BLUE,false);
+//         rr.showTestRoute("MyRoute8.txt",map,Color.RED,false);
+//         rr.showTestRoute("MyRoute9.txt",map,Color.BLACK,false);
+//         rr.showTestRoute("MyRoute11.txt",map,Color.DKGRAY,false);
+//         rr.showTestRoute("MyRoute10.txt",map,Color.CYAN,false); 
+//         
+//         rr.showTestRoute("MyRoute4.txt",map,Color.MAGENTA,false); 
          
          
 		// fo.TESTING("MyRoute4");
@@ -165,15 +173,18 @@ public class MyLocation implements Runnable {
 			rr.checkRemainingElementsInBQandCloseBuffer(fo);
 
 			fo.processRecord_kalman_filter("a",true);
+ 
+			for (int i = 0; i < 29; i++)
+				fo.processRecord_kalman_filter("a",false);
 			
-			for (int i = 0; i < 5; i++)
-				fo.processRecord_kalman_filter("a",false);
-	 
-			for (int i = 0; i < 12; i++)
-				fo.processRecord_delete_outliers("a",false);
-					
-			for (int i = 0; i < 5; i++)
-				fo.processRecord_kalman_filter("a",false);
+//			for (int i = 0; i < 5; i++)
+//				fo.processRecord_kalman_filter("a",false);
+//	 
+//			for (int i = 0; i < 12; i++)
+//				fo.processRecord_delete_outliers("a",false);
+//					
+//			for (int i = 0; i < 5; i++)
+//				fo.processRecord_kalman_filter("a",false);
 
 			// 3. calculate all other route info
 			DB_Route returnRoute = fo
