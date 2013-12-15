@@ -120,10 +120,11 @@ public class CampusMapDirection {
 		ReturnRoute tmpR;
 		
 		
-		int numberOfRoute = (jObject.length()-1)/3;
+		int numberOfRoute = (jObject.length()-1)/4;
 		
 		int distance;
 		int taketime;
+		int type;
 		ArrayList<LatLng> points;
 		for(int i = 1 ; i<=numberOfRoute; i++){
 			try {
@@ -133,6 +134,7 @@ public class CampusMapDirection {
 				distance = (int) jObject.getDouble("r"+i+"_distance");
 				taketime = jObject.getInt("r"+i+"_time");
 				
+				type = jObject.getInt("r"+i+"_type");
 				
 				String[] pointsArr = jObject.getString("r"+i+"_points").split(";");
 				String[] inner;
