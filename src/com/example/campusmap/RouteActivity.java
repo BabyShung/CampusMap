@@ -4,7 +4,9 @@ package com.example.campusmap;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.content.LocalBroadcastManager;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -41,11 +43,33 @@ public class RouteActivity extends Activity {
 			public void onItemClick(AdapterView<?> lv, View view,
 					int position, long id) {
 				//....click item event
-
+				String fileName = LV.getItemAtPosition(position)
+						.toString();
+				broadcastMsg(fileName);
 			}
 		});
 	}
 
+	private void broadcastMsg(String bn) {
+		sendMessageToMainActivity();
+		sendMessageToHomeActivity("RouteActivity",bn);
+	}
+
+	private void sendMessageToMainActivity() {
+		Intent intent = new Intent("SetTab");
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+
+	private void sendMessageToHomeActivity(String activity,String bn) {
+		Intent intent = new Intent("GetDirection");
+		intent.putExtra("Activity", activity);
+		intent.putExtra("FileName", bn);
+		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
+	}
+	
+	
+	
+	
 	private class MyListAdapter extends ArrayAdapter<DB_Route> {
 		public MyListAdapter() {
 			super(RouteActivity.this, R.layout.activity_route_listviewitem,

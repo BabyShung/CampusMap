@@ -405,7 +405,7 @@ public class DB_Operations implements TableDefinition {
 				+ lng
 				+ ","
 				+ bi
-				+ ") VALUES ('Schaeffer hall','20 East Washington Street, Iowa City, IA 52242','41.660695','-91.535656',"
+				+ ") VALUES ('Schaeffer Hall','20 East Washington Street, Iowa City, IA 52242','41.660695','-91.535656',"
 				+ R.drawable.bi3 + ");");
 		database.execSQL("INSERT INTO Building ("
 				+ bn

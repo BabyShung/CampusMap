@@ -135,6 +135,11 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		map.animateCamera(CameraUpdateFactory.zoomTo(zoomto));
 	}
 
+	private void setUpMyLocationCamera(LatLng ll, int zoomto) {
+		map.moveCamera(CameraUpdateFactory.newLatLng(ll));
+		map.animateCamera(CameraUpdateFactory.zoomTo(zoomto));
+	}
+
 	private void setUpListeners() {
 		map.setOnMapClickListener(this);
 		map.setOnMapLongClickListener(this);
@@ -192,7 +197,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	private void setUpBroadCastManager() {
 		LocalBroadcastManager.getInstance(this).registerReceiver(
-				BuildingNameReceiver, new IntentFilter("GetGoogleDirection"));
+				BuildingNameReceiver, new IntentFilter("GetDirection"));
 	}
 
 	private BroadcastReceiver BuildingNameReceiver = new BroadcastReceiver() {
@@ -206,20 +211,33 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				}
 			}
 
-			String destination = intent.getStringExtra("BuildingName");
-			// search the building lat & lng by bn
-			
-			LatLng to = getCenterPointOfABuildingFromDB(destination);
-			
-			// start an ansync task
-			if (myLastLocation != null) {
-				Location fromL = myLastLocation;
-				LatLng from = new LatLng(fromL.getLatitude(),
-						fromL.getLongitude());
-				CallDirection(from, to);
+			String activity = intent.getStringExtra("Activity");
+
+			System.out.println("*******SSNNN");
+
+			if (activity.equals("SearchActivity")) {
+				String destination = intent.getStringExtra("BuildingName");
+				// search the building lat & lng by bn
+
+				LatLng to = getCenterPointOfABuildingFromDB(destination);
+
+				// start an ansync task
+				if (myLastLocation != null) {
+					Location fromL = myLastLocation;
+					LatLng from = new LatLng(fromL.getLatitude(),
+							fromL.getLongitude());
+					// CallDirection(from, to);
+					CallCampusDirection(from, to);
+
+				}
+			} else {
+
+				String filename = intent.getStringExtra("FileName");
+				System.out.println("toString: ----   " + filename);
+				// also draw the route as well
+				DrawRouteFromRouteACT(filename, map, Color.RED);
 			}
 		}
-
 
 	};
 
@@ -230,7 +248,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		op.close();
 		return to;
 	}
-	
+
 	@Override
 	public void onMapLongClick(LatLng point) {
 		MarkerOptions mo = marker_polyline.setupMarkerOptions(point, null,
@@ -290,20 +308,60 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		}
 	}
 
+	/**
+	 * Campus direction
+	 */
+	private void CallCampusDirection(LatLng from, LatLng to) {
+
+		System.out.println("******start------" + from);
+		System.out.println("******end-------" + to);
+		campusRouteTask = new RouteRequestTask(MapActivity.this, map, from, to,
+				mMessageBar);
+		campusRouteTask.execute();
+
+	}
+
+	/**
+	 * Google direction
+	 */
 	private void CallDirection(LatLng from, LatLng to) { // Async task
 		googleDirectionTask = new GoogleRouteTask(this, map, from, to);
 		googleDirectionTask.execute();
 	}
 
+	private void DrawRoute(String returnFileName, GoogleMap map, int color) {
+		Route tmpR = new Route(new FileOperations());
+		tmpR.showTestRoute(returnFileName, map, color, false);
+	}
+
+	private void DrawRouteFromRouteACT(String returnFileName, GoogleMap map,
+			int color) {
+
+		// the filename is MyRouteX_a.txt, need to change to MyRouteX.txt
+		String routeobjArr[] = returnFileName.split("=");
+		String finalFN = routeobjArr[0].split("_")[0] + ".txt";
+
+		Route tmpR = new Route(new FileOperations());
+		LatLng firstPoint = tmpR.showTestRoute(finalFN, map, color, false);
+
+		if (firstPoint != null) {
+			setUpMyLocationCamera(firstPoint, 16);
+
+			Bundle b = new Bundle();
+			b.putInt("onMsgClick", 3);// after click the button, nothing happens
+			mMessageBar.show(routeobjArr[1] + "m, " + routeobjArr[2] + "s",
+					"Cancel", R.drawable.ic_messagebar_stop, b);
+		}
+
+	}
+
 	@Override
 	public void onInfoWindowClick(Marker marker) {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
-		
-		//destination string
+
+		// destination string
 		destination = marker.getTitle();
-		
-		
-		
+
 		alertDialog.setTitle(destination);
 		alertDialog.setMessage(marker.getSnippet());
 
@@ -315,16 +373,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						LatLng from = new LatLng(myLastLocation.getLatitude(),
 								myLastLocation.getLongitude());
 
-						//destination center point
+						// destination center point
 
 						LatLng to = getCenterPointOfABuildingFromDB(destination);
-						System.out.println("******start------" + from);
-						System.out.println("******end-------"+to);
-						campusRouteTask = new RouteRequestTask(
-								MapActivity.this, map, from, to, mMessageBar);
-						campusRouteTask.execute();
-						
+
+						CallCampusDirection(from, to);
+
 					}
+
 				});
 
 		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stop",
@@ -336,11 +392,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 									.disableLocationUpdate(locationTask);
 
 							// also draw the route as well
-							Route tmpR = new Route(new FileOperations());
-							tmpR.showTestRoute(returnFileName, map, Color.RED,false);
+							DrawRoute(returnFileName, map, Color.RED);
+
 						}
 
 					}
+
 				});
 		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Start",
 				new DialogInterface.OnClickListener() {
@@ -351,7 +408,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						// GPS_Network_Initialization();
 						//
 						// Async task, begin the route
-						locationTask = new MyLocationTask(ml,destination);
+						locationTask = new MyLocationTask(ml, destination);
 						locationTask.execute();
 
 					}
@@ -406,25 +463,24 @@ public class MapActivity extends Activity implements OnMapClickListener,
 			mMessageBar.show("You picked red route! Let's go!", "Stop",
 					R.drawable.ic_messagebar_stop, b);
 
-			//start recording
-			//....
+			// start recording
+			// ....
 			break;
 		case R.id.route2:
 			mMessageBar.show("You picked blue route! Let's go!", "Stop",
 					R.drawable.ic_messagebar_stop, b);
-			
-			//start recording
-			//....
-			
+
+			// start recording
+			// ....
+
 			break;
 		case R.id.route3:
 			mMessageBar.show("You picked black route! Let's go!", "Stop",
 					R.drawable.ic_messagebar_stop, b);
-			
-			//start recording
-			//....
-			
-			
+
+			// start recording
+			// ....
+
 			break;
 
 		}
@@ -447,9 +503,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 			break;
 		case 3:
-			//stop recording
-			
-			
+			// stop recording
+
 			Toast.makeText(this, "Yeah~!", Toast.LENGTH_SHORT).show();
 			break;
 

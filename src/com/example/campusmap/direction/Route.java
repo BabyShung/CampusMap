@@ -16,6 +16,7 @@ public class Route {
 	private BlockingQueue<Location_Hao> buffer;
 
 	// constructor
+	
 	// A Route Object is associted with recording, so init queue as well
 	public Route(FileOperations fo) {
 		buffer = new ArrayBlockingQueue<Location_Hao>(20);
@@ -23,7 +24,7 @@ public class Route {
 	}
 
 	//test method, to show a specific route
-	public void showTestRoute(String justName, GoogleMap map, int c,boolean isOriginal) {
+	public LatLng showTestRoute(String justName, GoogleMap map, int c,boolean isOriginal) {
 		String newS;
 		if(isOriginal){
 			newS = justName.replace(".txt", "");
@@ -31,6 +32,9 @@ public class Route {
 			newS = justName.replace(".txt", "_a");
 		}
 		ArrayList<LatLng> result = fo.readPointsFile(newS);
+		
+		LatLng first = result.get(0);
+		
 		PolylineOptions rectline;
 		if (result != null) {
 			rectline = new PolylineOptions().width(4).color(c);
@@ -41,6 +45,8 @@ public class Route {
 			map.addPolyline(rectline);
 			System.out.println("*************Drawing********");
 		}
+		
+		return first;
 	}
 
 	//put data into the buffer

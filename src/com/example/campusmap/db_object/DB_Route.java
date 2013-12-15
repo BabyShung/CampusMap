@@ -102,6 +102,7 @@ public class DB_Route {
 	}
 	@Override
 	public String toString() {
-		return "Route_" + Rid + ":   " + CreateTime;
+		return fileName+"="+Distance+"="+TakeTime+"="+Destination;
+		
 	}
 }

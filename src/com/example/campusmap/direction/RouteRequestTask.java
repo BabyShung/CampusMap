@@ -73,10 +73,6 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 	protected void onPostExecute(String r) {
 		super.onPostExecute(r);
 		
-		// also draw the route as well
-		//Route tmpR = new Route(new FileOperations());
-		//tmpR.showTestRoute(returnFileName, map, Color.RED);
-		
 		if(cmd.returnJSONObj()==null){
 			Toast.makeText(ma, "Network error",
 					Toast.LENGTH_LONG).show();
@@ -95,6 +91,7 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 				//draw
 				int[] Colors = { Color.RED, Color.BLUE, Color.BLACK};
 				int j = 0;
+				//draw all the possible route
 				for(ReturnRoute tmprr : rr){
 					
 					System.out.println("**** compare "+tmprr.getDistance());

@@ -153,7 +153,7 @@ public class SearchActivity extends Activity {
 
 	private void broadcastMsg(String bn) {
 		sendMessageToMainActivity();
-		sendMessageToHomeActivity(bn);
+		sendMessageToHomeActivity("SearchActivity",bn);
 	}
 
 	private void sendMessageToMainActivity() {
@@ -161,8 +161,9 @@ public class SearchActivity extends Activity {
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
-	private void sendMessageToHomeActivity(String bn) {
-		Intent intent = new Intent("GetGoogleDirection");
+	private void sendMessageToHomeActivity(String activity,String bn) {
+		Intent intent = new Intent("GetDirection");
+		intent.putExtra("Activity", activity);
 		intent.putExtra("BuildingName", bn);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
