@@ -1,8 +1,6 @@
 package com.example.campusmap;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Map;
 
 import net.simonvt.messagebar.MessageBar;
 import android.app.Activity;
@@ -29,8 +27,8 @@ import com.example.campusmap.direction.GoogleRouteTask;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.direction.RouteRequestTask;
 import com.example.campusmap.file.FileOperations;
-import com.example.campusmap.geometry.HaoDistance;
-import com.example.campusmap.geometry.NearestPoint;
+import com.example.campusmap.helper.DistanceConvert;
+import com.example.campusmap.helper.TimeConvert;
 import com.example.campusmap.location.MyLocation;
 import com.example.campusmap.location.MyLocation.LocationResult;
 import com.example.campusmap.location.MyLocationTask;
@@ -71,6 +69,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private MessageBar mMessageBar;
 	private LocationManager lm;
 	private String destination;
+	private Bundle bundleFromMessageBar;
+	private Menu menuForOptionUpdate;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -129,6 +129,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 	}
 
+	/**
+	 * Two camera setup
+	 * 
+	 */
 	private void setUpMyLocationCamera(Location l, int zoomto) {
 		map.moveCamera(CameraUpdateFactory.newLatLng(new LatLng(
 				l.getLatitude(), l.getLongitude())));
@@ -183,7 +187,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				point.latitude + " , " + point.longitude,
 				BitmapDescriptorFactory.HUE_RED, null, false);
 		currentMarker = map.addMarker(mo);
-		currentMarker.showInfoWindow();
+		// currentMarker.showInfoWindow();
 
 	}
 
@@ -212,8 +216,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 			}
 
 			String activity = intent.getStringExtra("Activity");
-
-			System.out.println("*******SSNNN");
 
 			if (activity.equals("SearchActivity")) {
 				String destination = intent.getStringExtra("BuildingName");
@@ -349,8 +351,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 			Bundle b = new Bundle();
 			b.putInt("onMsgClick", 3);// after click the button, nothing happens
-			mMessageBar.show(routeobjArr[1] + "m, " + routeobjArr[2] + "s",
-					"Cancel", R.drawable.ic_messagebar_stop, b);
+
+			TimeConvert tc = new TimeConvert(routeobjArr[2]);
+			mMessageBar.show(routeobjArr[1] + "M, " + tc, "Cancel",
+					R.drawable.ic_messagebar_stop, b);
 		}
 
 	}
@@ -445,11 +449,61 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	}
 
 	@Override
+	public boolean onPrepareOptionsMenu(Menu menu) {
+		menu.clear(); // Clear view of previous menu
+		
+		menuForOptionUpdate = menu;
+		
+		MenuInflater mi = getMenuInflater();
+ 
+		
+		int NumberOfRoutes = bundleFromMessageBar.getInt("NumberOfRoutes");
+		
+		if (NumberOfRoutes == 1) {// only one route,google
+			mi.inflate(R.menu.route_menu_1, menu);
+			
+			updateOptionMenu(R.id.route1,"time_1","distance_1");
+
+			
+		} else if (NumberOfRoutes == 2) {
+			mi.inflate(R.menu.route_menu_2, menu);
+			
+			updateOptionMenu(R.id.route1,"time_1","distance_1");
+			updateOptionMenu(R.id.route2,"time_2","distance_2");
+			
+		} else if (NumberOfRoutes == 3) {
+			mi.inflate(R.menu.route_menu_3, menu);
+			
+			updateOptionMenu(R.id.route1,"time_1","distance_1");
+			updateOptionMenu(R.id.route2,"time_2","distance_2");
+			updateOptionMenu(R.id.route3,"time_3","distance_3");
+		}
+
+		return super.onPrepareOptionsMenu(menu);
+	}
+
+
+	
+	private void updateOptionMenu(int id, String time, String distance) {
+				String Name = null;
+				if(id == R.id.route1){
+					Name = "Red";
+				}else if(id == R.id.route2){
+					Name = "Blue";
+				}else if(id == R.id.route3){
+					Name = "Black";
+				}
+				MenuItem mitem = menuForOptionUpdate.findItem(id);
+				TimeConvert tc = new TimeConvert(bundleFromMessageBar.getInt(time));
+				DistanceConvert dc = new DistanceConvert(bundleFromMessageBar.getInt(distance));
+				mitem.setTitle(Name+": "+dc+", "+tc);
+	}
+
+	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
 
 		super.onCreateOptionsMenu(menu);
-		MenuInflater mi = getMenuInflater();
-		mi.inflate(R.menu.route_menu, menu);
+
 		return true;
 	}
 
@@ -460,14 +514,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		switch (item.getItemId()) {
 		case R.id.route1:
 
-			mMessageBar.show("You picked red route! Let's go!", "Stop",
+			mMessageBar.show("Picked red route! Let's go!", "Stop",
 					R.drawable.ic_messagebar_stop, b);
 
 			// start recording
 			// ....
 			break;
 		case R.id.route2:
-			mMessageBar.show("You picked blue route! Let's go!", "Stop",
+			mMessageBar.show("Picked blue route! Let's go!", "Stop",
 					R.drawable.ic_messagebar_stop, b);
 
 			// start recording
@@ -475,7 +529,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 			break;
 		case R.id.route3:
-			mMessageBar.show("You picked black route! Let's go!", "Stop",
+			mMessageBar.show("Picked black route! Let's go!", "Stop",
 					R.drawable.ic_messagebar_stop, b);
 
 			// start recording
@@ -493,12 +547,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	 */
 	@Override
 	public void onMessageClick(Parcelable token) {
-		Bundle b = (Bundle) token;
-		final int onMsgClick = b.getInt("onMsgClick");
+		bundleFromMessageBar = (Bundle) token;
+		final int onMsgClick = bundleFromMessageBar.getInt("onMsgClick");
+		
 
 		switch (onMsgClick) {
 		case 1:
-
 			openOptionsMenu();
 
 			break;

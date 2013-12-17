@@ -53,13 +53,13 @@ public class GoogleRouteTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 		super.onPostExecute(result);
 
 		// select random color for a route
-		int[] randomColor = { Color.RED, Color.BLACK, Color.BLUE, Color.YELLOW,
-				Color.CYAN };
-		Random rm = new Random();
-		int index = rm.nextInt(5);
+//		int[] randomColor = { Color.RED, Color.BLACK, Color.BLUE, Color.YELLOW,
+//				Color.CYAN };
+//		Random rm = new Random();
+//		int index = rm.nextInt(5);
 
 		if (result != null) {
-			rectline = new PolylineOptions().width(4).color(randomColor[index]);
+			rectline = new PolylineOptions().width(4).color(Color.MAGENTA);
 			int i;
 			for (i = 0; i < result.size(); i++) {
 				rectline.add(result.get(i));

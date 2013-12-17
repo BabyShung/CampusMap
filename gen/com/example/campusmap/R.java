@@ -294,9 +294,9 @@ containing a value of this type.
         public static final int normal=0x7f040004;
         public static final int relativelayout=0x7f040009;
         public static final int route1=0x7f040019;
-        public static final int route2=0x7f04001a;
-        public static final int route3=0x7f04001b;
-        public static final int routeCancel=0x7f04001c;
+        public static final int route2=0x7f04001b;
+        public static final int route3=0x7f04001c;
+        public static final int routeCancel=0x7f04001a;
         public static final int routeLV=0x7f04000c;
         public static final int route_item_icon=0x7f04000d;
         public static final int route_item_name=0x7f04000e;
@@ -326,7 +326,9 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int main=0x7f0a0000;
-        public static final int route_menu=0x7f0a0001;
+        public static final int route_menu_1=0x7f0a0001;
+        public static final int route_menu_2=0x7f0a0002;
+        public static final int route_menu_3=0x7f0a0003;
     }
     public static final class string {
         public static final int action_settings=0x7f07001b;
