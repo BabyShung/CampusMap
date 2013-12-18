@@ -73,6 +73,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private Polyline lineFromRouteActivity;
 	private RouteRequestTask campusRouteTask;
 	private GoogleRouteTask googleDirectionTask;
+	private ArrayList<Polyline> RequestPolyLines;
+	
+	private boolean canRemoveThePolyline = true;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -191,12 +194,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 			lineFromRouteActivity.remove();
 		}
 		
-		if (campusRouteTask != null) {
-			ArrayList<Polyline> polyLines = campusRouteTask
+		if (campusRouteTask != null && canRemoveThePolyline == true) {
+			RequestPolyLines = campusRouteTask
 					.getPolyLineArrayList();
-			if (polyLines.size() != 0) {
+			if (RequestPolyLines.size() != 0) {
 				// clear all of the previous lines
-				for (Polyline tmpP : polyLines) {
+				for (Polyline tmpP : RequestPolyLines) {
 					tmpP.remove();
 				}
 			}
@@ -343,8 +346,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		System.out.println("******start------" + from);
 		System.out.println("******end-------" + to);
 
+		canRemoveThePolyline = true;
+		
 		clearRouteActLine_DirectionLine();
 
+		canRemoveThePolyline = false;
+		
 		campusRouteTask = new RouteRequestTask(MapActivity.this, map, from, to,
 				mMessageBar);
 		campusRouteTask.execute();
@@ -532,32 +539,59 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		b.putInt("onMsgClick", 3);
 		switch (item.getItemId()) {
 		case R.id.route1:
-
-			mMessageBar.show("Picked red route! Let's go!", "Stop",
-					R.drawable.ic_messagebar_stop, b);
-
-			// start recording
-			// ....
+			startRoute(1,"Picked Red route! Let's go!",b);
 			break;
 		case R.id.route2:
-			mMessageBar.show("Picked blue route! Let's go!", "Stop",
-					R.drawable.ic_messagebar_stop, b);
-
-			// start recording
-			// ....
+			
+			startRoute(2,"Picked Blue route! Let's go!",b);
 
 			break;
 		case R.id.route3:
-			mMessageBar.show("Picked black route! Let's go!", "Stop",
-					R.drawable.ic_messagebar_stop, b);
+			startRoute(3,"Picked Black route! Let's go!",b);
 
-			// start recording
-			// ....
-
+			break;
+		case R.id.routeCancel:
+			canRemoveThePolyline = true;
 			break;
 
 		}
 		return true;
+	}
+
+	private void startRoute(int routeNumber, String content, Bundle b) {
+		
+		canRemoveThePolyline = false;
+		
+		mMessageBar.show(content, "Stop",
+				R.drawable.ic_messagebar_stop, b);
+		
+		// start recording
+		
+		//remove the other two lines on map
+		RequestPolyLines = campusRouteTask
+				.getPolyLineArrayList();
+		int i=0;
+		if(routeNumber==1){
+			for(Polyline tmpP : RequestPolyLines){
+				if(i!=0)
+					tmpP.remove();
+				i++;
+			}
+		}else if(routeNumber==2){
+			for(Polyline tmpP : RequestPolyLines){
+				if(i!=1)
+					tmpP.remove();
+				i++;
+			}
+		}else if(routeNumber==3){
+			for(Polyline tmpP : RequestPolyLines){
+				if(i!=2)
+					tmpP.remove();
+				i++;
+			}
+		}
+		// ....
+
 	}
 
 	/**
@@ -575,6 +609,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 			break;
 		case 3:
+			
+			canRemoveThePolyline = true;
+			
 			// stop recording
 
 			Toast.makeText(this, "Yeah~!", Toast.LENGTH_SHORT).show();
