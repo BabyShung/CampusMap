@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
-import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.database.DB_Helper;
 import com.example.campusmap.db_object.DB_Building;
 
 public class SearchActivity extends Activity {
@@ -28,28 +28,29 @@ public class SearchActivity extends Activity {
 	private InputMethodManager imm;
 	private ArrayList<DB_Building> value;
 	private ArrayList<String> buildingList;
-	private DB_Operations datasource;
 	private ListView LV;
 	private AutoCompleteTextView ATV;
+	private DB_Helper dbh;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		dbh = new DB_Helper();
+
 		setContentView(R.layout.activity_search);
 		imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
 		buildingList = new ArrayList<String>();
-		
 
 		initData();
-		
+
 		populateATV();
 
 	}
 
 	private void initData() {
 		// read info from db , building object
-		readBuildingObjectFromDatabase();
+		value = dbh.readBuildingObjectFromDatabase(this);
 		getBuildingList();
 
 		populateLV();
@@ -72,8 +73,8 @@ public class SearchActivity extends Activity {
 		LV.setAdapter(adapter);
 		LV.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 			@Override
-			public void onItemClick(AdapterView<?> lv, View view,
-					int position, long id) {
+			public void onItemClick(AdapterView<?> lv, View view, int position,
+					long id) {
 				popDialog(value.get(position).getBuildingName());
 
 			}
@@ -88,7 +89,7 @@ public class SearchActivity extends Activity {
 
 		@Override
 		public View getView(int position, View convertView, ViewGroup parent) {
-			// TODO Auto-generated method stub
+
 			View itemView = convertView;
 			if (itemView == null) {
 				itemView = getLayoutInflater().inflate(
@@ -113,11 +114,12 @@ public class SearchActivity extends Activity {
 			else
 				timesText.setText(query_time + " times");
 
-			
-			 //Fill the icons we don't have Icons for buildings in DB yet
-			 ImageView imageView =(ImageView)itemView.findViewById(R.id.item_icon);
-			imageView.setImageResource(currentBuilding.getBuildingIcon());  //int bi_1=0x7f020000;
-			 
+			// Fill the icons we don't have Icons for buildings in DB yet
+			ImageView imageView = (ImageView) itemView
+					.findViewById(R.id.item_icon);
+			imageView.setImageResource(currentBuilding.getBuildingIcon()); // int
+																			// bi_1=0x7f020000;
+
 			return itemView;
 
 		}
@@ -153,7 +155,7 @@ public class SearchActivity extends Activity {
 
 	private void broadcastMsg(String bn) {
 		sendMessageToMainActivity();
-		sendMessageToHomeActivity("SearchActivity",bn);
+		sendMessageToHomeActivity("SearchActivity", bn);
 	}
 
 	private void sendMessageToMainActivity() {
@@ -161,25 +163,11 @@ public class SearchActivity extends Activity {
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
 	}
 
-	private void sendMessageToHomeActivity(String activity,String bn) {
+	private void sendMessageToHomeActivity(String activity, String bn) {
 		Intent intent = new Intent("GetDirection");
 		intent.putExtra("Activity", activity);
 		intent.putExtra("BuildingName", bn);
 		LocalBroadcastManager.getInstance(this).sendBroadcast(intent);
-	}
-
-	private void readBuildingObjectFromDatabase() {
-		datasource = new DB_Operations(this);
-		datasource.open();
-		value = datasource.getBuildingOBJWithTimes();
-		datasource.close();
-	}
-
-	private void updateQueryTimesIntoDatabase(String bn) {
-		DB_Operations dbo = new DB_Operations();
-		dbo.open();
-		dbo.updateQueryTimesForABuilding(bn);
-		dbo.close();
 	}
 
 	private void popDialog(final String bn) {
@@ -187,7 +175,7 @@ public class SearchActivity extends Activity {
 		AlertDialog alertDialog = new AlertDialog.Builder(this).create();
 
 		alertDialog.setTitle(bn);
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Go",
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Get Routes",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
@@ -198,7 +186,7 @@ public class SearchActivity extends Activity {
 						imm.hideSoftInputFromWindow(ATV.getWindowToken(), 0);
 
 						// update the times in db
-						updateQueryTimesIntoDatabase(bn);
+						dbh.updateQueryTimesIntoDatabase(bn);
 
 						// refresh the lists
 						initData();

@@ -87,7 +87,6 @@ public class RouteActivity extends Activity {
 
 			// Find route to work with
 			DB_Route currentRoute = routeList.get(position);
-			System.out.println("88888888   "+currentRoute.getFileName());
 			// Fill the route name
 			TextView nameText = (TextView) itemView
 					.findViewById(R.id.route_item_name);
@@ -106,18 +105,18 @@ public class RouteActivity extends Activity {
 		datasource.open();
 		routeList = datasource.getRouteInfo(true);
 		
-		for(DB_Route tmp : routeList){
-			System.out.println(tmp.getRid());
-			System.out.println(tmp.getFileName());
-			System.out.println(tmp.getStarting_lat());
-			System.out.println(tmp.getStarting_lng());
-			System.out.println(tmp.getEnding_lat());
-			System.out.println(tmp.getEnding_lng());
-			System.out.println(tmp.getTakeTime());
-			System.out.println(tmp.getDistance());
-			System.out.println(tmp.getCreateTime());
-			System.out.println("^*****************^");
-		}
+//		for(DB_Route tmp : routeList){
+//			System.out.println(tmp.getRid());
+//			System.out.println(tmp.getFileName());
+//			System.out.println(tmp.getStarting_lat());
+//			System.out.println(tmp.getStarting_lng());
+//			System.out.println(tmp.getEnding_lat());
+//			System.out.println(tmp.getEnding_lng());
+//			System.out.println(tmp.getTakeTime());
+//			System.out.println(tmp.getDistance());
+//			System.out.println(tmp.getCreateTime());
+//			System.out.println("^*****************^");
+//		}
 		
 		
 		//setListAdapter(new ArrayAdapter<String>(RoutesActivity.this,

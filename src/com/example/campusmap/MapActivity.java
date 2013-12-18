@@ -22,7 +22,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.database.DB_Helper;
 import com.example.campusmap.direction.GoogleRouteTask;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.direction.RouteRequestTask;
@@ -69,18 +69,21 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private String destination;
 	private Bundle bundleFromMessageBar;
 	private Menu menuForOptionUpdate;
-	
+	private DB_Helper dbh;
+
 	private Polyline lineFromRouteActivity;
 	private RouteRequestTask campusRouteTask;
 	private GoogleRouteTask googleDirectionTask;
 	private ArrayList<Polyline> RequestPolyLines;
-	
+
 	private boolean canRemoveThePolyline = true;
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_map);
+
+		dbh = new DB_Helper();
 
 		setUpBroadCastManager();
 		mapInitialization();
@@ -160,8 +163,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	@Override
 	public void onMapClick(LatLng point) {
 
-		
-		
 		if (LongClickCount == 2 || LongClickArrayPoints.size() == 1) {
 			clearMarkersAndLine();
 		}
@@ -175,9 +176,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						tmpBuilding.getAddress());
 			}
 		} else {// add a simple marker
-			
+
 			clearRouteActLine_DirectionLine();
-			
+
 			addSimpleMaker(point);
 		}
 
@@ -188,15 +189,14 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	}
 
 	private void clearRouteActLine_DirectionLine() {
-		
-		//remove three big!
-		if(lineFromRouteActivity!=null){
+
+		// remove three big!
+		if (lineFromRouteActivity != null) {
 			lineFromRouteActivity.remove();
 		}
-		
+
 		if (campusRouteTask != null && canRemoveThePolyline == true) {
-			RequestPolyLines = campusRouteTask
-					.getPolyLineArrayList();
+			RequestPolyLines = campusRouteTask.getPolyLineArrayList();
 			if (RequestPolyLines.size() != 0) {
 				// clear all of the previous lines
 				for (Polyline tmpP : RequestPolyLines) {
@@ -204,7 +204,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				}
 			}
 		}
-		
+
 		if (googleDirectionTask != null) {
 			Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
 			if (lastGoogleLine != null) {
@@ -240,7 +240,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		public void onReceive(Context context, Intent intent) {
 
 			clearRouteActLine_DirectionLine();
-			
 
 			String activity = intent.getStringExtra("Activity");
 
@@ -248,7 +247,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 				String destination = intent.getStringExtra("BuildingName");
 				// search the building lat & lng by bn
 
-				LatLng to = getCenterPointOfABuildingFromDB(destination);
+				LatLng to = dbh.getCenterPointOfABuildingFromDB(destination);
 
 				// start an ansync task
 				if (myLastLocation != null) {
@@ -256,7 +255,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 					LatLng from = new LatLng(fromL.getLatitude(),
 							fromL.getLongitude());
 					// CallDirection(from, to);
-					CallCampusDirection(from, to);
+					CallCampusDirection(from, to, false);
 
 				}
 			} else if (activity.equals("RouteActivity")) {
@@ -270,14 +269,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		}
 
 	};
-
-	private LatLng getCenterPointOfABuildingFromDB(String destination) {
-		DB_Operations op = new DB_Operations();
-		op.open();
-		LatLng to = op.getLatLngFromDB(destination);
-		op.close();
-		return to;
-	}
 
 	@Override
 	public void onMapLongClick(LatLng point) {
@@ -328,7 +319,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		if (currentMarker != null) {
 			currentMarker.remove();
 		}
-		
+
 		LongClickCount = 0;
 		if (googleDirectionTask != null) {
 			Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
@@ -341,19 +332,20 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	/**
 	 * Campus direction
 	 */
-	private void CallCampusDirection(LatLng from, LatLng to) {
+	private void CallCampusDirection(LatLng from, LatLng to,
+			boolean cameraToStart) {
 
 		System.out.println("******start------" + from);
 		System.out.println("******end-------" + to);
 
 		canRemoveThePolyline = true;
-		
+
 		clearRouteActLine_DirectionLine();
 
 		canRemoveThePolyline = false;
-		
+
 		campusRouteTask = new RouteRequestTask(MapActivity.this, map, from, to,
-				mMessageBar,bd);
+				mMessageBar, bd, cameraToStart, ml);
 		campusRouteTask.execute();
 
 	}
@@ -371,8 +363,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		tmpR.showTestRoute(returnFileName, map, color, false);
 	}
 
-	private void DrawRouteFromRouteACT(String returnFileName,
-			GoogleMap map, int color) {
+	private void DrawRouteFromRouteACT(String returnFileName, GoogleMap map,
+			int color) {
 
 		// the filename is MyRouteX_a.txt, need to change to MyRouteX.txt
 		String routeobjArr[] = returnFileName.split("=");
@@ -400,7 +392,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		alertDialog.setTitle(destination);
 		alertDialog.setMessage(marker.getSnippet());
 
-		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Get route",
+		alertDialog.setButton(AlertDialog.BUTTON_POSITIVE, "Get routes",
 				new DialogInterface.OnClickListener() {
 
 					public void onClick(DialogInterface dialog, int id) {
@@ -410,9 +402,10 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 						// destination center point
 
-						LatLng to = getCenterPointOfABuildingFromDB(destination);
+						LatLng to = dbh
+								.getCenterPointOfABuildingFromDB(destination);
 
-						CallCampusDirection(from, to);
+						CallCampusDirection(from, to, true);
 
 					}
 
@@ -448,6 +441,15 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 					}
 				});
+		// alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+		// new DialogInterface.OnClickListener() {
+		//
+		// public void onClick(DialogInterface dialog, int id) {
+		// //...
+		//
+		// }
+		// });
+
 		alertDialog.setIcon(R.drawable.ic_launcher);
 		alertDialog.show();
 
@@ -539,15 +541,15 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		b.putInt("onMsgClick", 3);
 		switch (item.getItemId()) {
 		case R.id.route1:
-			startRoute(1,"Picked Red route! Let's go!",b);
+			startRoute(1, "Picked Red route! Let's go!", b);
 			break;
 		case R.id.route2:
-			
-			startRoute(2,"Picked Blue route! Let's go!",b);
+
+			startRoute(2, "Picked Blue route! Let's go!", b);
 
 			break;
 		case R.id.route3:
-			startRoute(3,"Picked Black route! Let's go!",b);
+			startRoute(3, "Picked Black route! Let's go!", b);
 
 			break;
 		case R.id.routeCancel:
@@ -559,33 +561,34 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	}
 
 	private void startRoute(int routeNumber, String content, Bundle b) {
-		
+
 		canRemoveThePolyline = false;
-		
-		mMessageBar.show(content, "Stop",
-				R.drawable.ic_messagebar_stop, b);
-		
+
+		mMessageBar.show(content, "Stop", R.drawable.ic_messagebar_stop, b);
+
 		// start recording
-		
-		//remove the other two lines on map
-		RequestPolyLines = campusRouteTask
-				.getPolyLineArrayList();
-		int i=0;
-		if(routeNumber==1){
-			for(Polyline tmpP : RequestPolyLines){
-				if(i!=0)
+		// Async task, begin the route
+		// locationTask = new MyLocationTask(ml, destination);
+		// locationTask.execute();
+
+		// remove the other two lines on map
+		RequestPolyLines = campusRouteTask.getPolyLineArrayList();
+		int i = 0;
+		if (routeNumber == 1) {
+			for (Polyline tmpP : RequestPolyLines) {
+				if (i != 0)
 					tmpP.remove();
 				i++;
 			}
-		}else if(routeNumber==2){
-			for(Polyline tmpP : RequestPolyLines){
-				if(i!=1)
+		} else if (routeNumber == 2) {
+			for (Polyline tmpP : RequestPolyLines) {
+				if (i != 1)
 					tmpP.remove();
 				i++;
 			}
-		}else if(routeNumber==3){
-			for(Polyline tmpP : RequestPolyLines){
-				if(i!=2)
+		} else if (routeNumber == 3) {
+			for (Polyline tmpP : RequestPolyLines) {
+				if (i != 2)
 					tmpP.remove();
 				i++;
 			}
@@ -609,12 +612,19 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 			break;
 		case 3:
-			
-			canRemoveThePolyline = true;
-			
-			// stop recording
 
-			Toast.makeText(this, "Yeah~!", Toast.LENGTH_SHORT).show();
+			canRemoveThePolyline = true;
+
+			// stop recording
+			// if (ml != null) {
+			// String returnFileName = ml
+			// .disableLocationUpdate(locationTask);
+			//
+			// // also draw the route as well
+			// DrawRoute(returnFileName, map, Color.RED);
+			//
+			// }
+
 			break;
 
 		}

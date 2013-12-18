@@ -30,7 +30,7 @@ import com.google.android.gms.maps.model.LatLng;
 //This class will be execute in Async task
 public class MyLocation implements Runnable {
 
-	private final static int GPS_LOST_TIME = 5000; 
+	private final static int GPS_LOST_TIME = 4000; 
 	private final static int GPS_LOST_COUNTER = 10; 
 	
 	private Timer timer1;
@@ -56,6 +56,7 @@ public class MyLocation implements Runnable {
 	private BuildingDrawing bd;
 	private int counter = 0;
 	private String destination;
+	private LatLng enteredBuildingLatLng;
 
 	public void setDestination(String des) {
 		this.destination = des;
@@ -127,7 +128,10 @@ public class MyLocation implements Runnable {
 
 	}
 
-	// ---------------------------begin route, stop route-----------------------
+	/**
+	 * begin/stop route
+	 * 
+	 */
 	public void beginRoute() {
 		// set 'can record'
 		rr.toggleRecordState();
@@ -225,6 +229,14 @@ public class MyLocation implements Runnable {
 		return returnName;
 	}
 
+	public LatLng getEnteredBuildingLatLng(){
+		if(gps_lost_flag){//lost, means within a building
+			return enteredBuildingLatLng;
+		}else{	//else just use your current LatLng, much reliable
+			return null;
+		}
+	}
+	
 	/**
 	 * Check GPS availability
 	 * 
@@ -291,6 +303,10 @@ public class MyLocation implements Runnable {
 								.getWhichBuildingEntered();
 						// get the building LatLng
 						LatLng enteredBLL = ewb.getEnteredBuildingLatLng();
+						
+						//for routeOptimization
+						enteredBuildingLatLng = enteredBLL;
+						
 						GoogleLatLngDistance glld = new GoogleLatLngDistance();
 						double estimateDistance = glld.GetDistance(
 								enteredBLL.latitude, enteredBLL.longitude,
@@ -487,30 +503,35 @@ public class MyLocation implements Runnable {
 	 * 
 	 * @return
 	 */
+	
 	public Location getMyLastLocation() {
-		Location net_loc = null, gps_loc = null;
-		if (gps_enabled) {
-			gps_loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-		}
-		if (network_enabled) {
-			net_loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
-		}
-		// if there are both values use the latest one
-		if (gps_loc != null && net_loc != null) {
-			if (gps_loc.getTime() > net_loc.getTime()) {
-				return gps_loc;
-			} else {
-				return net_loc;
-			}
-		}
-		if (gps_loc != null) {
-			return gps_loc;
-		}
-		if (net_loc != null) {
-			return net_loc;
-		}
-		return null;
+		return MyLastLocation;
 	}
+	
+//	public Location getMyLastLocation() {
+//		Location net_loc = null, gps_loc = null;
+//		if (gps_enabled) {
+//			gps_loc = lm.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+//		}
+//		if (network_enabled) {
+//			net_loc = lm.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+//		}
+//		// if there are both values use the latest one
+//		if (gps_loc != null && net_loc != null) {
+//			if (gps_loc.getTime() > net_loc.getTime()) {
+//				return gps_loc;
+//			} else {
+//				return net_loc;
+//			}
+//		}
+//		if (gps_loc != null) {
+//			return gps_loc;
+//		}
+//		if (net_loc != null) {
+//			return net_loc;
+//		}
+//		return null;
+//	}
 
 	/**
 	 * inner class, useless

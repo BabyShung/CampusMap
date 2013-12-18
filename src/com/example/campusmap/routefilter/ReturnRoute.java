@@ -38,6 +38,9 @@ public class ReturnRoute implements Comparable<ReturnRoute>{
 		points = rpoints;
 	}
 	
+	public void setDistance(int distance){
+		this.distance = distance;
+	}
 	
 	@Override
 	public int compareTo(ReturnRoute rr) {

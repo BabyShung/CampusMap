@@ -81,7 +81,13 @@ public class NearestPoint {
 		return returnPoint;
 	}
 
-	// for routeOptimization class, only check half size
+	/**
+	 *  for routeOptimization class, only check half size
+	 * @param myLatLng
+	 * @param rroute
+	 * @param bd
+	 * @return
+	 */
 	public int getNearestPointForTwo(LatLng myLatLng, ArrayList<LatLng> rroute,
 			BuildingDrawing bd) {
 
