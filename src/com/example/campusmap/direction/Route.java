@@ -4,10 +4,15 @@ import java.util.ArrayList;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import com.example.campusmap.file.FileOperations;
+import com.example.campusmap.mapdrawing.PolylineDrawing;
 import com.example.campusmap.routefilter.Location_Hao;
+import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import android.graphics.Color;
 import android.location.Location;
 
 public class Route {
@@ -24,7 +29,7 @@ public class Route {
 	}
 
 	//test method, to show a specific route
-	public LatLng showTestRoute(String justName, GoogleMap map, int c,boolean isOriginal) {
+	public Polyline showTestRoute(String justName, GoogleMap map, int color,boolean isOriginal) {
 		String newS;
 		if(isOriginal){
 			newS = justName.replace(".txt", "");
@@ -35,18 +40,14 @@ public class Route {
 		
 		LatLng first = result.get(0);
 		
-		PolylineOptions rectline;
-		if (result != null) {
-			rectline = new PolylineOptions().width(4).color(c);
-			int i;
-			for (i = 0; i < result.size(); i++) {
-				rectline.add(result.get(i));
-			}
-			map.addPolyline(rectline);
-			System.out.println("*************Drawing********");
-		}
+		PolylineDrawing pdrawing = new PolylineDrawing();
 		
-		return first;
+		Polyline pl = pdrawing.drawLineOnGoogleMap(map, result, color,8);
+		
+		map.animateCamera(CameraUpdateFactory.newLatLng(first));
+ 
+		
+		return pl;
 	}
 
 	//put data into the buffer

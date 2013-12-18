@@ -63,15 +63,17 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private Polyline LongClickPolyLine;
 	private MarkerAndPolyLine marker_polyline;
 	private int LongClickCount;
-	private GoogleRouteTask googleDirectionTask;
 	private Location myLastLocation;
-	private RouteRequestTask campusRouteTask;
 	private MessageBar mMessageBar;
 	private LocationManager lm;
 	private String destination;
 	private Bundle bundleFromMessageBar;
 	private Menu menuForOptionUpdate;
-
+	
+	private Polyline lineFromRouteActivity;
+	private RouteRequestTask campusRouteTask;
+	private GoogleRouteTask googleDirectionTask;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -139,11 +141,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		map.animateCamera(CameraUpdateFactory.zoomTo(zoomto));
 	}
 
-	private void setUpMyLocationCamera(LatLng ll, int zoomto) {
-		map.moveCamera(CameraUpdateFactory.newLatLng(ll));
-		map.animateCamera(CameraUpdateFactory.zoomTo(zoomto));
-	}
-
 	private void setUpListeners() {
 		map.setOnMapClickListener(this);
 		map.setOnMapLongClickListener(this);
@@ -160,6 +157,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	@Override
 	public void onMapClick(LatLng point) {
 
+		
+		
 		if (LongClickCount == 2 || LongClickArrayPoints.size() == 1) {
 			clearMarkersAndLine();
 		}
@@ -173,6 +172,9 @@ public class MapActivity extends Activity implements OnMapClickListener,
 						tmpBuilding.getAddress());
 			}
 		} else {// add a simple marker
+			
+			clearRouteActLine_DirectionLine();
+			
 			addSimpleMaker(point);
 		}
 
@@ -180,6 +182,32 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		LongClickArrayPoints.clear();
 		LongClickArrayPoints.add(point);
 		LongClickCount++;
+	}
+
+	private void clearRouteActLine_DirectionLine() {
+		
+		//remove three big!
+		if(lineFromRouteActivity!=null){
+			lineFromRouteActivity.remove();
+		}
+		
+		if (campusRouteTask != null) {
+			ArrayList<Polyline> polyLines = campusRouteTask
+					.getPolyLineArrayList();
+			if (polyLines.size() != 0) {
+				// clear all of the previous lines
+				for (Polyline tmpP : polyLines) {
+					tmpP.remove();
+				}
+			}
+		}
+		
+		if (googleDirectionTask != null) {
+			Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
+			if (lastGoogleLine != null) {
+				lastGoogleLine.remove();
+			}
+		}
 	}
 
 	private void addSimpleMaker(LatLng point) {
@@ -208,12 +236,8 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		@Override
 		public void onReceive(Context context, Intent intent) {
 
-			if (googleDirectionTask != null) {
-				Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
-				if (lastGoogleLine != null) {
-					lastGoogleLine.remove();
-				}
-			}
+			clearRouteActLine_DirectionLine();
+			
 
 			String activity = intent.getStringExtra("Activity");
 
@@ -232,11 +256,12 @@ public class MapActivity extends Activity implements OnMapClickListener,
 					CallCampusDirection(from, to);
 
 				}
-			} else {
+			} else if (activity.equals("RouteActivity")) {
 
 				String filename = intent.getStringExtra("FileName");
 				System.out.println("toString: ----   " + filename);
 				// also draw the route as well
+
 				DrawRouteFromRouteACT(filename, map, Color.RED);
 			}
 		}
@@ -300,7 +325,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		if (currentMarker != null) {
 			currentMarker.remove();
 		}
-
+		
 		LongClickCount = 0;
 		if (googleDirectionTask != null) {
 			Polyline lastGoogleLine = googleDirectionTask.getDrawnLine();
@@ -317,6 +342,18 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 		System.out.println("******start------" + from);
 		System.out.println("******end-------" + to);
+
+		if (campusRouteTask != null) {
+			ArrayList<Polyline> polyLines = campusRouteTask
+					.getPolyLineArrayList();
+			if (polyLines.size() != 0) {
+				// clear all of the previous lines
+				for (Polyline tmpP : polyLines) {
+					tmpP.remove();
+				}
+			}
+		}
+
 		campusRouteTask = new RouteRequestTask(MapActivity.this, map, from, to,
 				mMessageBar);
 		campusRouteTask.execute();
@@ -336,26 +373,22 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		tmpR.showTestRoute(returnFileName, map, color, false);
 	}
 
-	private void DrawRouteFromRouteACT(String returnFileName, GoogleMap map,
-			int color) {
+	private void DrawRouteFromRouteACT(String returnFileName,
+			GoogleMap map, int color) {
 
 		// the filename is MyRouteX_a.txt, need to change to MyRouteX.txt
 		String routeobjArr[] = returnFileName.split("=");
 		String finalFN = routeobjArr[0].split("_")[0] + ".txt";
 
 		Route tmpR = new Route(new FileOperations());
-		LatLng firstPoint = tmpR.showTestRoute(finalFN, map, color, false);
+		lineFromRouteActivity = tmpR.showTestRoute(finalFN, map, color, false);
 
-		if (firstPoint != null) {
-			setUpMyLocationCamera(firstPoint, 16);
+		Bundle b = new Bundle();
+		b.putInt("onMsgClick", 3);// after click the button, nothing happens
 
-			Bundle b = new Bundle();
-			b.putInt("onMsgClick", 3);// after click the button, nothing happens
-
-			TimeConvert tc = new TimeConvert(routeobjArr[2]);
-			mMessageBar.show(routeobjArr[1] + "M, " + tc, "Cancel",
-					R.drawable.ic_messagebar_stop, b);
-		}
+		TimeConvert tc = new TimeConvert(routeobjArr[2]);
+		mMessageBar.show(routeobjArr[1] + "M, " + tc, "Cancel",
+				R.drawable.ic_messagebar_stop, b);
 
 	}
 
@@ -451,59 +484,54 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	@Override
 	public boolean onPrepareOptionsMenu(Menu menu) {
 		menu.clear(); // Clear view of previous menu
-		
+
 		menuForOptionUpdate = menu;
-		
+
 		MenuInflater mi = getMenuInflater();
- 
-		
+
 		int NumberOfRoutes = bundleFromMessageBar.getInt("NumberOfRoutes");
-		
+
 		if (NumberOfRoutes == 1) {// only one route,google
 			mi.inflate(R.menu.route_menu_1, menu);
-			
-			updateOptionMenu(R.id.route1,"time_1","distance_1");
 
-			
+			updateOptionMenu(R.id.route1, "time_1", "distance_1");
+
 		} else if (NumberOfRoutes == 2) {
 			mi.inflate(R.menu.route_menu_2, menu);
-			
-			updateOptionMenu(R.id.route1,"time_1","distance_1");
-			updateOptionMenu(R.id.route2,"time_2","distance_2");
-			
+
+			updateOptionMenu(R.id.route1, "time_1", "distance_1");
+			updateOptionMenu(R.id.route2, "time_2", "distance_2");
+
 		} else if (NumberOfRoutes == 3) {
 			mi.inflate(R.menu.route_menu_3, menu);
-			
-			updateOptionMenu(R.id.route1,"time_1","distance_1");
-			updateOptionMenu(R.id.route2,"time_2","distance_2");
-			updateOptionMenu(R.id.route3,"time_3","distance_3");
+
+			updateOptionMenu(R.id.route1, "time_1", "distance_1");
+			updateOptionMenu(R.id.route2, "time_2", "distance_2");
+			updateOptionMenu(R.id.route3, "time_3", "distance_3");
 		}
 
 		return super.onPrepareOptionsMenu(menu);
 	}
 
-
-	
 	private void updateOptionMenu(int id, String time, String distance) {
-				String Name = null;
-				if(id == R.id.route1){
-					Name = "Red";
-				}else if(id == R.id.route2){
-					Name = "Blue";
-				}else if(id == R.id.route3){
-					Name = "Black";
-				}
-				MenuItem mitem = menuForOptionUpdate.findItem(id);
-				TimeConvert tc = new TimeConvert(bundleFromMessageBar.getInt(time));
-				DistanceConvert dc = new DistanceConvert(bundleFromMessageBar.getInt(distance));
-				mitem.setTitle(Name+": "+dc+", "+tc);
+		String Name = null;
+		if (id == R.id.route1) {
+			Name = "Red";
+		} else if (id == R.id.route2) {
+			Name = "Blue";
+		} else if (id == R.id.route3) {
+			Name = "Black";
+		}
+		MenuItem mitem = menuForOptionUpdate.findItem(id);
+		TimeConvert tc = new TimeConvert(bundleFromMessageBar.getInt(time));
+		DistanceConvert dc = new DistanceConvert(
+				bundleFromMessageBar.getInt(distance));
+		mitem.setTitle(Name + ": " + dc + ", " + tc);
 	}
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
-
 		super.onCreateOptionsMenu(menu);
-
 		return true;
 	}
 
@@ -549,7 +577,6 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	public void onMessageClick(Parcelable token) {
 		bundleFromMessageBar = (Bundle) token;
 		final int onMsgClick = bundleFromMessageBar.getInt("onMsgClick");
-		
 
 		switch (onMsgClick) {
 		case 1:

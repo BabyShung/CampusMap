@@ -117,7 +117,7 @@ public class CampusMapDirection {
 		ReturnRoute tmpR;
 
 		int numberOfRoute = (jObject.length() - 1) / 4;
-
+		System.out.println("No. of route: "+numberOfRoute);
 		int distance;
 		int taketime;
 		int type;
@@ -129,9 +129,11 @@ public class CampusMapDirection {
 
 				distance = (int) jObject.getDouble("r" + i + "_distance");
 				taketime = jObject.getInt("r" + i + "_time");
-
 				type = jObject.getInt("r" + i + "_type");
-
+				
+				System.out.println("Distance of route: "+distance);
+				System.out.println("Type of route: "+type);
+				
 				String[] pointsArr = jObject.getString("r" + i + "_points")
 						.split(";");
 				String[] inner;

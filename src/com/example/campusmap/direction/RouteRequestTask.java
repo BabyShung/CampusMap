@@ -4,9 +4,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import net.simonvt.messagebar.MessageBar;
+
 import org.w3c.dom.Document;
 
-import net.simonvt.messagebar.MessageBar;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -14,11 +15,12 @@ import android.widget.Toast;
 
 import com.example.campusmap.MapActivity;
 import com.example.campusmap.R;
+import com.example.campusmap.mapdrawing.PolylineDrawing;
 import com.example.campusmap.routefilter.ReturnRoute;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.maps.model.Polyline;
 
 // Async <inputtype, progresstype, returntype>
 public class RouteRequestTask extends AsyncTask<String, Integer, String> {
@@ -33,6 +35,8 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 	private ArrayList<LatLng> googlePoints;
 	private int googleDistance;
 	private int googleTime;
+	
+	private ArrayList<Polyline> polylineAL;
 
 	public RouteRequestTask(MapActivity ma, GoogleMap map, LatLng fromPosition,
 			LatLng toPosition, MessageBar mMessageBar) {
@@ -41,8 +45,15 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;
 		this.mMessageBar = mMessageBar;
+		
+		this.polylineAL = new ArrayList<Polyline>();
+		
 	}
 
+	public ArrayList<Polyline> getPolyLineArrayList(){
+		return polylineAL;
+	}
+	
 	@Override
 	protected String doInBackground(String... arg0) {
 
@@ -77,6 +88,7 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 			int status = cmd.getStatus();
 			
 			Bundle b = new Bundle();
+			PolylineDrawing pdrawing = new PolylineDrawing();
 			
 			if (status == 1) {
 
@@ -109,8 +121,8 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 				for (ReturnRoute tmprr : rr) {
 					if (j >= 3)
 						break;
-					drawLineOnGoogleMap(map, tmprr.getPoints(), Colors[j]);
-					
+					Polyline pl = pdrawing.drawLineOnGoogleMap(map, tmprr.getPoints(), Colors[j],10-3*j);
+					polylineAL.add(pl);
 					b.putInt("distance_"+(j+1), tmprr.getDistance());
 					b.putInt("time_"+(j+1), tmprr.getTakeTime());
 					
@@ -119,8 +131,8 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 
 			} else {// 0 requested, just use google
 				row_to_optionMenu = 1;
-				drawLineOnGoogleMap(map, googlePoints, Color.RED);
-				
+				Polyline pl = pdrawing.drawLineOnGoogleMap(map, googlePoints, Color.RED,10);
+				polylineAL.add(pl);
 				
 				b.putInt("onMsgClick", 1);//1 means will pop up optionMenu
 				b.putInt("NumberOfRoutes", row_to_optionMenu);
@@ -138,20 +150,20 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 		}
 	}
 
-	private void drawLineOnGoogleMap(GoogleMap map, ArrayList<LatLng> points,
-			int color) {
-
-		PolylineOptions rectline;
-
-		if (points != null) {
-			rectline = new PolylineOptions().width(4).color(color);
-			for (int i = 0; i < points.size(); i++) {
-				rectline.add(points.get(i));
-			}
-			map.addPolyline(rectline);
-
-		}
-
-	}
+//	private Polyline drawLineOnGoogleMap(GoogleMap map, ArrayList<LatLng> points,
+//			int color,int width) {
+//		Polyline pl = null;
+//		PolylineOptions rectline;
+//
+//		if (points != null) {
+//			rectline = new PolylineOptions().width(width).color(color);
+//			for (int i = 0; i < points.size(); i++) {
+//				rectline.add(points.get(i));
+//			}
+//			pl = map.addPolyline(rectline);
+//			
+//		}
+//		return pl;
+//	}
 
 }

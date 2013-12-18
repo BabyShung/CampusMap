@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.widget.Toast;
 import com.example.campusmap.MapActivity;
+import com.example.campusmap.mapdrawing.PolylineDrawing;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.model.LatLng;
@@ -52,23 +53,14 @@ public class GoogleRouteTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 	protected void onPostExecute(ArrayList<LatLng> result) {
 		super.onPostExecute(result);
 
-		// select random color for a route
-//		int[] randomColor = { Color.RED, Color.BLACK, Color.BLUE, Color.YELLOW,
-//				Color.CYAN };
-//		Random rm = new Random();
-//		int index = rm.nextInt(5);
+		PolylineDrawing pdrawing = new PolylineDrawing();
+		
+		drawnLine = pdrawing.drawLineOnGoogleMap(map, result, Color.MAGENTA,10);
+ 
+		Toast.makeText(mContext, "Google direction",
+				Toast.LENGTH_SHORT).show();
+		map.animateCamera(CameraUpdateFactory.newLatLng(toPosition));
 
-		if (result != null) {
-			rectline = new PolylineOptions().width(4).color(Color.MAGENTA);
-			int i;
-			for (i = 0; i < result.size(); i++) {
-				rectline.add(result.get(i));
-			}
-			drawnLine = map.addPolyline(rectline);
-			map.animateCamera(CameraUpdateFactory.newLatLng(toPosition));
-			Toast.makeText(mContext, "Google direction",
-					Toast.LENGTH_SHORT).show();
-		}
 	}
 
 }
