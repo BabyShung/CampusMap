@@ -3,7 +3,7 @@ package com.example.campusmap.algorithms;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.example.campusmap.database.DB_Operations;
+import com.example.campusmap.database.DB_Helper;
 import com.example.campusmap.geometry.GoogleLatLngDistance;
 import com.example.campusmap.geometry.NearestPoint;
 import com.example.campusmap.location.MyLocation;
@@ -21,11 +21,13 @@ public class RouteOptimization {
 	private int routeI;
 	private GoogleLatLngDistance glld;
 	private BuildingDrawing bd;
+	private DB_Helper dbh;
 
 	public RouteOptimization(LatLng myLatLng, BuildingDrawing bd) {
 		this.myLatLng = myLatLng;
-		glld = new GoogleLatLngDistance();
 		this.bd = bd;
+		glld = new GoogleLatLngDistance();
+		dbh = new DB_Helper();
 	}
 
 	public List<ReturnRoute> routeOptimize(List<ReturnRoute> returnRoutes,
@@ -49,10 +51,10 @@ public class RouteOptimization {
 				ArrayList<LatLng> newRoutePoints = new ArrayList<LatLng>();
 
 				// check if myPosition within a building
-				// if (bd.pointIsInPolygon(myLatLng)) {
-				// String bn = bd.getCurrentTouchedBuilding().getBuildingName();
-				// myLatLng = getCenterPointOfABuildingFromDB(bn);
-				// }
+				 if (bd.pointIsInPolygon(myLatLng)) {
+					 String bn = bd.getCurrentTouchedBuilding().getBuildingName();
+					 myLatLng = dbh.getCenterPointOfABuildingFromDB(bn);
+				 }
 
 				// LatLng checkPoint = ml.getEnteredBuildingLatLng();
 				// if(checkPoint != null){
