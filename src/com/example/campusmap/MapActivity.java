@@ -353,7 +353,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		canRemoveThePolyline = false;
 		
 		campusRouteTask = new RouteRequestTask(MapActivity.this, map, from, to,
-				mMessageBar);
+				mMessageBar,bd);
 		campusRouteTask.execute();
 
 	}

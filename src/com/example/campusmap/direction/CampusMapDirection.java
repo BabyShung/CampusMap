@@ -27,7 +27,7 @@ public class CampusMapDirection {
 
 	private JSONObject jObject;
 
-	private ArrayList<ReturnRoute> returnRoute;
+	private ArrayList<ReturnRoute> returnRoutes;
 
 	public CampusMapDirection() {
 
@@ -113,7 +113,7 @@ public class CampusMapDirection {
 
 	public void initRouteOBJ() {
 
-		returnRoute = new ArrayList<ReturnRoute>();
+		returnRoutes = new ArrayList<ReturnRoute>();
 		ReturnRoute tmpR;
 
 		int numberOfRoute = (jObject.length() - 1) / 4;
@@ -147,19 +147,21 @@ public class CampusMapDirection {
 				}
 
 				// add
-				tmpR = new ReturnRoute(distance, taketime, points);
-				returnRoute.add(tmpR);
+				tmpR = new ReturnRoute(distance, taketime, points,type);
+				returnRoutes.add(tmpR);
 
 			} catch (JSONException e) {
-
 				e.printStackTrace();
 			}
 		}
 
+
+		
+		
 	}
 
 	public ArrayList<ReturnRoute> getRoutesArrayList() {
-		return returnRoute;
+		return returnRoutes;
 
 	}
 

@@ -15,6 +15,8 @@ import android.widget.Toast;
 
 import com.example.campusmap.MapActivity;
 import com.example.campusmap.R;
+import com.example.campusmap.algorithms.RouteOptimization;
+import com.example.campusmap.mapdrawing.BuildingDrawing;
 import com.example.campusmap.mapdrawing.PolylineDrawing;
 import com.example.campusmap.routefilter.ReturnRoute;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -35,16 +37,17 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 	private ArrayList<LatLng> googlePoints;
 	private int googleDistance;
 	private int googleTime;
-	
+	private BuildingDrawing bd;
 	private ArrayList<Polyline> polylineAL;
 
 	public RouteRequestTask(MapActivity ma, GoogleMap map, LatLng fromPosition,
-			LatLng toPosition, MessageBar mMessageBar) {
+			LatLng toPosition, MessageBar mMessageBar,BuildingDrawing bd) {
 		this.ma = ma;
 		this.map = map;
 		this.fromPosition = fromPosition;
 		this.toPosition = toPosition;
 		this.mMessageBar = mMessageBar;
+		this.bd = bd;
 		
 		this.polylineAL = new ArrayList<Polyline>();
 		
@@ -99,8 +102,14 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 				List<ReturnRoute> rr = cmd.getRoutesArrayList();
 
 				// add google direction as well
-				rr.add(new ReturnRoute(googleDistance, googleTime, googlePoints));
+				rr.add(new ReturnRoute(googleDistance, googleTime, googlePoints,-1));
 
+				//used fromPosition, should I get MyLocation updated one?
+				RouteOptimization rop = new RouteOptimization(fromPosition,bd);
+				
+				//optimizing the routes
+				rr = rop.routeOptimize(rr);
+				
 				// pass to optionmenu
 				if (rr.size() >= 3) {
 					row_to_optionMenu = 3;
@@ -149,21 +158,5 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 
 		}
 	}
-
-//	private Polyline drawLineOnGoogleMap(GoogleMap map, ArrayList<LatLng> points,
-//			int color,int width) {
-//		Polyline pl = null;
-//		PolylineOptions rectline;
-//
-//		if (points != null) {
-//			rectline = new PolylineOptions().width(width).color(color);
-//			for (int i = 0; i < points.size(); i++) {
-//				rectline.add(points.get(i));
-//			}
-//			pl = map.addPolyline(rectline);
-//			
-//		}
-//		return pl;
-//	}
 
 }

@@ -3,16 +3,17 @@ package com.example.campusmap.geometry;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import com.example.campusmap.mapdrawing.BuildingDrawing;
 import com.google.android.gms.maps.model.LatLng;
 
 public class NearestPoint {
 
 	private LatLng origin;
 	private ArrayList<LatLng> al;
-//	private LatLng mFirst;
-//	private LatLng mSecond;
-//	private LatLng mThird;
 	private ArrayList<LatLng> pointsForBuildingSet;
+
+	public NearestPoint() {
+	}
 
 	public NearestPoint(LatLng origin, ArrayList<LatLng> al) {
 		this.origin = origin;
@@ -25,31 +26,19 @@ public class NearestPoint {
 		LatLng closest_2 = getNearestPoint();
 		LatLng closest_3 = getNearestPoint();
 		LatLng closest_4 = getNearestPoint();
-		return new LatLng[]{ closest_1, closest_2, closest_3, closest_4  };
+		return new LatLng[] { closest_1, closest_2, closest_3, closest_4 };
 	}
-	
-	public LatLng[] returnClosestTwoPoints(LatLng[] points) {
-		
-		pointsForBuildingSet.clear();
-		for(LatLng tmpPoint: points)
-			pointsForBuildingSet.add(tmpPoint);
-		
-		LatLng closest_1 = getNearestPointForTwo();
-		LatLng closest_2  = getNearestPointForTwo();
-		return new LatLng[]{ closest_1, closest_2  };
-	}
-	
 
-//	public LatLng returnOneOfThreeSmallest(int index) {
-//		if (index == 1)
-//			return mFirst;
-//		else if (index == 2)
-//			return mSecond;
-//		else if (index == 3)
-//			return mThird;
-//		else
-//			return null;
-//	}
+	public LatLng[] returnClosestTwoPoints(LatLng[] points) {
+
+		pointsForBuildingSet.clear();
+		for (LatLng tmpPoint : points)
+			pointsForBuildingSet.add(tmpPoint);
+
+		LatLng closest_1 = getNearestPointForTwo();
+		LatLng closest_2 = getNearestPointForTwo();
+		return new LatLng[] { closest_1, closest_2 };
+	}
 
 	// not efficient, can modify some time later
 	private LatLng getNearestPoint() {
@@ -91,8 +80,32 @@ public class NearestPoint {
 		pointsForBuildingSet.remove(minIndex);
 		return returnPoint;
 	}
-	
-	
+
+	// for routeOptimization class, only check half size
+	public int getNearestPointForTwo(LatLng myLatLng, ArrayList<LatLng> rroute,
+			BuildingDrawing bd) {
+
+		double min = Double.MAX_VALUE;
+		LatLng tmpLL;
+		int minIndex = Integer.MAX_VALUE;
+		for (int i = 0; i < rroute.size() / 2; i++) {
+
+			tmpLL = rroute.get(i);
+			double current = getDistance(myLatLng,tmpLL);
+
+			if (!bd.pointIsInPolygon(tmpLL)) {
+				if (current < min) {
+					min = current;
+					minIndex = i;
+				}
+			}
+
+		}
+		return minIndex;
+	}
+
+
+
 	// not efficient, can modify some time later
 	public double[] sortDistances() {
 
@@ -139,6 +152,13 @@ public class NearestPoint {
 		return result;
 	}
 
+	private double getDistance(LatLng myLatLng, LatLng tmpLL) {
+		double result = Math.pow(myLatLng.latitude - tmpLL.latitude, 2)
+				+ Math.pow(myLatLng.longitude - tmpLL.longitude, 2);
+		//result = Math.sqrt(result);
+		return result;
+	}
+	
 	private double getDistanceSquare(LatLng tmp) {
 
 		double result = Math.pow(tmp.latitude - origin.latitude, 2)
