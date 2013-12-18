@@ -343,16 +343,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		System.out.println("******start------" + from);
 		System.out.println("******end-------" + to);
 
-		if (campusRouteTask != null) {
-			ArrayList<Polyline> polyLines = campusRouteTask
-					.getPolyLineArrayList();
-			if (polyLines.size() != 0) {
-				// clear all of the previous lines
-				for (Polyline tmpP : polyLines) {
-					tmpP.remove();
-				}
-			}
-		}
+		clearRouteActLine_DirectionLine();
 
 		campusRouteTask = new RouteRequestTask(MapActivity.this, map, from, to,
 				mMessageBar);
