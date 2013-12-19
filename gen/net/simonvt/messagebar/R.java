@@ -8,9 +8,9 @@ package net.simonvt.messagebar;
 
 public final class R {
 	public static final class attr {
-		public static final int messageBarButtonStyle = 0x7f010002;
-		public static final int messageBarContainerStyle = 0x7f010000;
-		public static final int messageBarTextStyle = 0x7f010001;
+		public static final int messageBarButtonStyle = 0x7f010012;
+		public static final int messageBarContainerStyle = 0x7f010010;
+		public static final int messageBarTextStyle = 0x7f010011;
 	}
 	public static final class drawable {
 		public static final int mb__item_background_holo_dark = 0x7f020052;
@@ -23,17 +23,17 @@ public final class R {
 		public static final int mb__messagebar_divider = 0x7f020059;
 	}
 	public static final class id {
-		public static final int mbButton = 0x7f040002;
-		public static final int mbContainer = 0x7f040000;
-		public static final int mbMessage = 0x7f040001;
+		public static final int mbButton = 0x7f050007;
+		public static final int mbContainer = 0x7f050005;
+		public static final int mbMessage = 0x7f050006;
 	}
 	public static final class layout {
 		public static final int mb__messagebar = 0x7f030007;
 	}
 	public static final class style {
-		public static final int MessageBar = 0x7f050000;
-		public static final int MessageBar_Button = 0x7f050003;
-		public static final int MessageBar_Container = 0x7f050001;
-		public static final int MessageBar_Message = 0x7f050002;
+		public static final int MessageBar = 0x7f080000;
+		public static final int MessageBar_Button = 0x7f080003;
+		public static final int MessageBar_Container = 0x7f080001;
+		public static final int MessageBar_Message = 0x7f080002;
 	}
 }

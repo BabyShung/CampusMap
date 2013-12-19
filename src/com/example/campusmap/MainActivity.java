@@ -56,7 +56,7 @@ public class MainActivity extends Activity {
 			// change text font and position
 			TextView tv = (TextView) mTabWidget.getChildAt(i).findViewById(
 					android.R.id.title);
-			tv.setTextSize(20);
+			tv.setTextSize(18);
 			tv.setTextColor(0xffffc000); // BALCK:-16777216
 			tv.setTypeface(null, Typeface.BOLD);
 

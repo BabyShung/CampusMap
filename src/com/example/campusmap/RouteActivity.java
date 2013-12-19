@@ -87,10 +87,22 @@ public class RouteActivity extends Activity {
 
 			// Find route to work with
 			DB_Route currentRoute = routeList.get(position);
+			
 			// Fill the route name
 			TextView nameText = (TextView) itemView
 					.findViewById(R.id.route_item_name);
-			nameText.setText(currentRoute.getFileName());
+			nameText.setText(currentRoute.getRid()+".to:");
+			
+			//route destination
+			TextView destinationText = (TextView) itemView
+					.findViewById(R.id.route_item_destination);
+			destinationText.setText(currentRoute.getDestination());
+			
+			//route distance and time
+			TextView distanceText = (TextView) itemView
+			.findViewById(R.id.route_item_distance);
+			distanceText.setText(currentRoute.getDistance() + "m  "+ currentRoute.getTakeTime() + "'s");
+	
 			
 			return itemView;
 

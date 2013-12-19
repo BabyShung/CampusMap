@@ -3,29 +3,44 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent" >
 
-    <ImageView
-        android:id="@+id/route_item_icon"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentTop="true"
-        android:adjustViewBounds="true"
-        android:maxHeight="60dp"
-        android:maxWidth="60dp"
-        android:src="@drawable/icon_building" />
-
     <TextView
         android:id="@+id/route_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/route_item_icon"
-        android:layout_alignParentRight="true"
+        android:layout_width="50dp"
+        android:layout_height="60dp"
+        android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/route_item_icon"
         android:paddingLeft="5dp"
         android:text="name"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textColor="#494f50"
         android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/route_item_destination"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/route_item_name"
+        android:layout_alignParentTop="true"
+        android:layout_toRightOf="@+id/route_item_name"
+        android:layout_toLeftOf="@+id/route_item_distance"
+        android:text="TextView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#494f50"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/route_item_distance"
+        android:layout_width="120dp"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/route_item_destination"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentTop="true"
+    
+        android:text="TextView"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:textColor="#494f50"
+        android:textSize="18sp" />
+
+  />
 
 </RelativeLayout>
