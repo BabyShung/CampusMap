@@ -27,6 +27,7 @@ import com.example.campusmap.direction.GoogleRouteTask;
 import com.example.campusmap.direction.Route;
 import com.example.campusmap.direction.RouteRequestTask;
 import com.example.campusmap.file.FileOperations;
+import com.example.campusmap.geometry.GoogleLatLngDistance;
 import com.example.campusmap.helper.DistanceConvert;
 import com.example.campusmap.helper.TimeConvert;
 import com.example.campusmap.location.MyLocation;
@@ -70,6 +71,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 	private Bundle bundleFromMessageBar;
 	private Menu menuForOptionUpdate;
 	private DB_Helper dbh;
+	private GoogleLatLngDistance glld;
 
 	private Polyline lineFromRouteActivity;
 	private RouteRequestTask campusRouteTask;
@@ -84,6 +86,7 @@ public class MapActivity extends Activity implements OnMapClickListener,
 		setContentView(R.layout.activity_map);
 
 		dbh = new DB_Helper();
+		glld = new GoogleLatLngDistance();
 
 		setUpBroadCastManager();
 		mapInitialization();
@@ -294,6 +297,17 @@ public class MapActivity extends Activity implements OnMapClickListener,
 					Color.RED, 5, LongClickArrayPoints);
 			LongClickPolyLine = map.addPolyline(plo);
 
+			// calculate distance
+			double distance = glld.GetDistance(
+					LongClickArrayPoints.get(0).latitude,
+					LongClickArrayPoints.get(0).longitude,
+					LongClickArrayPoints.get(1).latitude,
+					LongClickArrayPoints.get(1).longitude);
+
+			
+			Toast.makeText(this, "Distance: "+ distance,
+					Toast.LENGTH_SHORT).show();
+			
 			// start google direction async task
 			CallDirection(LongClickArrayPoints.get(0),
 					LongClickArrayPoints.get(1));
@@ -411,44 +425,44 @@ public class MapActivity extends Activity implements OnMapClickListener,
 
 				});
 
-		alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stop",
-				new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int id) {
-						if (ml != null) {
-							String returnFileName = ml
-									.disableLocationUpdate(locationTask);
-
-							// also draw the route as well
-							DrawRoute(returnFileName, map, Color.RED);
-
-						}
-
-					}
-
-				});
-		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Start",
-				new DialogInterface.OnClickListener() {
-
-					public void onClick(DialogInterface dialog, int id) {
-
-						// //set up MyLocation.class, for recording
-						// GPS_Network_Initialization();
-						//
-						// Async task, begin the route
-						locationTask = new MyLocationTask(ml, destination);
-						locationTask.execute();
-
-					}
-				});
-		// alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+		// alertDialog.setButton(AlertDialog.BUTTON_NEUTRAL, "Stop",
 		// new DialogInterface.OnClickListener() {
 		//
 		// public void onClick(DialogInterface dialog, int id) {
-		// //...
+		// if (ml != null) {
+		// String returnFileName = ml
+		// .disableLocationUpdate(locationTask);
+		//
+		// // also draw the route as well
+		// DrawRoute(returnFileName, map, Color.RED);
+		//
+		// }
+		//
+		// }
+		//
+		// });
+		// alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Start",
+		// new DialogInterface.OnClickListener() {
+		//
+		// public void onClick(DialogInterface dialog, int id) {
+		//
+		// // //set up MyLocation.class, for recording
+		// // GPS_Network_Initialization();
+		// //
+		// // Async task, begin the route
+		// locationTask = new MyLocationTask(ml, destination);
+		// locationTask.execute();
 		//
 		// }
 		// });
+		alertDialog.setButton(AlertDialog.BUTTON_NEGATIVE, "Cancel",
+				new DialogInterface.OnClickListener() {
+
+					public void onClick(DialogInterface dialog, int id) {
+						// ...
+
+					}
+				});
 
 		alertDialog.setIcon(R.drawable.ic_launcher);
 		alertDialog.show();

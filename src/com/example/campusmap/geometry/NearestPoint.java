@@ -110,7 +110,25 @@ public class NearestPoint {
 		return minIndex;
 	}
 
+	public int getNearestPointForTwoReverse(LatLng centerLatLng, ArrayList<LatLng> rroute) {
 
+		double min = Double.MAX_VALUE;
+		LatLng tmpLL;
+		int minIndex = Integer.MAX_VALUE;
+		for (int i = rroute.size() - 1; i > rroute.size() / 2; i--) {
+
+			tmpLL = rroute.get(i);
+			double current = getDistance(centerLatLng,tmpLL);
+
+				if (current < min) {
+					min = current;
+					minIndex = i;
+				}
+	
+
+		}
+		return minIndex;
+	}
 
 	// not efficient, can modify some time later
 	public double[] sortDistances() {

@@ -57,8 +57,7 @@ public class GoogleRouteTask extends AsyncTask<Void, Void, ArrayList<LatLng>> {
 		
 		drawnLine = pdrawing.drawLineOnGoogleMap(map, result, Color.MAGENTA,10);
  
-		Toast.makeText(mContext, "Google direction",
-				Toast.LENGTH_SHORT).show();
+
 		map.animateCamera(CameraUpdateFactory.newLatLng(toPosition));
 
 	}

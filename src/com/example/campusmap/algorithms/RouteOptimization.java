@@ -22,12 +22,17 @@ public class RouteOptimization {
 	private GoogleLatLngDistance glld;
 	private BuildingDrawing bd;
 	private DB_Helper dbh;
+	private LatLng CenterPoint;
+	private NearestPoint np;
 
-	public RouteOptimization(LatLng myLatLng, BuildingDrawing bd) {
+	public RouteOptimization(LatLng myLatLng, LatLng CenterPoint,
+			BuildingDrawing bd) {
 		this.myLatLng = myLatLng;
+		this.CenterPoint = CenterPoint;
 		this.bd = bd;
 		glld = new GoogleLatLngDistance();
 		dbh = new DB_Helper();
+		np = new NearestPoint();
 	}
 
 	public List<ReturnRoute> routeOptimize(List<ReturnRoute> returnRoutes,
@@ -44,6 +49,8 @@ public class RouteOptimization {
 
 		for (ReturnRoute rroute : returnRoutes) {
 
+			int nearestReverseIndex = -1;
+
 			if (rroute.getType() == 2 || rroute.getType() == 3) {
 
 				ArrayList<LatLng> gPoints = googleRoute.getPoints();
@@ -51,15 +58,28 @@ public class RouteOptimization {
 				ArrayList<LatLng> newRoutePoints = new ArrayList<LatLng>();
 
 				// check if myPosition within a building
-				 if (bd.pointIsInPolygon(myLatLng)) {
-					 String bn = bd.getCurrentTouchedBuilding().getBuildingName();
-					 myLatLng = dbh.getCenterPointOfABuildingFromDB(bn);
-				 }
+				// if (bd.pointIsInPolygon(myLatLng)) {
+				// String bn = bd.getCurrentTouchedBuilding().getBuildingName();
+				// myLatLng = dbh.getCenterPointOfABuildingFromDB(bn);
+				// }
 
 				// LatLng checkPoint = ml.getEnteredBuildingLatLng();
 				// if(checkPoint != null){
 				// myLatLng = checkPoint;
 				// }
+
+				int LastIndex = rPoints.size() - 1;
+				LatLng lastPoint = rPoints.get(LastIndex);
+				double distance_last_center = glld.GetDistance(
+						lastPoint.latitude, lastPoint.longitude,
+						CenterPoint.latitude, CenterPoint.longitude);
+
+				if (distance_last_center > 35) {
+					// find the closest one to center point, also the index
+					nearestReverseIndex = np.getNearestPointForTwoReverse(
+							CenterPoint, rPoints);
+
+				}
 
 				// check this route whether crossed with googleroute
 				if (crossWithGoogleRoute(rroute)) {
@@ -71,24 +91,47 @@ public class RouteOptimization {
 						newRoutePoints.add(gPoints.get(i));
 					}
 
-					for (int j = routeI; j < rPoints.size(); j++) {
-						newRoutePoints.add(rPoints.get(j));
+					//hao modified
+					if (nearestReverseIndex != -1) {
+
+						for (int j = routeI; j < nearestReverseIndex; j++) {
+							newRoutePoints.add(rPoints.get(j));
+						}
+						newRoutePoints.add(CenterPoint);
+						
+					} else {
+
+						for (int j = routeI; j < rPoints.size(); j++) {
+							newRoutePoints.add(rPoints.get(j));
+						}
 					}
 
 				} else { // not crossed
 
 					// get closest point, also that point not within a building
 
-					NearestPoint np = new NearestPoint();
-
 					int nearestIndex = np.getNearestPointForTwo(myLatLng,
 							rPoints, bd);
 
 					newRoutePoints.add(myLatLng);
 
-					for (int i = nearestIndex; i < rPoints.size(); i++) {
-						newRoutePoints.add(rPoints.get(i));
+					
+					//hao modified
+					if (nearestReverseIndex != -1) {
+
+						for (int j = nearestIndex; j < nearestReverseIndex; j++) {
+							newRoutePoints.add(rPoints.get(j));
+						}
+						newRoutePoints.add(CenterPoint);
+						
+					} else {
+
+						for (int i = nearestIndex; i < rPoints.size(); i++) {
+							newRoutePoints.add(rPoints.get(i));
+						}
 					}
+					
+
 
 				}
 

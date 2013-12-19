@@ -31,7 +31,7 @@ import com.google.android.gms.maps.model.LatLng;
 public class MyLocation implements Runnable {
 
 	private final static int GPS_LOST_TIME = 4000; 
-	private final static int GPS_LOST_COUNTER = 10; 
+	private final static int GPS_LOST_COUNTER = 13; 
 	
 	private Timer timer1;
 	private LocationManager lm;

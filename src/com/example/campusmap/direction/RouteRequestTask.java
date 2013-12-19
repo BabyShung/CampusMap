@@ -112,7 +112,7 @@ public class RouteRequestTask extends AsyncTask<String, Integer, String> {
 						googlePoints, -1));
 
 				// used fromPosition, should I get MyLocation updated one?
-				RouteOptimization rop = new RouteOptimization(fromPosition, bd);
+				RouteOptimization rop = new RouteOptimization(fromPosition, toPosition, bd);
 
 				// optimizing the routes
 				rr = rop.routeOptimize(rr, ml);
