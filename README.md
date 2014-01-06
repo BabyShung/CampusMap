@@ -6,8 +6,7 @@ This app is for University of Iowa.
 Demo:
 http://www.youtube.com/watch?v=9BYGYzdonMU
 
-PPT:
-https://docs.google.com/presentation/d/1gUhi6qXb81UC2vXFBxZMF3HMvqLECZdGIh7L1qanBDQ/edit?pli=1#slide=id.g25df661c9_10
+PPT: check "Introduction.pdf"
 
 ABSTRACT
 
