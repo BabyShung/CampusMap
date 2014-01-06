@@ -3,6 +3,10 @@ CampusMap
 
 This app is for University of Iowa.
 
+Demo:
+http://www.youtube.com/watch?v=9BYGYzdonMU
+
+
 ABSTRACT
 
 CampusGPS, a different perspective of navigation
