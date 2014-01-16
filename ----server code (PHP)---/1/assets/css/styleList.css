@@ -1,0 +1,63 @@
+.logout{
+ 	float:right;   
+    padding-right:50px;
+}
+
+.clear{
+ 	clear:both;   
+}
+
+#file-manager{
+	background-color:#EEE;
+	border:1px solid #DDD;
+	margin:50px auto;
+	padding:10px;
+	width:800px;
+}
+
+ul.manager li{
+	background:url("../img/bg_gradient.gif") repeat-x center bottom #F5F5F5;
+	border:1px solid #DDD;
+	border-top-color:#FFF;
+
+	list-style:none;
+	position:relative;
+}
+
+ul.manager li a{
+	display:block;
+	padding:8px;
+}
+
+ul.manager li a:hover .download-label{
+	/* When a list is hovered over, show the download green text inside it: */
+	display:block;
+}
+
+span.download-label{
+	background-color:#64B126;
+	border:1px solid #4E9416;
+	color:white;
+	display:none;
+	font-size:10px;
+	padding:2px 4px;
+	position:absolute;
+	right:8px;
+	text-decoration:none;
+	text-shadow:0 0 1px #315D0D;
+	top:6px;
+	
+	/* CSS3 Rounded Corners */
+	
+	-moz-border-radius:3px;
+	-webkit-border-radius:3px;
+	border-radius:3px;
+}
+
+span.download-count{
+	color:#999;
+	font-size:13px;
+	padding:3px 10px;
+	position:absolute;
+	text-decoration:none;
+}

@@ -1,0 +1,152 @@
+/*-------------------------
+	Simple reset
+--------------------------*/
+
+
+*{
+	margin:0;
+	padding:0;
+}
+
+
+/*-------------------------
+	General Styles
+--------------------------*/
+
+
+html{
+	background-color: #F37703;
+	min-height:100%;
+	background-size:cover;
+}
+
+body{
+	font:15px/1.3 'Open Sans', sans-serif;
+	color: #fff;
+	min-height:100%;
+}
+
+a, a:visited {
+	outline:none;
+	color:#389dc1;
+}
+
+a:hover{
+	text-decoration:none;
+}
+
+ 
+
+
+/*-------------------------
+	The Login Form
+--------------------------*/
+
+
+#login-register{
+	background-color:#242424;
+	padding: 65px 75px;
+	width:450px;
+    
+	height:350px;
+	position:absolute;
+	top:50%;
+	left:50%;
+	margin:-235px 0 0 -325px;
+
+	box-shadow:0 2px 5px rgba(0,0,0,0.5);
+}
+
+#login-register h1{
+	font-size:36px;
+    height:55px;
+}
+
+
+
+#login-register input{
+	font: inherit;
+	font-size: 18px;
+	line-height: 30px;
+	background-color: #363636;
+	color: #fff;
+	padding: 10px 20px;
+	border: none;
+	display: block;
+	width: 450px;
+	margin-top: 30px;
+	outline: none;
+}
+
+#login-register p{
+	line-height:1.4;
+}
+
+#login-register button{
+	display:inline-block;
+	margin-top:20px;
+	width: 450px;
+	font:inherit;
+	font-weight:bold;
+	font-size:20px;
+
+	cursor:pointer;
+
+	background-color:#494f50;
+	color:#fff;
+	padding:20px 45px;
+
+	border:none;
+	border-bottom:3px solid #494F50;
+	border-radius:3px;
+}
+
+#login-register button:hover{
+	background-color:#E0527A;
+}
+
+#login-register.loggedIn button{
+	cursor: default;
+	background-color: #555 !important;
+	border-bottom-color: #444 !important;
+	color: #aaa !important;
+}
+
+#login-register span{
+	line-height:1.4;
+	font-size: 12px;
+	position: absolute;
+	bottom: 95px;
+	width: 225px;
+	height: 20px;
+	right: 80px;
+	color: #85bb2f; 
+}
+
+#login-register.error span{
+	color: #ee5ea5;	
+}
+
+#login-register.loading span{
+	color: transparent;
+	background-position: 0 100%;
+}
+
+
+
+/*-------------------------
+	hearder
+--------------------------*/
+
+#myheader{
+  background-color:#FEE101; 
+  width:100%;
+  height:50px;
+  line-height:50px;
+  vertical-align:middle;
+  padding-left:10px;
+  color: #494f50;
+}
+
+
+
