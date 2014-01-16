@@ -8,6 +8,31 @@ http://www.youtube.com/watch?v=9BYGYzdonMU
 
 PPT: check "Introduction.pdf"
 
+
+For our app, it is sort of complex to configure.
+The configuration is rather complex, since we have a server in the cloud.
+Also the client is difficult to configure.
+
+Steps for client:
+1.	import Campus Map project.
+2.	Import Message bar project
+3.	Right click Campus map -> properties ->android ->add ->add message bar as library
+4.	Import google-play-service lib, the same step as step 3
+5.	Register a google API key on Google
+6.	Replace your API key in the Manifest file
+7. Now it's good to run
+
+If you have any configuration problem, just email me
+Hao-zheng@uiowa.edu
+
+Campus map server
+http://1.campusgps.sinaapp.com/login.php
+account: guest@uiowa.edu
+pwd:  123123
+
+
+--------------------------------------------------------------------------------
+
 ABSTRACT
 
 CampusGPS, a different perspective of navigation
