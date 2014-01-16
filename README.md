@@ -23,7 +23,7 @@ Steps for client:
 7. Now it's good to run
 
 If you have any configuration problem, just email me
-Hao-zheng@uiowa.edu
+hao-zheng@uiowa.edu
 
 Campus map server
 http://1.campusgps.sinaapp.com/login.php
